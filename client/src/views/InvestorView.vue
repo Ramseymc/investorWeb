@@ -24,8 +24,14 @@
           v-for="investor in InvestorList"
           :key="investor.investor_id"
         >
-        <!-- add a link to either investmentAdd or investmentUpdate - might change on Wayne's opinion  -->
-          <td>{{ investor.investor_acc_number }}</td> 
+        
+          <td><a target="_blank"
+                 style="text-decoration: none"
+                 v-on:click="openInvestmentView"
+                 :id="investor.investor_id"
+           >{{ investor.investor_acc_number }} </a>
+          </td> <!-- add a link to investmentView.vue - might change on Wayne's opinion  -->
+                   
           <td>{{ investor.investor_name }} {{ investor.investor_surname }} </td>
           <td>{{ investor.investor_email }} </td>
           <td>{{ investor.investor_id_number }} </td>
@@ -33,13 +39,18 @@
       </tbody>
     </template>
   </v-simple-table>
-
+    <InvestmentView
+      v-if="openInvestmentView"
+      :investorId="investorId"      
+      @closeForm="closeForm"
+    />
   </div>
 </template>
 
 <script>
 
 import axios from "axios";
+import InvestmentView from "../views/InvestmentView.vue";
 //let url = process.env.VUE_APP_BASEURL;
 
 //import * as dayjs from "dayjs";
@@ -49,6 +60,7 @@ import axios from "axios";
 export default {
   name: "investorview",
   components: {
+      InvestmentView
   },
 
   metaInfo: {
@@ -71,6 +83,8 @@ export default {
       // investor data
       InvestorList: [],
       searchInvestors: "",
+      investorId: "",
+      SelectedInvestorId: "",
     };
   },
 
@@ -79,12 +93,29 @@ export default {
   },
 
   computed: {    
+      pageUrl() {
+      return 'page.html?id=' + this.investorId;
+    }
   },
 
   watch: {  
   },
 
   methods: {
+    openInvestmentView(theEvent) {
+        this.SelectedInvestorId = theEvent.srcElement.id
+        console.log("Open Investment View - investor_id", this.SelectedInvestorId)
+        // open InvestmentView.vue with the investor_id input 
+        window.open("../investmentview.vue?investorId=" + this.SelectedInvestorId, "_self")
+        
+        // // code for the InvestmentView.vue
+        // var url_string = "http://www.example.com/t.html?a=1&b=3&c=m2-m3-m4-m5"; //window.location.href
+        // var url = new URL(url_string);
+        // var investorId = url.searchParams.get("investorId");
+        // console.log(investorId);
+    },
+
+
     async getAllInvestors() {
       this.InvetorsList = [];
       let data = {

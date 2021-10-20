@@ -1,6 +1,7 @@
 <template>
   <div class="about">
     <h1>View Investments</h1>
+    <!--
     <v-simple-table>
     <template v-slot:default>
       <thead>
@@ -10,9 +11,9 @@
           </th>
           <th class="text-left">
             Investment ID 
-            <!-- link to investmentUpdate.vue -->
+             link to investmentUpdate.vue 
           </th>
-          <!-- <th class="text-left">
+          <th class="text-left">
             Name
           </th>
           <th class="text-left">
@@ -20,7 +21,7 @@
           </th>
           <th class="text-left">
             ID
-          </th> -->
+          </th> 
         </tr>
       </thead>
       <tbody>
@@ -31,17 +32,17 @@
         
           <td>{{ investment.investor_id }}  </td> 
           
-          <td>{{ investment.investment_id }} <!-- + link to investmentUpdate.vue --> </td> 
+          <td>{{ investment.investment_id }} + link to investmentUpdate.vue </td> 
 
-          <!-- <td>{{ investor.investor_name }} {{ investor.investor_surname }} </td>
+           <td>{{ investor.investor_name }} {{ investor.investor_surname }} </td>
           <td>{{ investor.investor_email }} </td>
-          <td>{{ investor.investor_id_number }} </td> -->
+          <td>{{ investor.investor_id_number }} </td> 
         </tr>
       </tbody>
 
-      <!-- button to investmentAdd.vue -->
+      button to investmentAdd.vue
     </template>
-  </v-simple-table>
+  </v-simple-table> -->
 
   </div>
 </template>
@@ -54,7 +55,7 @@ import axios from "axios";
 //import * as imageConversion from "image-conversion";
 
 export default {
-  name: "investmentview",
+  name: "investments",
   components: {
    
   },
@@ -82,22 +83,22 @@ export default {
     };
   },
 
-async mounted() {
-    // code for the InvestmentView.vue
-    console.log("MOUNT")
-    var url_string = "http://www.example.com/t.html?a=1&b=3&c=m2-m3-m4-m5"; //window.location.href
-    var url = new URL(url_string);
-    var investorId = url.searchParams.get("investorId");
-    console.log("MOUNTED", investorId);
-    this.investorId = investorId;
-    this.getAllInvestments();   
-  },
+// async mounted() {
+//     // code for the InvestmentView.vue
+//     console.log("MOUNT")
+//     var url_string = "http://www.example.com/t.html?a=1&b=3&c=m2-m3-m4-m5"; //window.location.href
+//     var url = new URL(url_string);
+//     var investorId = url.searchParams.get("investorId");
+//     console.log("MOUNTED", investorId);
+//     this.investorId = investorId;
+//     this.getAllInvestments();   
+//   },
 
-  computed: {    
-  },
+//   computed: {    
+//   },
 
-  watch: {  
-  },
+//   watch: {  
+//   },
 
   methods: {
     async getAllInvestments() {

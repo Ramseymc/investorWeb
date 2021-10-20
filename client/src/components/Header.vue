@@ -3,49 +3,45 @@
     <h1>Header of InvestorApp (components/Header.vue)</h1>
 
     <v-list>
-          <template>
-            <div v-for="item in superUser" :key="item.id">
-              <v-list-group v-if="item.items" no-action :group="'items'">
-                <template v-slot:activator>
-                  <v-list-item-content>
-                    <v-list-item-title
-                      :close-on-content-click="false"
-                      style="text-align: left;margin-left: 5%;"
-                    >
-                      <v-icon :color="item.color">{{ item.icon }}</v-icon>
-                      {{ item.title }}</v-list-item-title
-                    >
-                  </v-list-item-content>
-                </template>
-                <v-list-item
-                  v-for="subItem in item.items"
-                  :key="subItem.id"
-                  :to="{ name: subItem.name }"
-                  @click="closeMenu"
+      <template>
+        <div v-for="item in superUser" :key="item.id">
+          <v-list-group v-if="item.items" no-action :group="'items'">
+            <template v-slot:activator>
+              <v-list-item-content>
+                <v-list-item-title
+                  :close-on-content-click="false"
+                  style="text-align: left; margin-left: 5%"
                 >
-                  <v-list-item-content>
-                    <v-list-item-title
-                      style="text-align: left;margin-left: 5%;"
-                    >
-                      <v-icon :color="subItem.color">{{ subItem.icon }}</v-icon>
-                      {{ subItem.title }}</v-list-item-title
-                    >
-                  </v-list-item-content>
-                </v-list-item>
-              </v-list-group>
-              <v-list-item v-else :to="{ name: item.name }" @click="closeMenu">
-                <v-list-item-content>
-                  <v-list-item-title style="text-align: left; margin-left: 5%;">
-                    <v-icon :color="item.color">{{ item.icon }}</v-icon>
-                    {{ item.title }}</v-list-item-title
-                  >
-                </v-list-item-content>
-              </v-list-item>
-            </div>
-          </template>
-        </v-list>
-
-   
+                  <v-icon :color="item.color">{{ item.icon }}</v-icon>
+                  {{ item.title }}</v-list-item-title
+                >
+              </v-list-item-content>
+            </template>
+            <v-list-item
+              v-for="subItem in item.items"
+              :key="subItem.id"
+              :to="{ name: subItem.name }"
+              @click="closeMenu"
+            >
+              <v-list-item-content>
+                <v-list-item-title style="text-align: left; margin-left: 5%">
+                  <v-icon :color="subItem.color">{{ subItem.icon }}</v-icon>
+                  {{ subItem.title }}</v-list-item-title
+                >
+              </v-list-item-content>
+            </v-list-item>
+          </v-list-group>
+          <v-list-item v-else :to="{ name: item.name }" @click="closeMenu">
+            <v-list-item-content>
+              <v-list-item-title style="text-align: left; margin-left: 5%">
+                <v-icon :color="item.color">{{ item.icon }}</v-icon>
+                {{ item.title }}</v-list-item-title
+              >
+            </v-list-item-content>
+          </v-list-item>
+        </div>
+      </template>
+    </v-list>
   </v-container>
 </template>
 
@@ -71,16 +67,25 @@ export default {
             role: 3,
             menu: 1,
             id: "PortalUser",
-            color: "orange"
+            color: "orange",
           },
           {
-            title: "Investor",
-            name: "Investor",
+            title: "Add Investor",
+            name: "investoradd",
             icon: "mdi-percent",
             role: 2,
             menu: 1,
-            id: "Investor",
-            color: "lime accent-2"
+            id: "investoradd",
+            color: "lime accent-2",
+          },
+          {
+            title: "View Investors",
+            name: "investorview",
+            icon: "mdi-percent",
+            role: 2,
+            menu: 1,
+            id: "investorview",
+            color: "lime accent-5",
           },
           {
             title: "Report - Investor Listing",
@@ -89,7 +94,7 @@ export default {
             role: 3,
             menu: 1,
             id: "InvestorListingReport",
-            color: "light-green accent-2"
+            color: "light-green accent-2",
           },
           {
             title: "Report - Investor Statement",
@@ -98,7 +103,7 @@ export default {
             role: 3,
             menu: 1,
             id: "InvestorStatementReport",
-            color: "lime"
+            color: "lime",
           },
 
           {
@@ -108,11 +113,9 @@ export default {
             role: 3,
             menu: 1,
             id: "InvestorExcelReport",
-            color: "amber accent-3"
+            color: "amber accent-3",
           },
-
-                       
-        ]
+        ],
       },
 
       {
@@ -131,7 +134,7 @@ export default {
             role: 3,
             menu: 1,
             id: "Category",
-            color: "lime"
+            color: "lime",
           },
           {
             title: "Oppurtunity",
@@ -140,7 +143,7 @@ export default {
             role: 3,
             menu: 1,
             id: "OppurtunitySub",
-            color: "pink"
+            color: "pink",
           },
           {
             title: "Report",
@@ -149,9 +152,9 @@ export default {
             role: 3,
             menu: 1,
             id: "OpportunityReport",
-            color: "amber"
-          }
-        ]
+            color: "amber",
+          },
+        ],
       },
       {
         title: "Investment",
@@ -169,7 +172,7 @@ export default {
             role: 3,
             menu: 1,
             id: "InvestmentSub",
-            color: "purple accent-1"
+            color: "purple accent-1",
           },
           {
             title: "Report - Investment Listing",
@@ -178,7 +181,7 @@ export default {
             role: 3,
             menu: 1,
             id: "InvestmentListingReport",
-            color: "teal accent-2"
+            color: "teal accent-2",
           },
           {
             title: "Report - Investment Updates",
@@ -187,9 +190,9 @@ export default {
             role: 3,
             menu: 1,
             id: "InvestmentUpdatesReport",
-            color: "teal accent-4"
-          }
-        ]
+            color: "teal accent-4",
+          },
+        ],
       },
       {
         title: "Invest Pledge",
@@ -209,7 +212,7 @@ export default {
           //   id: "apartment",
           //   color: "amber"
           // },
-        ]
+        ],
       },
 
       {
@@ -228,9 +231,9 @@ export default {
             role: 3,
             menu: 1,
             id: "Interest",
-            color: "amber"
-          }
-   
+            color: "amber",
+          },
+
           // {
           //   title: "Reset Dates",
           //   name: "DateReset",
@@ -240,7 +243,7 @@ export default {
           //   id: "DateReset",
           //   color: "yellow"
           // }
-        ]
+        ],
       },
       {
         title: "Setup",
@@ -258,11 +261,10 @@ export default {
             role: 3,
             menu: 1,
             id: "TransactionType",
-            color: "deep-orange"
-          }
-        ]
-      }
-     
+            color: "deep-orange",
+          },
+        ],
+      },
     ],
     siteManager: [
       {
@@ -271,7 +273,7 @@ export default {
         icon: "mdi-percent",
         role: 2,
         menu: 1,
-        id: "signup"
+        id: "signup",
       },
       {
         title: "Gantt Chart",
@@ -280,7 +282,7 @@ export default {
         role: 3,
         menu: 1,
         id: "gantt4",
-        color: "light-green accent-2"
+        color: "light-green accent-2",
       },
 
       {
@@ -290,7 +292,7 @@ export default {
         role: 3,
         menu: 1,
         id: "purchaseordercreate",
-        color: "lime"
+        color: "lime",
       },
       {
         title: "View Purchase Orders",
@@ -299,7 +301,7 @@ export default {
         role: 3,
         menu: 1,
         id: "purchaseorderview",
-        color: "pink"
+        color: "pink",
       },
       {
         title: "Deliveries",
@@ -308,7 +310,7 @@ export default {
         role: 3,
         menu: 1,
         id: "Deliveries",
-        color: "amber"
+        color: "amber",
       },
       {
         title: "Images",
@@ -317,7 +319,7 @@ export default {
         role: 3,
         menu: 1,
         id: "images",
-        color: "yellow"
+        color: "yellow",
       },
       {
         title: "Quality Control",
@@ -326,7 +328,7 @@ export default {
         role: 3,
         menu: 1,
         id: "QualityControl",
-        color: "orange"
+        color: "orange",
       },
       {
         title: "Instruction To Commence",
@@ -335,8 +337,8 @@ export default {
         role: 3,
         menu: 1,
         id: "ITC",
-        color: "white"
-      }
+        color: "white",
+      },
       // {
       //   title: "Schedule",
       //   name: "Schedule",
@@ -361,7 +363,7 @@ export default {
         icon: "mdi-percent",
         role: 2,
         menu: 1,
-        id: "signup"
+        id: "signup",
       },
       {
         title: "Gantt V3A",
@@ -370,7 +372,7 @@ export default {
         role: 3,
         menu: 1,
         id: "ganttv3A",
-        color: "light-green accent-2"
+        color: "light-green accent-2",
       },
       {
         title: "Purchase Orders",
@@ -388,7 +390,7 @@ export default {
             role: 3,
             menu: 1,
             id: "purchaseordercreate",
-            color: "lime"
+            color: "lime",
           },
           {
             title: "View Purchase Orders",
@@ -397,7 +399,7 @@ export default {
             role: 3,
             menu: 1,
             id: "purchaseorderview",
-            color: "pink"
+            color: "pink",
           },
           {
             title: "Deliveries",
@@ -406,10 +408,10 @@ export default {
             role: 3,
             menu: 1,
             id: "Deliveries",
-            color: "amber"
-          }
-        ]
-      }
+            color: "amber",
+          },
+        ],
+      },
     ],
     anyUser: [
       {
@@ -419,14 +421,40 @@ export default {
         role: 3,
         menu: 0,
         id: "about",
-        color: "amber"
-      }
-    ]
-   
+        color: "amber",
+      },
+    ],
   }),
 
   mounted() {
     console.log("Header.vue");
+  },
+
+  methods: {
+    closeMenu() {
+      this.closeOnClick = true;
+      setTimeout(() => {
+        this.closeOnClick = false;
+      });
+    },
+    logout() {
+      this.$store.dispatch("logout");
+      if (this.$route.name !== "Home") {
+        this.$router.push({ name: "Home" });
+      }
+    }
   }
 };
 </script>
+
+<style scoped>
+h2 {
+  color: whitesmoke;
+}
+@media only screen and (max-width: 767px) {
+  .mobile {
+    font-size: 60%;
+    /* max-width: 100vw; */
+  }
+}
+</style>

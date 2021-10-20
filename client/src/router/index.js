@@ -19,6 +19,22 @@ const routes = [
     component: () =>
       import(/* webpackChunkName: "about" */ "../views/About.vue"),
   },
+  {
+    path: "/investoradd",
+    name: "investoradd",
+    component: () =>
+      import(
+        /* webpackChunkName: "salesinfo" */ "../components/InvestorAdd.vue"
+      ),
+  },
+  {
+    path: "/investorview",
+    name: "investorview",
+    component: () =>
+      import(
+        /* webpackChunkName: "salesinfo" */ "../views/InvestorView.vue"
+      ),
+  },
 ];
 
 const router = new VueRouter({

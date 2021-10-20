@@ -1,6 +1,6 @@
 <template>
 <div>
-<h1>TESTING views/HOME.vue</h1>
+  <h1>TESTING views/HOME.vue</h1>
 </div>
 </template>
 

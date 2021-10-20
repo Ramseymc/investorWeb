@@ -43,347 +43,339 @@ router.post("/uploadImage", upload.single("stockImage"), (req, res) => {
     );
 }),
 
-    // Server Methods
-    router.get("/test", (req, res) => {
-        res.json({ Awesome: "It Works!!!!!" })
-    });
+// Server Methods
+router.get("/test", (req, res) => {
+    res.json({ Awesome: "It Works!!!!!" })
+});
 
 router.post("/testServer", (req, res) => {
     console.log("completeTransfers req", req.body)
     res.json({ Awesome: "It Works x2 !!!!!" });
 }),
 
-    router.post("/createClient", upload.array("documents"), (req, res) => {
-        console.log(req.body)
-        console.log(req.files)
-        let fileDetails = [];
-        // file manipulation
-        if (req.files.length) {
+router.post("/createInvestor", upload.array("documents"), (req, res) => {
+    console.log(req.body)
+    console.log(req.files)
+    let fileDetails = [];
+    // file manipulation
+    if (req.files.length) {
+        let contains = req.body.contains.split(",");
+        contains.forEach((el, index) => {
+            let mainIndex = index;
+            if (req.files[mainIndex] !== "undefined") {
+                console.log("FILES AFTER CHECK::: ", req.files[mainIndex])
+                let insert = {
+                    fileType: el,
+                    fileName: `${req.files[mainIndex].filename}.${req.files[mainIndex].mimetype.split("/")[1]
+                        }`,
+                    originalName: req.files[mainIndex].filename,
+                };
+                fileDetails.push(insert);
+            }
+        });
 
-            let contains = req.body.contains.split(",");
+        console.log("fileDetails", fileDetails);
 
-            contains.forEach((el, index) => {
-                //1 - 5 loops
-                let mainIndex = index;
-
-                // req.files[mainIndex]
-                // req.files.forEach((el2) => {
-                //another 5 loops (maybe more if multi)
-                console.log("FILES::: ", req.files[mainIndex])
-                console.log("FILES::: ", req.files[mainIndex])
-                // el2.filenameA = `${el2.filename}.${el2.mimetype.split("/")[1]}`
-                if (req.files[mainIndex] !== "undefined") {
-                    console.log("FILES AFTER CHECK::: ", req.files[mainIndex])
-                    let insert = {
-                        fileType: el,
-                        fileName: `${req.files[mainIndex].filename}.${req.files[mainIndex].mimetype.split("/")[1]
-                            }`,
-                        originalName: req.files[mainIndex].filename,
-                    };
-                    fileDetails.push(insert);
+        fileDetails.forEach((el) => {
+            let filtered = req.files.filter((el2) => {
+                return el2.filename === el.originalName;
+            });
+            el.fileNameUpdated = `${el.fileName}`;
+            fs.rename(
+                `public/uploads/${el.originalName}`,
+                `public/uploads/${el.fileNameUpdated}`,
+                (err) => {
+                    if (err) console.log("Error renaming", err);
+                    //throw err
                 }
-            });
+            );
+        });
+    }
 
-            console.log("fileDetails", fileDetails);
+    let investorOneDisclaimerFile;
+    let investorOneIDFile;
+    let investorOnePOAFile;
 
+    let investorTwoDisclaimerFile;
+    let investorTwoIDFile;
+    let investorTwoPOAFile;
 
-            fileDetails.forEach((el) => {
-                let filtered = req.files.filter((el2) => {
-                    return el2.filename === el.originalName;
-                });
-                el.fileNameUpdated = `${el.fileName}`;
-                fs.rename(
-                    `public/uploads/${el.originalName}`,
-                    `public/uploads/${el.fileNameUpdated}`,
-                    (err) => {
-                        if (err) console.log("Error renaming", err);
-                        //throw err
-                    }
-                );
-            });
+    let representativeDisclaimerFile;
+    let representativeIDFile;
+    let representativePOAFile;
+
+    let companyResolutionFile;
+    let companyRefDocsFile;
+    let companyPOAFile;
+
+    if (fileDetails.length) {
+
+        investorOneDisclaimerFile = fileDetails.filter((el) => {
+            return el.fileType === "investorOneDisclaimerFile";
+        });
+        if (investorOneDisclaimerFile.length) {
+            investorOneDisclaimerFile = investorOneDisclaimerFile[0].fileName;
+        } else {
+            investorOneDisclaimerFile = "";
         }
 
-        let investorOneDisclaimerFile;
-        let investorOneIDFile;
-        let investorOnePOAFile;
-
-        let investorTwoDisclaimerFile;
-        let investorTwoIDFile;
-        let investorTwoPOAFile;
-
-        let representativeDisclaimerFile;
-        let representativeIDFile;
-        let representativePOAFile;
-
-        let companyResolutionFile;
-        let companyRefDocsFile;
-        let companyPOAFile;
-
-
-        if (fileDetails.length) {
-
-            investorOneDisclaimerFile = fileDetails.filter((el) => {
-                return el.fileType === "investorOneDisclaimerFile";
-            });
-            if (investorOneDisclaimerFile.length) {
-                investorOneDisclaimerFile = investorOneDisclaimerFile[0].fileName;
-            } else {
-                investorOneDisclaimerFile = "";
-            }
-
-            investorOneIDFile = fileDetails.filter((el) => {
-                return el.fileType === "investorOneIDFile";
-            });
-            if (investorOneIDFile.length) {
-                investorOneIDFile = investorOneIDFile[0].fileName;
-            } else {
-                investorOneIDFile = "";
-            }
-
-            investorOnePOAFile = fileDetails.filter((el) => {
-                return el.fileType === "investorOnePOAFile";
-            });
-            if (investorOnePOAFile.length) {
-                investorOnePOAFile = investorOnePOAFile[0].fileName;
-            } else {
-                investorOnePOAFile = "";
-            }
-
-            investorTwoDisclaimerFile = fileDetails.filter((el) => {
-                return el.fileType === "investorTwoDisclaimerFile";
-            });
-            if (investorTwoDisclaimerFile.length) {
-                investorTwoDisclaimerFile = investorTwoDisclaimerFile[0].fileName;
-            } else {
-                investorTwoDisclaimerFile = "";
-            }
-
-            investorTwoIDFile = fileDetails.filter((el) => {
-                return el.fileType === "investorTwoIDFile";
-            });
-            if (investorTwoIDFile.length) {
-                investorTwoIDFile = investorTwoIDFile[0].fileName;
-            } else {
-                investorTwoIDFile = "";
-            }
-
-            investorTwoPOAFile = fileDetails.filter((el) => {
-                return el.fileType === "investorTwoPOAFile";
-            });
-            if (investorTwoPOAFile.length) {
-                investorTwoPOAFile = investorTwoPOAFile[0].fileName;
-            } else {
-                investorTwoPOAFile = "";
-            }
-
-            representativeDisclaimerFile = fileDetails.filter((el) => {
-                return el.fileType === "representativeDisclaimerFile";
-            });
-            if (representativeDisclaimerFile.length) {
-                representativeDisclaimerFile = representativeDisclaimerFile[0].fileName;
-            } else {
-                representativeDisclaimerFile = "";
-            }
-
-            representativeIDFile = fileDetails.filter((el) => {
-                return el.fileType === "representativeIDFile";
-            });
-            if (representativeIDFile.length) {
-                representativeIDFile = representativeIDFile[0].fileName;
-            } else {
-                representativeIDFile = "";
-            }
-
-            representativePOAFile = fileDetails.filter((el) => {
-                return el.fileType === "representativePOAFile";
-            });
-            if (representativePOAFile.length) {
-                representativePOAFile = representativePOAFile[0].fileName;
-            } else {
-                representativePOAFile = "";
-            }
-
-            companyResolutionFile = fileDetails.filter((el) => {
-                return el.fileType === "companyResolutionFile";
-            });
-            if (companyResolutionFile.length) {
-                companyResolutionFile = companyResolutionFile[0].fileName;
-            } else {
-                companyResolutionFile = "";
-            }
-
-            companyRefDocsFile = fileDetails.filter((el) => {
-                return el.fileType === "companyRefDocsFile";
-            });
-            if (companyRefDocsFile.length) {
-                companyRefDocsFile = companyRefDocsFile[0].fileName;
-            } else {
-                companyRefDocsFile = "";
-            }
-
-            companyPOAFile = fileDetails.filter((el) => {
-                return el.fileType === "companyPOAFile";
-            });
-            if (companyPOAFile.length) {
-                companyPOAFile = companyPOAFile[0].fileName;
-            } else {
-                companyPOAFile = "";
-            }
+        investorOneIDFile = fileDetails.filter((el) => {
+            return el.fileType === "investorOneIDFile";
+        });
+        if (investorOneIDFile.length) {
+            investorOneIDFile = investorOneIDFile[0].fileName;
+        } else {
+            investorOneIDFile = "";
         }
 
-        // add the formData names to database fields
-        let mysql1 = `INSERT INTO investors (
-                    investor_acc_number,
-                    investor_name,
-                    investor_surname,
-                    investor_id_number,
-                    investor_two_name,
-                    investor_two_surname,
-                    investor_two_id_number,
-                    company_name,
-                    ref_number,
-                    company_rep_initals,
-                    company_rep_surname,
-                    company_rep_id_number,
-                    contact_email,
-                    contact_two_email,
-                    mobile,
-                    landline,
-                    mobile_two,
-                    landline_two,                  
-                    street_no,
-                    street_name,
-                    address_suburb,
-                    province,
-                    address_postal_code,
-                    box_no,
-                    postal_suburb,
-                    postal_code,
-                    bank_name,
-                    account_name,
-                    branch_code,
-                    account_no,
-                    fica_date,
-                    person_mode
-
-                  ) VALUES ( 
-                    '${req.body.investorCode}',
-                    '${req.body.investorInitials}',
-                    '${req.body.investorSurname}',
-                    '${req.body.investorIDNumber}',
-                                  
-                    '${req.body.investorTwoInitials}',
-                    '${req.body.investorTwoSurname}',
-                    '${req.body.investorTwoIDNumber}',
-
-                    '${req.body.companyName}',
-                    '${req.body.regNumber}',
-
-                    '${req.body.companyRepInitials}',
-                    '${req.body.companyRepSurname}',
-                    '${req.body.companyRepIDNumber}',
-
-                    '${req.body.contactEmail}',
-                    '${req.body.contactTwoEmail}',
-                    '${req.body.mobile}',
-                    '${req.body.landline}',
-                    '${req.body.mobileTwo}',
-                    '${req.body.landlineTwo}',
-                 
-                    '${req.body.streetNo}',
-                    '${req.body.streetName}',
-                    '${req.body.addressSuburb}',
-                    '${req.body.province}',
-                    '${req.body.addressPostalCode}',
-                    '${req.body.boxNo}',
-                    '${req.body.postalSuburb}',
-                    '${req.body.postalCode}',
-                    '${req.body.bankName}',
-                    '${req.body.accountName}',
-                    '${req.body.branchCode}',
-                    '${req.body.accountNumber}',
-                    '${req.body.person}'
-
-                  )`
-        // + the 'let' file variables
-
-    }),
-
-    router.post("/getAllInvestors", (req, res) => {
-        console.log(req.body)
-        // res.json({awesome: "It Works"})
-        //let mysql = `select distinct mainCategory(reference) from stockonhand
-        // let mysql = ` select 
-
-        //     stockId,
-        //     reference as mainCategory, 
-        //     po.itemCode, 
-        //     po.itemDescription, 
-        //     SUM(d.quantityDelivered - IFNULL(si.requisitioned,0)) as qtyOnHand, 
-        //     IFNULL(si.requisitioned,0) as requisitioned 
-        //   from deliveries d 
-        //   join purchaseorders po on po.PONumber = d.PONumber 
-        //   join stockitems si on si.id = po.stockId    
-        //   where d.development = ${req.body.id}
-        //   group by itemDescription`
-
-        let mysql = `select * from investors i`
-
-        //let mysql2 = `select * from deliveries d join purchaseorders po on po.PONumber = d.PONumber join stockitems si on si.id = po.stockId`
-        pool.getConnection(function (err, connection) {
-            if (err) {
-                connection.release();
-                resizeBy.send("Error with connection");
-            }
-            connection.query(mysql, function (error, result) {
-                if (error) {
-                    console.log(error);
-                } else {
-                    // console.log("getStockList success 2")
-
-                    res.json(result);
-                }
-            });
-            connection.release();
+        investorOnePOAFile = fileDetails.filter((el) => {
+            return el.fileType === "investorOnePOAFile";
         });
-    }),
+        if (investorOnePOAFile.length) {
+            investorOnePOAFile = investorOnePOAFile[0].fileName;
+        } else {
+            investorOnePOAFile = "";
+        }
 
-    // create template
-    router.post("/completeTransfers", (req, res) => {
-        console.log("completeTransfers req", req.body)
-        let supplierName = ""
-        let contactID = ""
-        req.body.subContractor.forEach(subContract => {
-            supplierName = subContract.supplierName
-            contactID = subContract.contactID
-        })
-        console.log("XXXS", supplierName)
-        console.log("XXXC", contactID)
-        let mysqlPrefix = ` insert into stocktranfers (supplierName, contactID, block, unit, stockId, qtyTransfered, user, userId, stockImageUrl, transferDate) `
-        let mysql = "";
-        let mysql2Prefix = ` update stockitems s join purchaseorders po on po.stockId = s.id set requisitioned = IFNULL(requisitioned,0)  + `
-        req.body.stockList.forEach(stockItem => {
-            mysql = mysql + mysqlPrefix + ` VALUES ('${supplierName}', '${req.body.contactID}', '${req.body.block}', '${req.body.unit}',  '${stockItem.stockId}', '${stockItem.qtyToTransfer}' , '${req.body.user}','${req.body.userId}', 'public/uploads/${req.body.imageName}', '${req.body.transferDate}'); `
-                + mysql2Prefix + ` ${parseInt(stockItem.qtyToTransfer)} WHERE s.id = '${stockItem.stockId}' AND po.reference = '${stockItem.mainCategory}' ;`
-        })
-        console.log(chalk.cyanBright("completeTransfers sql", mysql))
-
-        pool.getConnection(function (err, connection) {
-            if (err) {
-                connection.release();
-                resizeBy.send("Error with connection");
-            }
-            connection.query(mysql, function (error, result) {
-                if (error) {
-                    console.log(error);
-                } else {
-                    console.log("completeTransfers success")
-                    res.json(result);
-                }
-            });
-            connection.release();
+        investorTwoDisclaimerFile = fileDetails.filter((el) => {
+            return el.fileType === "investorTwoDisclaimerFile";
         });
+        if (investorTwoDisclaimerFile.length) {
+            investorTwoDisclaimerFile = investorTwoDisclaimerFile[0].fileName;
+        } else {
+            investorTwoDisclaimerFile = "";
+        }
+
+        investorTwoIDFile = fileDetails.filter((el) => {
+            return el.fileType === "investorTwoIDFile";
+        });
+        if (investorTwoIDFile.length) {
+            investorTwoIDFile = investorTwoIDFile[0].fileName;
+        } else {
+            investorTwoIDFile = "";
+        }
+
+        investorTwoPOAFile = fileDetails.filter((el) => {
+            return el.fileType === "investorTwoPOAFile";
+        });
+        if (investorTwoPOAFile.length) {
+            investorTwoPOAFile = investorTwoPOAFile[0].fileName;
+        } else {
+            investorTwoPOAFile = "";
+        }
+
+        representativeDisclaimerFile = fileDetails.filter((el) => {
+            return el.fileType === "representativeDisclaimerFile";
+        });
+        if (representativeDisclaimerFile.length) {
+            representativeDisclaimerFile = representativeDisclaimerFile[0].fileName;
+        } else {
+            representativeDisclaimerFile = "";
+        }
+
+        representativeIDFile = fileDetails.filter((el) => {
+            return el.fileType === "representativeIDFile";
+        });
+        if (representativeIDFile.length) {
+            representativeIDFile = representativeIDFile[0].fileName;
+        } else {
+            representativeIDFile = "";
+        }
+
+        representativePOAFile = fileDetails.filter((el) => {
+            return el.fileType === "representativePOAFile";
+        });
+        if (representativePOAFile.length) {
+            representativePOAFile = representativePOAFile[0].fileName;
+        } else {
+            representativePOAFile = "";
+        }
+
+        companyResolutionFile = fileDetails.filter((el) => {
+            return el.fileType === "companyResolutionFile";
+        });
+        if (companyResolutionFile.length) {
+            companyResolutionFile = companyResolutionFile[0].fileName;
+        } else {
+            companyResolutionFile = "";
+        }
+
+        companyRefDocsFile = fileDetails.filter((el) => {
+            return el.fileType === "companyRefDocsFile";
+        });
+        if (companyRefDocsFile.length) {
+            companyRefDocsFile = companyRefDocsFile[0].fileName;
+        } else {
+            companyRefDocsFile = "";
+        }
+
+        companyPOAFile = fileDetails.filter((el) => {
+            return el.fileType === "companyPOAFile";
+        });
+        if (companyPOAFile.length) {
+            companyPOAFile = companyPOAFile[0].fileName;
+        } else {
+            companyPOAFile = "";
+        }
+    }
+
+    // add the formData names to database fields
+    let mysql1 = `INSERT INTO investors (
+                investor_acc_number,
+                investor_name,
+                investor_surname,
+                investor_id_number,
+                investor_two_name,
+                investor_two_surname,
+                investor_two_id_number,
+                company_name,
+                ref_number,
+                company_rep_initals,
+                company_rep_surname,
+                company_rep_id_number,
+                contact_email,
+                contact_two_email,
+                mobile,
+                landline,
+                mobile_two,
+                landline_two,                  
+                street_no,
+                street_name,
+                address_suburb,
+                province,
+                address_postal_code,
+                box_no,
+                postal_suburb,
+                postal_code,
+                bank_name,
+                account_name,
+                branch_code,
+                account_no,
+                fica_date,
+                person_mode
+
+                ) VALUES ( 
+                '${req.body.investorCode}',
+                '${req.body.investorInitials}',
+                '${req.body.investorSurname}',
+                '${req.body.investorIDNumber}',
+                                
+                '${req.body.investorTwoInitials}',
+                '${req.body.investorTwoSurname}',
+                '${req.body.investorTwoIDNumber}',
+
+                '${req.body.companyName}',
+                '${req.body.regNumber}',
+
+                '${req.body.companyRepInitials}',
+                '${req.body.companyRepSurname}',
+                '${req.body.companyRepIDNumber}',
+
+                '${req.body.contactEmail}',
+                '${req.body.contactTwoEmail}',
+                '${req.body.mobile}',
+                '${req.body.landline}',
+                '${req.body.mobileTwo}',
+                '${req.body.landlineTwo}',
+                
+                '${req.body.streetNo}',
+                '${req.body.streetName}',
+                '${req.body.addressSuburb}',
+                '${req.body.province}',
+                '${req.body.addressPostalCode}',
+                '${req.body.boxNo}',
+                '${req.body.postalSuburb}',
+                '${req.body.postalCode}',
+                '${req.body.bankName}',
+                '${req.body.accountName}',
+                '${req.body.branchCode}',
+                '${req.body.accountNumber}',
+                '${req.body.person}'
+
+                )`
+    // + the 'let' file variables
+
+}),
+
+router.post("/getAllInvestors", (req, res) => {
+
+    let mysql = `select * from investors i`
+
+    pool.getConnection(function (err, connection) {
+        if (err) {
+            connection.release();
+            resizeBy.send("Error with connection");
+        }
+        connection.query(mysql, function (error, result) {
+            if (error) {
+                console.log(error);
+            } else {
+                res.json(result);
+            }
+        });
+        connection.release();
     });
+}),
+
+router.post("/getAllInvestments", (req, res) => {
+
+    let mysql = `select * from investments iv`
+
+    pool.getConnection(function (err, connection) {
+        if (err) {
+            connection.release();
+            resizeBy.send("Error with connection");
+        }
+        connection.query(mysql, function (error, result) {
+            if (error) {
+                console.log(error);
+            } else {
+                res.json(result);
+            }
+        });
+        connection.release();
+    });
+}),
+
+
+
+
+// create template
+router.post("/completeTransfers", (req, res) => {
+    console.log("completeTransfers req", req.body)
+    let supplierName = ""
+    let contactID = ""
+    req.body.subContractor.forEach(subContract => {
+        supplierName = subContract.supplierName
+        contactID = subContract.contactID
+    })
+    console.log("XXXS", supplierName)
+    console.log("XXXC", contactID)
+    let mysqlPrefix = ` insert into stocktranfers (supplierName, contactID, block, unit, stockId, qtyTransfered, user, userId, stockImageUrl, transferDate) `
+    let mysql = "";
+    let mysql2Prefix = ` update stockitems s join purchaseorders po on po.stockId = s.id set requisitioned = IFNULL(requisitioned,0)  + `
+    req.body.stockList.forEach(stockItem => {
+        mysql = mysql + mysqlPrefix + ` VALUES ('${supplierName}', '${req.body.contactID}', '${req.body.block}', '${req.body.unit}',  '${stockItem.stockId}', '${stockItem.qtyToTransfer}' , '${req.body.user}','${req.body.userId}', 'public/uploads/${req.body.imageName}', '${req.body.transferDate}'); `
+            + mysql2Prefix + ` ${parseInt(stockItem.qtyToTransfer)} WHERE s.id = '${stockItem.stockId}' AND po.reference = '${stockItem.mainCategory}' ;`
+    })
+    console.log(chalk.cyanBright("completeTransfers sql", mysql))
+
+    pool.getConnection(function (err, connection) {
+        if (err) {
+            connection.release();
+            resizeBy.send("Error with connection");
+        }
+        connection.query(mysql, function (error, result) {
+            if (error) {
+                console.log(error);
+            } else {
+                console.log("completeTransfers success")
+                res.json(result);
+            }
+        });
+        connection.release();
+    });
+});
 
 // update template
 router.post("/submitStockTake", (req, res) => {

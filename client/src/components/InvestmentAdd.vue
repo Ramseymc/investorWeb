@@ -7,10 +7,10 @@
 
       <v-layout align-center justify-center style="padding: 8px">
         <v-form ref="form" v-model="valid" lazy-validation>
-          <h2>Create Investor</h2>
+          <h2>Create Investment</h2>
 
           <!-- Person / company and 2 People radio buttons -->
-          <v-container>
+          <!-- <v-container>
             <v-row>
               <v-col cols="12" md="4">
                 <v-radio-group
@@ -46,7 +46,7 @@
                 </v-radio-group>
               </v-col>
             </v-row>
-          </v-container>
+          </v-container> -->
 
           <!-- Investor Code & Linked email - read-only fields -->
           <v-container>
@@ -57,7 +57,7 @@
                 :counter="20"
                 maxValue="20"
                 :rules="nameRules"
-                label="Investor Code"
+                label="Investor Code:"
                 required
                 @blur="checkNames"
               ></v-text-field>
@@ -68,7 +68,7 @@
                 :counter="20"
                 maxValue="20"
                 :rules="nameRules"
-                label="Linked User Email (Portal):"
+                label="Project:"
                 required
                 @blur="checkNames"
               ></v-text-field> 
@@ -79,7 +79,7 @@
                 :counter="20"
                 maxValue="20"
                 :rules="nameRules"
-                label="Linked User Email (Portal):"
+                label="Linked Unit:"
                 required
                 @blur="checkNames"
               ></v-text-field>
@@ -90,7 +90,7 @@
                 :counter="20"
                 maxValue="20"
                 :rules="nameRules"
-                label="Linked User Email (Portal):"
+                label="Investment Amount:"
                 required
                 @blur="checkNames"
               ></v-text-field>
@@ -98,7 +98,7 @@
           </v-container>
 
           <!-- 1 investor details -->
-          <v-container v-if="person === 'person'">
+          <v-container>
             <v-row>
               <v-col cols="12" sm="12">
                 <!-- <h3>Investor One Details</h3> -->
@@ -109,7 +109,7 @@
                 :counter="20"
                 maxValue="20"
                 :rules="nameRules"
-                label="Investor Initials"
+                label="Loan Agreement Sign Date:"
                 required
                 @blur="checkNames"
               ></v-text-field>
@@ -119,18 +119,18 @@
                 :counter="20"
                 maxValue="20"
                 :rules="nameRules"
-                label="Investor Surname"
+                label="Investment Date:"
                 required
                 @blur="checkNames"
               ></v-text-field>
               <v-text-field
                 v-model="investmentPerc"
-                label="ID Number*"
+                label="Investment %:"
                 required
               ></v-text-field>
             </v-row>
           </v-container>
-          <v-container v-if="person === 'person'">
+          <v-container>
             <v-row>
               <v-col cols="12" sm="12">
                 <!-- <h3>Investor One Details</h3> -->
@@ -141,7 +141,7 @@
                 :counter="20"
                 maxValue="20"
                 :rules="nameRules"
-                label="Investor Initials"
+                label="Release Date:"
                 required
                 @blur="checkNames"
               ></v-text-field>
@@ -151,48 +151,54 @@
                 :counter="20"
                 maxValue="20"
                 :rules="nameRules"
-                label="Investor Surname"
+                label="Release Amount:"
                 required
                 @blur="checkNames"
               ></v-text-field>
               <v-text-field
                 v-model="releasePerc"
-                label="ID Number*"
+                label="Release %:"
                 required
               ></v-text-field>
             </v-row>
           </v-container>
-          <v-container v-if="person === 'person'">
+          <v-container>
             <v-row>
-              <v-col cols="12" sm="12">
-                <!-- <h3>Investor One Details</h3> -->
-              </v-col>
+              
+              <v-col cols="12" sm="4">
               <v-text-field
                 ref="nameInput"
                 v-model="repaymentDate"
                 :counter="20"
                 maxValue="20"
                 :rules="nameRules"
-                label="Investor Initials"
+                label="Repayment Date:"
                 required
                 @blur="checkNames"
               ></v-text-field>
+              </v-col>
+              <v-col cols="12" sm="4">
               <v-text-field
                 ref="surnameInput"
                 v-model="repaymentAmount"
                 :counter="20"
                 maxValue="20"
                 :rules="nameRules"
-                label="Investor Surname"
+                label="Repayment Amount:"
                 required
                 @blur="checkNames"
               ></v-text-field>
+              </v-col>
+              <v-col cols="12" sm="3">
               <!-- to be a checkbox -->
-              <v-text-field
+              <v-checkbox
                 v-model="investmentClosed"
-                label="ID Number*"
-                required
-              ></v-text-field>
+                label="Investment Closed?"
+                color="success"
+                value="success"
+                hide-details
+                ></v-checkbox>
+              </v-col>
             </v-row>
           </v-container>
 
@@ -206,14 +212,14 @@
           </v-container>
 
           <!-- investor1 file uploads -->
-          <v-container v-if="person === 'person'">
+          <v-container>
             <v-row>
               <v-col cols="12" sm="12">
                
               </v-col>
               <v-file-input
                 v-model="singedLoanAgreementFile"
-                label="Upload Disclaimer Letter"
+                label="Signed Loan Agreement"
                 accept="image/jpeg, image/jpg, image/png, image/bmp, application/pdf"
                 filled
                 hint="Upload Disclaimer Letter"
@@ -223,22 +229,28 @@
               <v-col cols="12" sm="12"> -->
               <v-file-input
                 v-model="POPFile"
-                label="Upload ID"
+                label="POP File"
                 accept="image/jpeg, image/jpg, image/png, image/bmp, application/pdf"
                 filled
                 hint="Upload ID"
                 persistent-hint
               ></v-file-input>
               <!-- </v-col>
+              
+              <v-col cols="12" sm="12">
               <v-col cols="12" sm="12"> -->
+            </v-row>
+            <v-row>
+            <v-col cols="12" sm="12">
               <v-file-input
                 v-model="attorneyConfirmLetterFile"
-                label="Upload POA"
+                label="Attorney Confirmation Letter"
                 accept="image/jpeg, image/jpg, image/png, image/bmp, application/pdf"
                 filled
                 hint="Upload POA"
                 persistent-hint
               ></v-file-input>
+            </v-col>
             </v-row>
           </v-container>
 
@@ -288,14 +300,14 @@
 
 <script>
 import axios from "axios";
-import VuePhoneNumberInput from "vue-phone-number-input";
+//import VuePhoneNumberInput from "vue-phone-number-input";
 import "vue-phone-number-input/dist/vue-phone-number-input.css";
 let url = process.env.VUE_APP_BASEURL;
 
 export default {
-  name: "investoradd",
+  name: "investmentadd",
   components: {
-    VuePhoneNumberInput,
+   // VuePhoneNumberInput,
   },
   metaInfo: {
     title: "Create Investor",
@@ -312,6 +324,8 @@ export default {
     },
   },
   data: () => ({
+    // add data models here
+    
     roleId: null,
     jobId: null,
     jobType: null,
@@ -321,8 +335,25 @@ export default {
     valid: true, // crm
     value: true,
 
-    // investor form data
+    // investment form data
     investorCode: "",
+    project: "",
+    linkedUnit: "",
+    investmentAmount: "",
+    loanAgreementSignDate: "",
+    investmentDate: "",
+    investmentPerc: "",
+    releaseDate: "",
+    releaseAmount: "",
+    releasePerc: "",
+    repaymentDate: "",
+    repaymentAmount: "",
+    investmentClosed: false,
+    singedLoanAgreementFile: null,
+    POPFile: null,
+    attorneyConfirmLetterFile: null,
+    // 
+
     linkedEmail: "",
 
     person: "",
@@ -442,119 +473,71 @@ export default {
       this.buyers = "1";
     },
 
-    async saveInvestor() {
+    async saveInvestment() {
+
+
       let files = [];
       let contains = [];
-      if (this.investorOneDisclaimerFile !== null) {
-        contains.push("investorOneDisclaimerFile");
-        files.push(this.investorOneDisclaimerFile); // append mimetype here?
+      if (this.singedLoanAgreementFile !== null) {
+        contains.push("singedLoanAgreementFile");
+        files.push(this.singedLoanAgreementFile); // append mimetype here?
       }
 
       // investorOneDisclaimerFile: null,
-      if (this.investorOneIDFile !== null) {
-        contains.push("investorOneIDFile");
-        files.push(this.investorOneIDFile); // append mimetype here?
+      if (this.POPFile !== null) {
+        contains.push("POPFile");
+        files.push(this.POPFile); // append mimetype here?
       }
       // investorOneIDFile: null,
-      if (this.investorOnePOAFile !== null) {
-        contains.push("investorOnePOAFile");
-        files.push(this.investorOnePOAFile); // append mimetype here?
+      if (this.attorneyConfirmLetterFile !== null) {
+        contains.push("attorneyConfirmLetterFile");
+        files.push(this.attorneyConfirmLetterFile); // append mimetype here?
       }
-      // investorOnePOAFile: null,
-
-      if (this.investorTwoDisclaimerFile !== null) {
-        contains.push("investorTwoDisclaimerFile");
-        files.push(this.investorTwoDisclaimerFile); // append mimetype here?
-      }
-      // investorTwoDisclaimerFile: null,
-      if (this.investorTwoIDFile !== null) {
-        contains.push("investorTwoIDFile");
-        files.push(this.investorTwoIDFile); // append mimetype here?
-      }
-      // investorTwoIDFile: null,
-      if (this.investorTwoPOAFile !== null) {
-        contains.push("investorTwoPOAFile");
-        files.push(this.investorTwoPOAFile); // append mimetype here?
-      }
-      // investorTwoPOAFile: null,
-      
-      if (this.representativeDisclaimerFile !== null) {
-        contains.push("representativeDisclaimerFile");
-        files.push(this.representativeDisclaimerFile); // append mimetype here?
-      }
-      // representativeDisclaimerFile: null,
-      if (this.representativeIDFile !== null) {
-        contains.push("representativeIDFile");
-        files.push(this.representativeIDFile); // append mimetype here?
-      }
-      // representativeIDFile: null,
-      if (this.representativePOAFile !== null) {
-        contains.push("representativePOAFile");
-        files.push(this.representativePOAFile); // append mimetype here?
-      }
-      // representativePOAFile: null,
-      if (this.companyResolutionFile !== null) {
-        contains.push("companyResolutionFile");
-        files.push(this.companyResolutionFile); // append mimetype here?
-      }
-      // companyResolutionFile: null,
-      if (this.companyRefDocsFile !== null) {
-        contains.push("companyRefDocsFile");
-        files.push(this.companyRefDocsFile); // append mimetype here?
-      }
-      // companyRefDocsFile: null,
-      if (this.companyPOAFile !== null) {
-        contains.push("companyPOAFile");
-        files.push(this.companyPOAFile); // append mimetype here?
-      }
-      // companyPOAFile: null
-      
       let formData = new FormData();
       for (var x = 0; x < files.length; x++) {
         formData.append("documents", files[x]);
       }
 
+
+    // investorCode: "",
+    // project: "",
+    // linkedUnit: "",
+    // investmentAmount: "",
+    // loanAgreementSignDate: "",
+    // investmentDate: "",
+    // investmentPerc: "",
+    // releaseDate: "",
+    // releaseAmount: "",
+    // releasePerc: "",
+    // repaymentDate: "",
+    // repaymentAmount: "",
+    // investmentClosed: false,
+    // singedLoanAgreementFile: null,
+    // POPFile: null,
+    // attorneyConfirmLetterFile: null,
+    
       formData.append("investorCode", this.investorCode);
-      formData.append("linkedEmail", this.linkedEmail);
-      formData.append("investorInitials", this.investorInitials);
-      formData.append("investorSurname", this.investorSurname);
-      formData.append("investorIDNumber", this.investorIDNumber);
+      formData.append("project", this.project);
+      formData.append("linkedUnit", this.linkedUnit);
+      formData.append("investmentAmount", this.investmentAmount);
+      formData.append("loanAgreementSignDate", this.loanAgreementSignDate);
 
-      formData.append("investorTwoCode", this.investorTwoCode);
-      formData.append("investorTwoInitials", this.investorTwoInitials);
-      formData.append("investorTwoSurname", this.investorTwoSurname);
-      formData.append("investorTwoIDNumber", this.investorTwoIDNumber);
+      formData.append("investmentDate", this.investmentDate);
+      formData.append("releaseDate", this.releaseDate);
+      formData.append("releaseAmount", this.releaseAmount);
+      formData.append("releasePerc", this.releasePerc);
 
-      formData.append("companyName", this.companyName);
-      formData.append("regNumber", this.regNumber);
+      formData.append("repaymentDate", this.repaymentDate);
+      formData.append("repaymentAmount", this.repaymentAmount);
 
       formData.append("companyRepInitials", this.companyRepInitials);
       formData.append("companyRepSurname", this.companyRepSurname);
       formData.append("companyRepIDNumber", this.companyRepIDNumber);
 
-      formData.append("contactEmail", this.contactEmail);
-      formData.append("contactTwoEmail", this.contactTwoEmail);
+      formData.append("investmentClosed", this.investmentClosed);
 
-      formData.append("mobile", this.mobile.phoneNumber);
-      formData.append("landline", this.landline.phoneNumber);
-      formData.append("mobileTwo", this.mobile.phoneNumberTwo);
-      formData.append("landlineTwo", this.landline.phoneNumberTwo);
-
-      formData.append("streetNo", this.streetNo);
-      formData.append("streetName", this.streetName);
-      formData.append("addressSuburb", this.addressSuburb);
-      formData.append("province", this.province);
-      formData.append("addressPostalCode", this.addressPostalCode);
-
-      formData.append("boxNo", this.boxNo);
-      formData.append("postalSuburb", this.postalSuburb);
-      formData.append("postalCode", this.postalCode);
-
-      formData.append("bankName", this.bankName);
-      formData.append("accountName", this.accountName);
-      formData.append("branchCode", this.branchCode);
-      formData.append("accountNumber", this.accountNumber);
-
+  
+      
       formData.append("ficaDate", this.ficaDate);
 
       formData.append("person", this.person);

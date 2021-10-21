@@ -25,11 +25,14 @@
           :key="investor.investor_id"
         >
         
-          <td><a target="_blank"
+          <td><v-btn :id="investor.investor_id" text @click="viewInvestor">{{ investor.investor_acc_number }}</v-btn>
+              
+              <!-- <a target="_blank"
                  style="text-decoration: none"
                  v-on:click="openInvestmentView"
                  :id="investor.investor_id"
-           >{{ investor.investor_acc_number }} </a>
+           >{{ investor.investor_acc_number }} </a> -->
+
           </td> <!-- add a link to investmentView.vue - might change on Wayne's opinion  -->
                    
           <td>{{ investor.investor_name }} {{ investor.investor_surname }} </td>
@@ -40,7 +43,8 @@
     </template>
   </v-simple-table>
     <InvestmentView
-      v-if="openInvestmentView"
+      v-if="openInvestmentViewForm"
+      :dialog="openInvestmentViewForm"
       :investorId="investorId"      
       @closeForm="closeForm"
     />
@@ -85,6 +89,7 @@ export default {
       searchInvestors: "",
       investorId: "",
       SelectedInvestorId: "",
+      openInvestmentUpdateForm: false,
     };
   },
 
@@ -102,19 +107,26 @@ export default {
   },
 
   methods: {
-    openInvestmentView(theEvent) {
+      viewInvestor(event) {
+            console.log(event.currentTarget.id)
+            // this.$router.push({})
+            this.$router.push({name: 'investmentview', params: { id: event.currentTarget.id } })
+      },
+    openInvestmentUpdate(theEvent) {
         this.SelectedInvestorId = theEvent.srcElement.id
         console.log("Open Investment View - investor_id", this.SelectedInvestorId)
         // open InvestmentView.vue with the investor_id input 
-        window.open("../investmentview.vue?investorId=" + this.SelectedInvestorId, "_self")
-        
+        //window.open("../investmentview.vue?investorId=" + this.SelectedInvestorId, "_self")
+        this.openInvestmentUpdateForm = !this.openInvestmentUpdateForm;
         // // code for the InvestmentView.vue
         // var url_string = "http://www.example.com/t.html?a=1&b=3&c=m2-m3-m4-m5"; //window.location.href
         // var url = new URL(url_string);
         // var investorId = url.searchParams.get("investorId");
         // console.log(investorId);
     },
-
+    closeForm(event) {
+      this.openInvestmentViewForm = event;
+    },
 
     async getAllInvestors() {
       this.InvetorsList = [];

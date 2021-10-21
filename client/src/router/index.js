@@ -36,8 +36,9 @@ const routes = [
       ),
   },
   {
-    path: "/investmentview",
+    path: "/investmentview/:id",
     name: "investmentview",
+    // params: true,
     component: () =>
       import(
         /* webpackChunkName: "investmentview" */ "../views/InvestmentView.vue"
@@ -57,14 +58,6 @@ const routes = [
     component: () =>
       import(
         /* webpackChunkName: "investmentupdate" */ "../components/InvestmentUpdate.vue"
-      ),
-  },
-  {
-    path: "/investments",
-    name: "investments",
-    component: () =>
-      import(
-        /* webpackChunkName: "investmentadd" */ "../views/Investments.vue"
       ),
   },
 ];

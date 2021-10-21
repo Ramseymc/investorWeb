@@ -6,11 +6,16 @@
       <thead>
         <tr>
           <th class="text-left">
-            Investor ID
+            Investor Code
           </th>
           <th class="text-left">
-            Investment ID 
-            <!-- link to investmentUpdate.vue -->
+            Name
+          </th>
+          <th class="text-left">
+            Date Created
+          </th>
+          <th class="text-left">
+            Investment Amount
           </th>
           <!-- <th class="text-left">
             Name
@@ -28,11 +33,13 @@
           v-for="investment in InvestmentList"
           :key="investment.investment_id"
         >
-        
-          <td>{{ investment.investor_id }}  </td> 
+          <td><v-btn :id="investment.investment_id" text @click="viewInvestment">{{ investment.investor_acc_number }}</v-btn>  
           
-          <td>{{ investment.investment_id }} <!-- + link to investmentUpdate.vue --> </td> 
+          <td>{{ investment.investor_name }} {{ investment.investor_surname }} </td> <!-- + link to investmentUpdate.vue --> 
 
+          <td>{{ investment.datecreated }}  </td> 
+
+          <td> {{ investment.investment_amount }}  </td> 
           <!-- <td>{{ investor.investor_name }} {{ investor.investor_surname }} </td>
           <td>{{ investor.investor_email }} </td>
           <td>{{ investor.investor_id_number }} </td> -->
@@ -42,21 +49,26 @@
       <!-- button to investmentAdd.vue -->
     </template>
   </v-simple-table>
-
+    <InvestmentUpdate
+      v-if="openInvestmentUpdateForm"
+      :dialog="openInvestmentUpdateForm"
+      :investorId="investorId"      
+      @closeForm="closeForm"
+    />
   </div>
 </template>
 
 <script>
 import axios from "axios";
 //let url = process.env.VUE_APP_BASEURL;
-
+import InvestmentUpdate from "../components/InvestmentUpdate.vue"
 //import * as dayjs from "dayjs";
 //import * as imageConversion from "image-conversion";
 
 export default {
   name: "investmentview",
   components: {
-   
+   InvestmentUpdate
   },
   metaInfo: {
     title: "Investment View",
@@ -72,24 +84,25 @@ export default {
       amp: true,
     },
   },
-  
+  props: {
+      dialog: Boolean,
+      investorId: String,
+  },
   data() {
     return {
       // investment data
       InvestmentList: [],
-      searchInvestments: "",     
-      investorId: "", 
+      searchInvestments: "",  
+      paramId: 0 ,
+      openInvestmentUpdateForm: "",
+      //investorId: "", 
     };
   },
 
-async mounted() {
-    // code for the InvestmentView.vue
-    console.log("MOUNT")
-    var url_string = "http://www.example.com/t.html?a=1&b=3&c=m2-m3-m4-m5"; //window.location.href
-    var url = new URL(url_string);
-    var investorId = url.searchParams.get("investorId");
-    console.log("MOUNTED", investorId);
-    this.investorId = investorId;
+  async mounted() {
+    // get the investor_id to filter on 
+    this.paramId = parseInt(this.$route.params.id)
+
     this.getAllInvestments();   
   },
 
@@ -100,11 +113,19 @@ async mounted() {
   },
 
   methods: {
+      viewInvestment(event) {
+            console.log(event.currentTarget.id)
+            // this.$router.push({})
+            this.$router.push({name: 'investmentupdate', params: { id: event.currentTarget.id } })
+            console.log("view investment done");
+      },
     async getAllInvestments() {
       this.InvestmentList = [];
       let data = {
         id: 1, // use the $store.developement.id 
+        paramId: this.paramId
       };
+      console.log(data)
       await axios({
         method: "post",
         url: `http://localhost:3000/getAllInvestments`, // use store url 
@@ -115,7 +136,7 @@ async mounted() {
             response.data.forEach((investment) => {            
               this.InvestmentList.push(investment);
             });
-            console.log("this.InvetorsList = ", this.InvestmentList);
+            console.log("this.Investment List = ", this.InvestmentList);
           },
           (error) => {
             console.log(error);

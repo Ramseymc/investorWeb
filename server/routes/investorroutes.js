@@ -318,8 +318,9 @@ router.post("/getAllInvestors", (req, res) => {
 }),
 
 router.post("/getAllInvestments", (req, res) => {
+    console.log("ESYYY",req.body)
 
-    let mysql = `select * from investments iv`
+    let mysql = `select * from investors i join investments iv on iv.investor_id = i.investor_id where iv.investment_amount > 0 and i.investor_id = ${req.body.paramId}`
 
     pool.getConnection(function (err, connection) {
         if (err) {

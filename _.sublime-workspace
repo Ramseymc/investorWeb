@@ -1,0 +1,349 @@
+{
+	"auto_complete":
+	{
+		"selected_items":
+		[
+		]
+	},
+	"buffers":
+	[
+		{
+			"contents": "-- SQLINES DEMO *** sktop version to convert large SQL scripts,\n-- SQLINES DEMO *** ny issues with Online conversion.\n\n-- SQLINES DEMO *** act us at support@sqlines.com\n\nUSE `InvestorDB`;\n \n/* SQLINES DEMO *** w [dbo].[portal_Interest]    Script Date: 2021/10/14 17:43:21 ******/\n/* SET ANSI_NULLS ON */\n \n/* SET QUOTED_IDENTIFIER ON */\n \nCREATE VIEW `portal_Interest`\nAS\nSELECT        InvestmentInterest.interest_date, Investors.userId, InvestmentInterest.investor_id, Investors.investor_acc_number, Investors.investor_name, Investors.investor_surname, \n                         InvestmentInterest.opportunity_id, Opportunities.opportunity_code, Opportunities.opportunity_name, InvestmentInterest.investment_amount, InvestmentInterest.investment_interest_rate, \n                         InvestmentInterest.interest_amount, InvestmentInterest.interest_type\nFROM            InvestmentInterest INNER JOIN\n                         Investors ON InvestmentInterest.investor_id = Investors.investor_id INNER JOIN\n                         Opportunities ON InvestmentInterest.opportunity_id = Opportunities.opportunity_id;\n \n/* SQLINES DEMO *** w [dbo].[portal_InvestorInvestment]    Script Date: 2021/10/14 17:43:21 ******/\n/* SET ANSI_NULLS ON */\n \n/* SET QUOTED_IDENTIFIER ON */\n \nCREATE VIEW `portal_InvestorInvestment`\nAS\nSELECT        'T' AS Type, Investments.investment_id AS Id, Investors.userId, Investments.investor_id, Investors.investor_acc_number, Investors.investor_name, \n                         Investors.investor_surname, Investments.opportunity_id, Opportunities.opportunity_code, Opportunities.opportunity_name, Investments.investment_amount, Investments.release_date, \n                         Investments.end_date, Investments.investment_interest_rate, Opportunities.opportunity_amount_required, Opportunities.opportunity_start_date, Opportunities.opportunity_end_date, \n                         Opportunities.opportunity_interest_rate\nFROM            Opportunities INNER JOIN\n                         Investments ON Opportunities.opportunity_id = Investments.opportunity_id INNER JOIN\n                         Investors ON Investments.investor_id = Investors.investor_id\nUNION ALL\nSELECT        'P' AS Type, InvestPledges.pledge_id AS Id, Investors.userId, InvestPledges.investor_id, Investors.investor_acc_number, Investors.investor_name, Investors.investor_surname, \n                         InvestPledges.opportunity_id, Opportunities.opportunity_code, Opportunities.opportunity_name, InvestPledges.investment_amount, InvestPledges.release_date, \n                         InvestPledges.end_date, InvestPledges.investment_interest_rate, Opportunities.opportunity_amount_required, Opportunities.opportunity_start_date, Opportunities.opportunity_end_date, \n                         Opportunities.opportunity_interest_rate\nFROM            InvestPledges INNER JOIN\n                         Investors ON InvestPledges.investor_id = Investors.investor_id INNER JOIN\n                         Opportunities ON InvestPledges.opportunity_id = Opportunities.opportunity_id\nWHERE        (InvestPledges.investment_transferred IS NULL) OR\n                         (InvestPledges.investment_transferred = 0);\n \n/* SQLINES DEMO *** w [dbo].[portal_Investors]    Script Date: 2021/10/14 17:43:21 ******/\n/* SET ANSI_NULLS ON */\n \n/* SET QUOTED_IDENTIFIER ON */\n \nCREATE VIEW `portal_Investors`\nAS\nSELECT        Investors.userId, Users.Username, Investors.investor_id, Investors.investor_acc_number, Investors.investor_name, Investors.investor_surname, Investors.investor_organisation, \n                         Investors.investor_id_number, Investors.investor_email, Investors.investor_mobile, Investors.investor_landline, Investors.investor_physical_street, \n                         Investors.investor_physical_suburb, Investors.investor_physical_province, Investors.investor_physical_country, Investors.investor_physical_postal_code, \n                         Investors.investor_postal_street_box, Investors.investor_postal_suburb, Investors.investor_postal_province, Investors.investor_postal_country, Investors.investor_postal_postal_code, \n                         Investors.investor_fica, Investors.investor_ficaDate, Investors.investor_reference, Investors.blocked, Investors.dateCreated, Investors.lastUpdated\nFROM            Investors LEFT OUTER JOIN\n                         Users ON Investors.userId = Users.Id;\n \n/* SQLINES DEMO *** w [dbo].[portal_InvestorStatements]    Script Date: 2021/10/14 17:43:21 ******/\n/* SET ANSI_NULLS ON */\n \n/* SET QUOTED_IDENTIFIER ON */\n \nCREATE VIEW `portal_InvestorStatements`\nAS\nSELECT        InvestmentStatement.investor_id, Investors.userId, Investors.investor_acc_number, Investors.investor_name, Investors.investor_surname, \n                         InvestmentStatement.opportunity_id, Opportunities.opportunity_code, Opportunities.opportunity_name, InvestmentStatement.Date, InvestmentStatement.Amount, \n                         InvestmentStatement.Type, InvestmentStatement.InterestRate, InvestmentStatement.Days, SUM(InvestmentStatement.InvestmentAmount) OVER (PARTITION BY \n                         InvestmentStatement.investor_id, InvestmentStatement.opportunity_id\nORDER BY Date) AS CapitalBalance, SUM(InvestmentStatement.InterestAmount) OVER (PARTITION BY InvestmentStatement.investor_id, InvestmentStatement.opportunity_id\nORDER BY Date) AS InterestBalance, SUM(InvestmentStatement.Amount) OVER (PARTITION BY InvestmentStatement.investor_id, InvestmentStatement.opportunity_id\nORDER BY Date) AS TotalBalance\nFROM            InvestmentStatement INNER JOIN\n                         Investors ON InvestmentStatement.investor_id = Investors.investor_id INNER JOIN\n                         Opportunities ON InvestmentStatement.opportunity_id = Opportunities.opportunity_id\nORDER BY InvestmentStatement.investor_id, InvestmentStatement.Date\nLIMIT 100;\n \n/* SQLINES DEMO *** w [dbo].[portal_Opportunities]    Script Date: 2021/10/14 17:43:21 ******/\n/* SET ANSI_NULLS ON */\n \n/* SET QUOTED_IDENTIFIER ON */\n \nCREATE VIEW `portal_Opportunities`\nAS\nSELECT        Opportunities.categoryId, OpportunityCategories.Description AS Category, Opportunities.opportunity_id, Opportunities.opportunity_code, Opportunities.opportunity_name, \n                         Opportunities.opportunity_amount_required, Opportunities.opportunity_start_date, Opportunities.opportunity_end_date, Opportunities.opportunity_interest_rate, Opportunities.transfer_date, \n                         Opportunities.transfer_type, Opportunities.blocked, Opportunities.dateCreated, Opportunities.lastUpdated\nFROM            Opportunities LEFT OUTER JOIN\n                         OpportunityCategories ON Opportunities.categoryId = OpportunityCategories.Id;\n \n/* SQLINES DEMO *** w [dbo].[ViewInvestments]    Script Date: 2021/10/14 17:43:21 ******/\n/* SET ANSI_NULLS ON */\n \n/* SET QUOTED_IDENTIFIER ON */\n \nCREATE VIEW `ViewInvestments`\nAS\nSELECT        Investments.investment_id, Investments.investor_id, Investors.investor_acc_number, Investors.investor_name, Investors.investor_surname, \n                         Investments.opportunity_id, Opportunities.opportunity_code, Opportunities.opportunity_name, Investments.investment_amount, \n                         Investments.investment_exit_rollover, Investments.release_date, Investments.end_date, Investments.investment_interest_rate, \n                         Investments.transaction_type, Investments.blocked, Investments.dateCreated, Investments.lastUpdated\nFROM            Investments INNER JOIN\n                         Opportunities ON Investments.opportunity_id = Opportunities.opportunity_id INNER JOIN\n                         Investors ON Investments.investor_id = Investors.investor_id;\n \n/* SQLINES DEMO *** w [dbo].[ViewInvestPledges]    Script Date: 2021/10/14 17:43:21 ******/\n/* SET ANSI_NULLS ON */\n \n/* SET QUOTED_IDENTIFIER ON */\n \nCREATE VIEW `ViewInvestPledges`\nAS\nSELECT        InvestPledges.pledge_id, InvestPledges.investor_id, Investors.investor_acc_number, Investors.investor_name, Investors.investor_surname, \n                         InvestPledges.opportunity_id, Opportunities.opportunity_code, Opportunities.opportunity_name, InvestPledges.investment_amount, \n                         InvestPledges.contract_signed_date, InvestPledges.deposit_date, InvestPledges.release_date, InvestPledges.end_date, \n                         InvestPledges.trust_interest_rate, InvestPledges.investment_interest_rate, InvestPledges.investment_transferred, InvestPledges.blocked, \n                         InvestPledges.dateCreated, InvestPledges.lastUpdated\nFROM            InvestPledges INNER JOIN\n                         Investors ON InvestPledges.investor_id = Investors.investor_id INNER JOIN\n                         Opportunities ON InvestPledges.opportunity_id = Opportunities.opportunity_id;\n \n/* SQLINES DEMO *** w [dbo].[vwByInvestor_InvestmentInterestRate]    Script Date: 2021/10/14 17:43:21 ******/\n/* SET ANSI_NULLS ON */\n \n/* SET QUOTED_IDENTIFIER ON */\n \nCREATE VIEW `vwByInvestor_InvestmentInterestRate`\nAS\nSELECT        SUM(investment_amount) AS Amount\nFROM            Investments\nWHERE        (investor_id = 49) AND (investment_interest_rate = 18) AND (release_date < STR_TO_DATE('2020-01-01', 102));\n \n/* SQLINES DEMO *** w [dbo].[vwCheck_InvestorStatements]    Script Date: 2021/10/14 17:43:21 ******/\n/* SET ANSI_NULLS ON */\n \n/* SET QUOTED_IDENTIFIER ON */\n \nCREATE VIEW `vwCheck_InvestorStatements`\nAS\nSELECT        InvestmentStatement.investor_id, Investors.userId, Investors.investor_acc_number, Investors.investor_name, \n                         Investors.investor_surname, InvestmentStatement.opportunity_id, Opportunities.opportunity_code, Opportunities.opportunity_name, \n                         InvestmentStatement.Date, InvestmentStatement.Amount, InvestmentStatement.Type, InvestmentStatement.InterestRate, \n                         InvestmentStatement.Days, SUM(InvestmentStatement.InvestmentAmount) OVER (PARTITION BY InvestmentStatement.investor_id, \n                         InvestmentStatement.opportunity_id\nORDER BY id) AS CapitalBalance, SUM(InvestmentStatement.InterestAmount) OVER (PARTITION BY InvestmentStatement.investor_id, \nInvestmentStatement.opportunity_id\nORDER BY id) AS InterestBalance, SUM(InvestmentStatement.Amount) OVER (PARTITION BY InvestmentStatement.investor_id, \nInvestmentStatement.opportunity_id\nORDER BY id) AS TotalBalance\nFROM            InvestmentStatement INNER JOIN\n                         Investors ON InvestmentStatement.investor_id = Investors.investor_id INNER JOIN\n                         Opportunities ON InvestmentStatement.opportunity_id = Opportunities.opportunity_id\nWHERE        (Investors.investor_acc_number = 'ZMAT01')\nORDER BY InvestmentStatement.investor_id, InvestmentStatement.Date\nLIMIT 100;\n \n/* SQLINES DEMO *** w [dbo].[vwInterestCalc]    Script Date: 2021/10/14 17:43:21 ******/\n/* SET ANSI_NULLS ON */\n \n/* SET QUOTED_IDENTIFIER ON */\n \nCREATE VIEW `vwInterestCalc`\nAS\nSELECT        (SELECT        investor_acc_number\n                          FROM            Investors\n                          WHERE        Investors.investor_id = Investments.investor_id) AS InvestorNumber,\n                             (SELECT        (investor_name + investor_surname) AS InvestorName\n                               FROM            Investors\n                               WHERE        Investors.investor_id = Investments.investor_id) AS InvestorName,\n                             (SELECT        opportunity_code\n                               FROM            Opportunities\n                               WHERE        Opportunities.opportunity_id = Investments.opportunity_id) AS OpportunityCode,\n                             (SELECT        opportunity_name\n                               FROM            Opportunities\n                               WHERE        Opportunities.opportunity_id = Investments.opportunity_id) AS OpportunityName, release_date, end_date, investment_amount, \n                         investment_interest_rate, ROUND(investment_amount * TIMESTAMPDIFF(day, release_date, end_date) / 365 * investment_interest_rate / 100, 2) AS [Expected Interest], \n                         TIMESTAMPDIFF(day, release_date, end_date) AS [Start - End Days], ROUND(investment_amount * TIMESTAMPDIFF(day, release_date, IIF(end_date > NOW(3), NOW(3), \n                         end_date)) / 365 * investment_interest_rate / 100, 2) AS [Current Interest], TIMESTAMPDIFF(day, release_date, IIF(end_date > NOW(3), NOW(3), end_date)) \n                         AS [Current Days]\nFROM            Investments\nWHERE        transaction_type != 3;\n \n/* SQLINES DEMO *** w [dbo].[vwInvestmentsBase]    Script Date: 2021/10/14 17:43:21 ******/\n/* SET ANSI_NULLS ON */\n \n/* SET QUOTED_IDENTIFIER ON */\n \nCREATE VIEW `vwInvestmentsBase`\nAS\nSELECT        investment_id, investor_id, opportunity_id, investment_amount, investment_exit_rollover, release_date, end_date, investment_interest_rate, transaction_type, blocked,\n                             (SELECT        Description\n                               FROM            TransactionTypes\n                               WHERE        (Investments.transaction_type = Id)) AS TransactionType,\n                             (SELECT        Description\n                               FROM            InvestmentActions\n                               WHERE        (Investments.investment_exit_rollover = Id)) AS ExitRollover\nFROM            Investments;\n \n/* SQLINES DEMO *** w [dbo].[vwInvestorStart]    Script Date: 2021/10/14 17:43:21 ******/\n/* SET ANSI_NULLS ON */\n \n/* SET QUOTED_IDENTIFIER ON */\n \nCREATE VIEW `vwInvestorStart`\nAS\nSELECT        investor_id, investment_interest_rate\nFROM            Investments\nWHERE        (release_date < STR_TO_DATE('2020-01-01', 102))\nGROUP BY investor_id, investment_interest_rate\nHAVING        (investor_id = 49) AND (investment_interest_rate = 18);\n ",
+			"file": "/C/Users/Admin/Documents/views.sql",
+			"file_size": 30312,
+			"file_write_time": 132786999526717997,
+			"settings":
+			{
+				"buffer_size": 14001,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"contents": "<template>\n  <div class=\"about\">\n      <h1> View Investors </h1>\n  </div>\n</template>\n\n<script>\nimport * as dayjs from \"dayjs\";\nimport axios from \"axios\";\nlet url = process.env.VUE_APP_BASEURL;\nimport * as imageConversion from \"image-conversion\";\nexport default {\n  name: \"Deliveries\",\n  components: {\n    // PDFViewer,\n    //PDFViewer: () => import(\"../components/PDFViewer\")\n  },\n  metaInfo: {\n    title: \"Deliveries\",\n    titleTemplate: \"CPC - %s\",\n    meta: [\n      {\n        name: `description`,\n        content: `About CPC here.`\n      }\n    ],\n    htmlAttrs: {\n      lang: \"en\",\n      amp: true\n    }\n  },\n  data() {\n    return {\n      InvestorList: [],\n\n      uploadDialog: false,\n      getComponent: false,\n      files: [],\n      progressActive: false,\n      imageFile: null,\n      currentIdForUploadImage: null,\n\n      showSrc: \"http://localhost:3000/Elec-Elec-001.pdf\",\n      showFileName: \"Elec-Elec-001\",\n      showPDF: true,\n      supplier: \"\",\n      suppliers: [],\n      purchaseOrder: \"\",\n      purchaseOrders: [],\n      difference: 0,\n      snackbar: false,\n      snackbarMessage: \"\",\n      dialog: false,\n      dialogEmail: false,\n      headers: [\n        {\n          text: \"Block\",\n          align: \"start\",\n          sortable: false,\n          value: \"subsection\"\n        },\n        {\n          text: \"Unit\",\n          align: \"start\",\n          sortable: false,\n          value: \"unit\"\n        },\n        {\n          text: \"Delivery Date\",\n          align: \"start\",\n          sortable: false,\n          value: \"deliveryDate\"\n        },\n        { text: \"Item\", value: \"itemDescription\" },\n        { text: \"Quantity Ordered\", value: \"quantity\", align: \"center\" },\n        { text: \"Unit Measure\", value: \"unitDescription\", align: \"center\" },\n        { text: \"Quantity Delivered\", value: \"delivered\", align: \"center\" },\n        { text: \"Variance\", value: \"difference\", align: \"center\" },\n        { text: \"Actions\", value: \"actions\", sortable: false }\n      ],\n      desserts: [],\n      editedIndex: -1,\n      editedItem: {\n        subsection: \"\",\n        unitNumber: \"\",\n        deliveryDate: \"\",\n        itemDescription: \"\",\n        quantity: 0,\n        unitDescription: \"\",\n        delivered: 0,\n        difference: 0,\n        comments: \"\"\n      },\n      defaultItem: {\n        subsection: \"\",\n        unitNumber: \"\",\n        deliveryDate: \"\",\n        itemDescription: \"\",\n        quantity: 0,\n        unitDescription: \"\",\n        delivered: 0,\n        difference: 0,\n        comments: \"\"\n      }\n    };\n  },\n  async mounted() {\n    this.getAllInvestors();  \n    // let data = {\n    //   id: this.$store.state.development.id\n    // };\n    // await axios({\n    //   method: \"post\",\n    //   url: `${url}/POreceived`,\n    //   data: data\n    // }).then(\n    //   response => {\n    //     this.suppliers = response.data;\n    //   },\n    //   error => {\n    //     console.log(error);\n    //   }\n    // );\n    // this.processNotifications();\n  },\n  computed: {\n    formTitle() {\n      return this.editedIndex === -1 ? \"New Item\" : \"Edit Item\";\n    }\n  },\n\n  watch: {\n    dialog(val) {\n      val || this.close();\n    },\n    dialogDelete(val) {\n      val || this.closeDelete();\n    }\n  },\n\n  methods: {\n    async getAllInvestors() {\n        this.InvetorsList = [];     \n        let data = {\n            id: 1,\n            \n        }\n        await axios({\n            method: \"post\",\n            url: `http://localhost:3000/getAllInvestors`,\n            data: data\n        })\n            .then(\n            response => {\n                response.data.forEach(stockItem => {\n                    stockItem.qtyOnHandLbl  = \"Qty On Hand\";\n                    stockItem.qtyCountedLbl = \"Qty Counted\";\n                    stockItem.CountCorrect   = true\n                    stockItem.CountCorrectLbl = \"Correct Stock Qty?\"\n                    stockItem.qtyCounted    = 0;\n                    this.InvetorsList.push(stockItem);                                              \n                });\n                console.log(\"this.InvetorsList = \", this.InvetorsList)           \n            },\n            error => {\n                console.log(error);\n            }\n            )\n            .catch(e => {\n            console.log(e);\n            });\n    },\n    removeFromList(event) {\n      this.files.splice(parseInt(event.currentTarget.id), 1);\n    },\n    async blobToFile(theBlob, fileName, lastModifiedDate, lastModified) {\n      theBlob.lastModifiedDate = lastModifiedDate;\n      theBlob.lastModified = lastModified;\n      theBlob.name = fileName;\n      return theBlob;\n    },\n    convertImage() {\n      return new Promise((resolve, reject) => {\n        let newFile = [];\n        let file;\n\n        this.files.forEach(el => {\n          if (el.size > 2000000) {\n            console.log(\"Size\", el.size);\n            imageConversion.compressAccurately(el, 1700).then(res => {\n              console.log(res);\n              file = this.blobToFile(\n                res,\n                el.name,\n                el.lastModifiedDate,\n                el.lastModified\n              );\n\n              newFile.push(file);\n            });\n          } else {\n            newFile.push(el);\n          }\n        });\n        resolve(() => {\n          this.files = newFile;\n          console.log(newFile);\n          console.log(\"After Conversion\", this.files);\n        });\n        reject(err => {\n          console.log(err);\n        });\n      });\n    },\n    async uploadedImageFile() {\n      if (this.files.length) {\n        await this.convertImage();\n        this.progressActive = true;\n        let formData = new FormData();\n        this.files.forEach(el => {\n          formData.append(\"files\", el);\n        });\n        await axios({\n          method: \"post\",\n          url: `${url}/uploadDeliveryImage`,\n          data: formData\n        }).then(\n          response => {\n            this.uploadDialog = false;\n\n            this.desserts.forEach(el => {\n              el.image = JSON.stringify(response.data);\n            });\n          },\n          error => {\n            console.log(error);\n          }\n        );\n      }\n    },\n    closeClientInfo() {\n      this.$emit(\"closeForm\", false);\n    },\n\n    receiptAll() {\n      this.desserts.forEach(el => {\n        el.delivered = el.quantity;\n        el.quantityDelivered = el.quantity;\n        el.quantityExpected = el.quantity;\n        el.difference = 0;\n      });\n    },\n    checkIfEmailNecessary() {\n      let variance = this.desserts.reduce((prev, el) => {\n        return prev + el.difference;\n      }, 0);\n      if (variance > 0) {\n        this.dialogEmail = true;\n      } else {\n        this.process();\n      }\n    },\n    async emailBeforeProcessDialog() {\n      let supplierToEmail = this.suppliers.filter(el => {\n        return el.supplierName === this.supplier;\n      });\n      let deliveryData = this.desserts.filter(el => {\n        return el.difference !== 0;\n      });\n      let toPost = {\n        supplierToEmail,\n        data: deliveryData\n      };\n      await axios({\n        method: \"post\",\n        url: `${url}/deliveryVariance`,\n        data: toPost\n      }).then(\n        response => {\n          if (response.data.success) {\n            this.snackbarMessage = \"Email successfully sent!\";\n          } else {\n            this.snackbarMessage =\n              \"There was a connection problem, please try again later!\";\n          }\n          this.snackbar = true;\n          this.process();\n          this.dialogEmail = false;\n        },\n        error => {\n          console.log(error);\n        }\n      );\n    },\n    closeEmailDialog() {\n      this.dialogEmail = false;\n      this.process();\n    },\n    async process() {\n      let supplier = this.suppliers.filter(el => {\n        return el.supplierName === this.supplier;\n      })[0].id;\n      let toPost = this.desserts.filter(el => {\n        return (\n          el.delivered !== 0 &&\n          parseInt(el.deliveredPreviously) !== parseInt(el.delivered)\n        );\n      });\n      if (toPost.length) {\n        toPost.forEach(el => {\n          el.delivered = parseInt(el.delivered);\n          el.enteredBy = this.$store.state.userName;\n          (el.development = this.$store.state.development.id),\n            (el.supplier = supplier);\n          if (parseInt(el.delivered) === parseInt(el.quantity)) {\n            el.fulfilled = true;\n          } else {\n            el.fulfilled = false;\n          }\n        });\n        await axios({\n          method: \"post\",\n          url: `${url}/postdeliveries`,\n          data: toPost\n        }).then(\n          () => {\n            this.desserts = [];\n            this.purchaseOrder = \"\";\n          },\n          error => {\n            console.log(error);\n          }\n        );\n      }\n    },\n    ifDifferent() {\n      if (this.editedItem.difference !== 0) {\n        alert(`Are you sure?\n        The amount you have entered does not agree to the amount expected.`);\n      }\n    },\n    calculateDifference() {\n      this.editedItem.difference =\n        this.editedItem.quantity - this.editedItem.delivered;\n    },\n    getPDF() {\n      this.getComponent = true;\n    },\n    updateOpened() {\n      this.getComponent = false;\n    },\n    async getPurchaseOrders() {\n      let supplierChosen = this.suppliers.filter(el => {\n        return el.supplierName === this.supplier;\n      });\n      let data = {\n        id: this.$store.state.development.id,\n        supplier: supplierChosen[0].id\n      };\n      await axios({\n        method: \"post\",\n        url: `${url}/PONumbers`,\n        data: data\n      }).then(\n        response => {\n          this.purchaseOrders = response.data;\n        },\n        error => {\n          console.log(error);\n        }\n      );\n    },\n    async getspecificPurchaseOrder() {\n      let data = {\n        poNumber: this.purchaseOrder,\n        id: this.$store.state.development.id\n      };\n      await axios({\n        method: \"post\",\n        url: `${url}/getPO`,\n        data: data\n      }).then(\n        response => {\n          response.data.forEach(el => {\n            el.deliveryDate = dayjs(el.deliveryDate).format(\"YYYY-MM-DD\");\n            el.difference = parseInt(el.quantity) - parseInt(el.delivered);\n            el.deliveredPreviously = el.delivered;\n          });\n          this.desserts = response.data;\n        },\n        error => {\n          console.log(error);\n        }\n      );\n    },\n\n    editItem(item) {\n      this.editedIndex = this.desserts.indexOf(item);\n      this.editedItem = Object.assign({}, item);\n      this.dialog = true;\n    },\n\n    close() {\n      this.dialog = false;\n      this.$nextTick(() => {\n        this.editedItem = Object.assign({}, this.defaultItem);\n        this.editedIndex = -1;\n      });\n    },\n    save() {\n      if (this.editedIndex > -1) {\n        Object.assign(this.desserts[this.editedIndex], this.editedItem);\n      } else {\n        this.desserts.push(this.editedItem);\n      }\n      this.close();\n    }\n  }\n};\n</script>\n",
+			"settings":
+			{
+				"buffer_size": 10931,
+				"line_ending": "Windows",
+				"name": "<template>"
+			}
+		},
+		{
+			"contents": "Investview - click the ivestor_code to open InvestmentView with the investor_id attached as an attribute\nget the investor_id in the Investment.vue and retrieve investments using this.InvestorId\n\nget work investmentView opening all investors, then with the investor id\n\n15 min concentrate sessions\nthen line and smoke\nstay organized and ontop of my environment, deep breaths \n\nwork done by 4pm\n-----\ndo my hair\nblaze\nsmoke ciggies\nplay music on phone\nsearch wallpapers\n-----\nwash meself\nsign lease\ncharge iPod\nget food from checkers\ngrind coffee @ Troy and speak to him about teaching English \ngo to the beach and let go \n-----\n\nask for an office chair \ntrust universe and follow my heart \n\nbinance a few mins a day\nmake a schedule / routine for Cape Town - Work, love, adventure balance\n\n-----\n",
+			"file": "/D/dev/todo.txt",
+			"file_size": 0,
+			"file_write_time": 132792032853243971,
+			"settings":
+			{
+				"buffer_size": 794,
+				"line_ending": "Windows"
+			}
+		}
+	],
+	"build_system": "",
+	"build_system_choices":
+	[
+	],
+	"build_varint": "",
+	"command_palette":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+			[
+				"insta",
+				"Package Control: Install Package"
+			],
+			[
+				"pakc",
+				"Package Control: Install Package"
+			],
+			[
+				"",
+				"Bookmarks: Select Previous"
+			],
+			[
+				"pack",
+				"Install Package Control"
+			]
+		],
+		"width": 0.0
+	},
+	"console":
+	{
+		"height": 0.0,
+		"history":
+		[
+		]
+	},
+	"distraction_free":
+	{
+		"menu_visible": true,
+		"show_minimap": false,
+		"show_open_files": false,
+		"show_tabs": false,
+		"side_bar_visible": false,
+		"status_bar_visible": false
+	},
+	"expanded_folders":
+	[
+		"/C/dev/investorWeb"
+	],
+	"file_history":
+	[
+		"/D/dev/repos/timeManagement/node_modules/g/test.js",
+		"/D/dev/repos/timeManagement/node_modules/g/index.js",
+		"/C/dev/cape/spLeft.sql",
+		"/C/Users/Admin/Documents/capeDev/Projects11_Martins_Server_logins.txt",
+		"/C/Program Files/MySQL/MySQL Workbench 8.0/modules/db_mssql_grt.py",
+		"/C/dev/cape/migration_script.sql",
+		"/C/dev/cape/migration_script_flatfile.txt",
+		"/C/Users/Admin/Documents/capeDev/SQL reports/reportQuery.sql",
+		"/C/dev/swimcape/swimjs/index.html",
+		"/C/Users/Admin/Documents/capeDev/SQL reports/InvestorOpportunity/InvestorOpportunity/packages/System.Configuration.ConfigurationManager.4.7.0/lib/net461/System.Configuration.ConfigurationManager.xml",
+		"/C/xampp/htdocs/index.php",
+		"/C/Users/Admin/Documents/SPs_and_Views_Script.sql",
+		"/C/xampp/webdav/webdav.txt",
+		"/C/dev/webfiles/ALTER TABLE salesinfo.sql",
+		"/C/Users/Admin/Downloads/eccentri_capeprojects (2).sql",
+		"/C/Users/Admin/Documents/.env",
+		"/C/Users/Admin/Documents/.env_SERVER"
+	],
+	"find":
+	{
+		"height": 28.0
+	},
+	"find_in_files":
+	{
+		"height": 0.0,
+		"where_history":
+		[
+		]
+	},
+	"find_state":
+	{
+		"case_sensitive": false,
+		"find_history":
+		[
+			"`dbo`.",
+			"dbo.",
+			"OpportunityCategories",
+			"InvestmentStatement",
+			"Users",
+			"InvestPledges",
+			"Opportunities",
+			"Investments",
+			"Investors",
+			"InvestmentInterest",
+			"ConnectionStrings",
+			"developement",
+			"ConnectionS"
+		],
+		"highlight": true,
+		"in_selection": false,
+		"preserve_case": false,
+		"regex": false,
+		"replace_history":
+		[
+			"",
+			"opportunitycategories",
+			"investmentstatement",
+			"users",
+			"investpledges",
+			"opportunities",
+			"investments",
+			"investors",
+			"investmentinterest"
+		],
+		"reverse": false,
+		"show_context": true,
+		"use_buffer2": true,
+		"whole_word": false,
+		"wrap": true
+	},
+	"folders":
+	[
+		{
+			"path": "C:\\dev\\investorWeb"
+		}
+	],
+	"groups":
+	[
+		{
+			"selected": 1,
+			"sheets":
+			[
+				{
+					"buffer": 0,
+					"file": "/C/Users/Admin/Documents/views.sql",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 14001,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1242,
+								1242
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/SQL/SQL.sublime-syntax",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 2,
+					"type": "text"
+				},
+				{
+					"buffer": 1,
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 10931,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								10380,
+								10380
+							]
+						],
+						"settings":
+						{
+							"auto_name": "<template>",
+							"syntax": "Packages/Text/Plain text.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 570.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 0,
+					"type": "text"
+				},
+				{
+					"buffer": 2,
+					"file": "/D/dev/todo.txt",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 794,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								415,
+								415
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Text/Plain text.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 1,
+					"type": "text"
+				}
+			]
+		}
+	],
+	"incremental_find":
+	{
+		"height": 28.0
+	},
+	"input":
+	{
+		"height": 0.0
+	},
+	"layout":
+	{
+		"cells":
+		[
+			[
+				0,
+				0,
+				1,
+				1
+			]
+		],
+		"cols":
+		[
+			0.0,
+			1.0
+		],
+		"rows":
+		[
+			0.0,
+			1.0
+		]
+	},
+	"menu_visible": true,
+	"output.find_results":
+	{
+		"height": 0.0
+	},
+	"pinned_build_system": "",
+	"project": "",
+	"replace":
+	{
+		"height": 52.0
+	},
+	"save_all_on_build": true,
+	"select_file":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"select_project":
+	{
+		"height": 500.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 380.0
+	},
+	"select_symbol":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"selected_group": 0,
+	"settings":
+	{
+	},
+	"show_minimap": true,
+	"show_open_files": true,
+	"show_tabs": true,
+	"side_bar_visible": true,
+	"side_bar_width": 150.0,
+	"status_bar_visible": true,
+	"template_settings":
+	{
+	}
+}

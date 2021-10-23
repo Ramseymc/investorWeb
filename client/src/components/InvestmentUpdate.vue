@@ -71,7 +71,7 @@
                 label="Project:"
                 required
                 @blur="checkNames"
-              ></v-text-field> 
+              ></v-text-field>
 
               <v-text-field
                 ref="linkedEmailInput"
@@ -194,7 +194,7 @@
                 color="success"
                 value="success"
                 hide-details
-                ></v-checkbox>
+              ></v-checkbox>
               <!-- <v-text-field
                 v-model="investmentClosed"
                 label="Investment Closed?"
@@ -215,9 +215,7 @@
           <!-- investor1 file uploads -->
           <v-container>
             <v-row>
-              <v-col cols="12" sm="12">
-               
-              </v-col>
+              <v-col cols="12" sm="12"> </v-col>
               <v-file-input
                 v-model="singedLoanAgreementFile"
                 label="Signed Loan Agreement"
@@ -242,19 +240,18 @@
               <v-col cols="12" sm="12"> -->
             </v-row>
             <v-row>
-            <v-col cols="12" sm="12">
-              <v-file-input
-                v-model="attorneyConfirmLetterFile"
-                label="Attorney Confirmation Letter"
-                accept="image/jpeg, image/jpg, image/png, image/bmp, application/pdf"
-                filled
-                hint="Upload POA"
-                persistent-hint
-              ></v-file-input>
-            </v-col>
+              <v-col cols="12" sm="12">
+                <v-file-input
+                  v-model="attorneyConfirmLetterFile"
+                  label="Attorney Confirmation Letter"
+                  accept="image/jpeg, image/jpg, image/png, image/bmp, application/pdf"
+                  filled
+                  hint="Upload POA"
+                  persistent-hint
+                ></v-file-input>
+              </v-col>
             </v-row>
           </v-container>
-
 
           <!-- Action Buttons -->
           <v-container>
@@ -308,7 +305,7 @@ let url = process.env.VUE_APP_BASEURL;
 export default {
   name: "investmentupdate",
   components: {
-   // VuePhoneNumberInput,
+    // VuePhoneNumberInput,
   },
   props: {
     dialog: Boolean,
@@ -330,7 +327,7 @@ export default {
   },
   data: () => ({
     // add data models here
-    
+
     roleId: null,
     jobId: null,
     jobType: null,
@@ -357,7 +354,7 @@ export default {
     singedLoanAgreementFile: null,
     POPFile: null,
     attorneyConfirmLetterFile: null,
-    // 
+    //
 
     linkedEmail: "",
 
@@ -446,23 +443,21 @@ export default {
       (v) => !!v || "E-mail is required",
       (v) => /.+@.+\..+/.test(v) || "E-mail must be valid",
     ],
-    
   }),
 
   async mounted() {
     this.testServer();
   },
-  watch: {    
-  },
+  watch: {},
 
-  methods: {    
+  methods: {
     async testServer() {
       await axios({
         method: "get",
         url: `http://localhost:3000/test`,
       }).then(
         (response) => {
-          console.log(response.data)              
+          console.log(response.data);
         },
         (error) => {
           console.log(error);
@@ -474,7 +469,7 @@ export default {
       console.log(event);
     },
 
-    personCompanySwitch() {      
+    personCompanySwitch() {
       this.buyers = "1";
     },
 
@@ -513,7 +508,7 @@ export default {
         files.push(this.investorTwoPOAFile); // append mimetype here?
       }
       // investorTwoPOAFile: null,
-      
+
       if (this.representativeDisclaimerFile !== null) {
         contains.push("representativeDisclaimerFile");
         files.push(this.representativeDisclaimerFile); // append mimetype here?
@@ -544,7 +539,7 @@ export default {
         files.push(this.companyPOAFile); // append mimetype here?
       }
       // companyPOAFile: null
-      
+
       let formData = new FormData();
       for (var x = 0; x < files.length; x++) {
         formData.append("documents", files[x]);
@@ -602,14 +597,13 @@ export default {
       }).then(
         (response) => {
           console.log(response.data);
-          this.snackbar = true;          
+          this.snackbar = true;
         },
         (error) => {
           console.log(error);
         }
       );
     },
-  
 
     reset() {
       this.$refs.form.reset();

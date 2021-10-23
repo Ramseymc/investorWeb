@@ -1,23 +1,57 @@
 <template>
   <div class="about">
-    <h1>View Investments</h1>
+    <br />
+    <v-row>
+      <v-col cols="3">
+        <h1>View Investments</h1>
+      </v-col>
+      <!-- Search -->
+      <v-col cols="4">
+        <v-text-field
+          prepend-icon="mdi-magnify"
+          placholder="Search"
+          label="Search"
+          v-model="searchInvestments"
+        ></v-text-field>
+      </v-col>
+      <v-col cols="4">
+        <v-btn-toggle v-model="icon" borderless>
+          <v-btn value="back" color="grey" @click="back">
+            <v-icon right> mdi-keyboard-backspace </v-icon>
+          </v-btn>
+
+          <v-btn value="refresh" color="secondary" @click="refresh">
+            <span>Refresh</span>
+
+            <v-icon right> mdi-refresh </v-icon>
+          </v-btn>
+
+          <v-btn value="create" color="primary" @click="create">
+            <span class="hidden-sm-and-down">Create</span>
+
+            <v-icon right> mdi-account-plus </v-icon>
+          </v-btn>
+        </v-btn-toggle>
+      </v-col>
+    </v-row>
+    <v-row>
+      <v-col cols="8">
+          <h2> 
+            
+            {{this.InvestorCode}} - {{this.InvestorName}} </h2>
+      </v-col>
+    </v-row>
     <v-simple-table>
-    <template v-slot:default>
-      <thead>
-        <tr>
-          <th class="text-left">
-            Investor Code
-          </th>
-          <th class="text-left">
-            Name
-          </th>
-          <th class="text-left">
-            Date Created
-          </th>
-          <th class="text-left">
-            Investment Amount
-          </th>
-          <!-- <th class="text-left">
+      <template v-slot:default>
+        <thead>
+          <tr>
+            <!-- <th class="text-left">Investor Code</th>
+            <th class="text-left">Name</th> -->
+            
+            <th class="text-left">Date Created</th>
+            <th class="text-left">Date Funds Paid</th>
+            <th class="text-left">Investment Amount</th>
+            <!-- <th class="text-left">
             Name
           </th>
           <th class="text-left">
@@ -26,33 +60,50 @@
           <th class="text-left">
             ID
           </th> -->
-        </tr>
-      </thead>
-      <tbody>
-        <tr
-          v-for="investment in InvestmentList"
-          :key="investment.investment_id"
-        >
-          <td><v-btn :id="investment.investment_id" text @click="viewInvestment">{{ investment.investor_acc_number }}</v-btn>  
-          
-          <td>{{ investment.investor_name }} {{ investment.investor_surname }} </td> <!-- + link to investmentUpdate.vue --> 
+          </tr>
+        </thead>
+        <tbody>
+          <tr
+            v-for="investment in investmentsFiltered"
+            :key="investment.investment_id"
+          >
+            <!-- <td>
+              <v-btn
+                :id="investment.investment_id"
+                text
+                @click="viewInvestment"
+                >{{ investment.investor_acc_number }}</v-btn
+              >
+            </td>
 
-          <td>{{ investment.datecreated }}  </td> 
+            <td>
+              {{ investment.investor_name }} {{ investment.investor_surname }}
+            </td> -->
+            <!-- + link to investmentUpdate.vue -->
 
-          <td> {{ investment.investment_amount }}  </td> 
-          <!-- <td>{{ investor.investor_name }} {{ investor.investor_surname }} </td>
+            <td>
+              <v-btn value="date" color="primary"
+                  :id="investment.investment_id"
+                  text
+                  @click="viewInvestment"
+                  >{{ investment.datecreated }}</v-btn
+                >
+            </td>
+            <td> Date </td>
+            <td>R{{ investment.investment_amount }}</td>
+            <!-- <td>{{ investor.investor_name }} {{ investor.investor_surname }} </td>
           <td>{{ investor.investor_email }} </td>
           <td>{{ investor.investor_id_number }} </td> -->
-        </tr>
-      </tbody>
+          </tr>
+        </tbody>
 
-      <!-- button to investmentAdd.vue -->
-    </template>
-  </v-simple-table>
+        <!-- button to investmentAdd.vue -->
+      </template>
+    </v-simple-table>
     <InvestmentUpdate
       v-if="openInvestmentUpdateForm"
       :dialog="openInvestmentUpdateForm"
-      :investorId="investorId"      
+      :investorId="investorId"
       @closeForm="closeForm"
     />
   </div>
@@ -61,14 +112,14 @@
 <script>
 import axios from "axios";
 //let url = process.env.VUE_APP_BASEURL;
-import InvestmentUpdate from "../components/InvestmentUpdate.vue"
+import InvestmentUpdate from "../components/InvestmentUpdate.vue";
 //import * as dayjs from "dayjs";
 //import * as imageConversion from "image-conversion";
 
 export default {
   name: "investmentview",
   components: {
-   InvestmentUpdate
+    InvestmentUpdate,
   },
   metaInfo: {
     title: "Investment View",
@@ -85,56 +136,105 @@ export default {
     },
   },
   props: {
-      dialog: Boolean,
-      investorId: String,
+    dialog: Boolean,
+    investorId: String,
   },
   data() {
     return {
       // investment data
       InvestmentList: [],
-      searchInvestments: "",  
-      paramId: 0 ,
+      searchInvestments: "",
+      paramId: 0,
       openInvestmentUpdateForm: "",
-      //investorId: "", 
+      text: "center",
+      icon: "justify",
+      InvestorCode: "",
+      InvestorName: "",
+      //investorId: "",
     };
   },
 
   async mounted() {
-    // get the investor_id to filter on 
-    this.paramId = parseInt(this.$route.params.id)
+    // get the investor_id to filter on
+    this.paramId = parseInt(this.$route.params.id);
 
-    this.getAllInvestments();   
+    this.getAllInvestments();
   },
 
-  computed: {    
+  computed: {
+    investmentsFiltered() {
+      if (this.searchInvestments === "") {
+        console.log("InvestorList = ", this.InvestmentList);
+        return this.InvestmentList;
+      } else {
+        return this.InvestmentList.filter((el) => {
+          console.log("Search Investors  ", this.searchInvestments);
+          return (
+            !this.searchInvestments ||
+            el.investor_name
+              .toLowerCase()
+              .indexOf(this.searchInvestments.toLowerCase()) > -1 ||
+            el.datecreated
+              .toLowerCase()
+              .indexOf(this.searchInvestments.toLowerCase()) > -1 ||
+            el.investor_acc_number
+              .toLowerCase()
+              .indexOf(this.searchInvestments.toLowerCase()) > -1
+            //el.investor_email.toLowerCase().indexOf(this.searchInvestments.toLowerCase()) > -1 ||
+            //el.investor_id_number.toLowerCase().indexOf(this.searchInvestments.toLowerCase()) >
+            //-1
+          );
+        });
+      }
+    },
   },
 
-  watch: {  
-  },
+  watch: {},
 
   methods: {
-      viewInvestment(event) {
-            console.log(event.currentTarget.id)
-            // this.$router.push({})
-            this.$router.push({name: 'investmentupdate', params: { id: event.currentTarget.id } })
-            console.log("view investment done");
-      },
+    create() {
+      this.$router.push({
+        name: "investmentadd",
+        //params: { id: event.currentTarget.id },
+      });
+    },
+    refresh() {
+      this.searchInvestments = "";
+      this.getAllInvestments();      
+    },
+    back() {
+      this.$router.push({
+        name: "investorview",
+        //params: { id: event.currentTarget.id },
+      });
+    },
+    viewInvestment(event) {
+      console.log(event.currentTarget.id);
+      // this.$router.push({})
+      this.$router.push({
+        name: "investmentupdate",
+        params: { id: event.currentTarget.id },
+      });
+      console.log("view investment done");
+    },
     async getAllInvestments() {
       this.InvestmentList = [];
       let data = {
-        id: 1, // use the $store.developement.id 
-        paramId: this.paramId
+        id: 1, // use the $store.developement.id
+        paramId: this.paramId,
       };
-      console.log(data)
+      console.log(data);
       await axios({
         method: "post",
-        url: `http://localhost:3000/getAllInvestments`, // use store url 
+        url: `http://localhost:3000/getAllInvestments`, // use store url
         data: data,
       })
         .then(
           (response) => {
-            response.data.forEach((investment) => {            
+            response.data.forEach((investment) => {
               this.InvestmentList.push(investment);
+              this.InvestorCode = investment.investor_acc_number;
+              this.InvestorName = investment.investor_name + investment.investor_surname;
             });
             console.log("this.Investment List = ", this.InvestmentList);
           },

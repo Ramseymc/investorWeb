@@ -59,7 +59,6 @@
                 :rules="nameRules"
                 label="Investor Code"
                 required
-                @blur="checkNames"
               ></v-text-field>
 
               <v-text-field
@@ -70,7 +69,6 @@
                 :rules="nameRules"
                 label="Linked User Email (Portal):"
                 required
-                @blur="checkNames"
               ></v-text-field>
             </v-row>
           </v-container>
@@ -89,7 +87,6 @@
                 :rules="nameRules"
                 label="Investor Initials"
                 required
-                @blur="checkNames"
               ></v-text-field>
               <v-text-field
                 ref="surnameInput"
@@ -99,7 +96,6 @@
                 :rules="nameRules"
                 label="Investor Surname"
                 required
-                @blur="checkNames"
               ></v-text-field>
               <v-text-field
                 v-model="investorIDNumber"
@@ -123,7 +119,6 @@
                 :rules="nameRules"
                 label="Investor Two Initials"
                 required
-                @blur="checkNames"
               ></v-text-field>
               <v-text-field
                 ref="surnameInput"
@@ -133,7 +128,6 @@
                 :rules="nameRules"
                 label="Investor Two Surname"
                 required
-                @blur="checkNames"
               ></v-text-field>
               <v-text-field
                 v-model="investorTwoIDNumber"
@@ -157,7 +151,6 @@
                 :rules="nameRules"
                 label="Company Name"
                 required
-                @blur="checkNames"
               ></v-text-field>
               <v-text-field
                 ref="companyRegInput"
@@ -167,7 +160,6 @@
                 :rules="nameRules"
                 label="Registration/Trust No"
                 required
-                @blur="checkNames"
               ></v-text-field>
             </v-row>
           </v-container>
@@ -186,7 +178,6 @@
                 :rules="nameRules"
                 label="Investor Two Initials"
                 required
-                @blur="checkNames"
               ></v-text-field>
               <v-text-field
                 ref="surnameInput"
@@ -196,7 +187,6 @@
                 :rules="nameRules"
                 label="Investor Two Surname"
                 required
-                @blur="checkNames"
               ></v-text-field>
               <v-text-field
                 v-model="companyRepIDNumber"
@@ -694,23 +684,21 @@ export default {
       (v) => !!v || "E-mail is required",
       (v) => /.+@.+\..+/.test(v) || "E-mail must be valid",
     ],
-    
   }),
 
   async mounted() {
     this.testServer();
   },
-  watch: {    
-  },
+  watch: {},
 
-  methods: {    
+  methods: {
     async testServer() {
       await axios({
         method: "get",
         url: `http://localhost:3000/test`,
       }).then(
         (response) => {
-          console.log(response.data)              
+          console.log(response.data);
         },
         (error) => {
           console.log(error);
@@ -722,7 +710,7 @@ export default {
       console.log(event);
     },
 
-    personCompanySwitch() {      
+    personCompanySwitch() {
       this.buyers = "1";
     },
 
@@ -761,7 +749,7 @@ export default {
         files.push(this.investorTwoPOAFile); // append mimetype here?
       }
       // investorTwoPOAFile: null,
-      
+
       if (this.representativeDisclaimerFile !== null) {
         contains.push("representativeDisclaimerFile");
         files.push(this.representativeDisclaimerFile); // append mimetype here?
@@ -792,7 +780,7 @@ export default {
         files.push(this.companyPOAFile); // append mimetype here?
       }
       // companyPOAFile: null
-      
+
       let formData = new FormData();
       for (var x = 0; x < files.length; x++) {
         formData.append("documents", files[x]);
@@ -850,14 +838,13 @@ export default {
       }).then(
         (response) => {
           console.log(response.data);
-          this.snackbar = true;          
+          this.snackbar = true;
         },
         (error) => {
           console.log(error);
         }
       );
     },
-  
 
     reset() {
       this.$refs.form.reset();

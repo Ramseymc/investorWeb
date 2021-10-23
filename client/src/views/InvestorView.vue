@@ -1,70 +1,114 @@
 <template>
   <div class="about">
-    <h1>View Investors</h1>
-    <v-simple-table>
-    <template v-slot:default>
-      <thead>
-        <tr>
-          <th class="text-left">
-            Investor Code
-          </th>
-          <th class="text-left">
-            Name
-          </th>
-          <th class="text-left">
-            Email
-          </th>
-          <th class="text-left">
-            ID
-          </th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr
-          v-for="investor in InvestorList"
-          :key="investor.investor_id"
-        >
-        
-          <td><v-btn :id="investor.investor_id" text @click="viewInvestor">{{ investor.investor_acc_number }}</v-btn>
-              
+    <!-- Header row with Create button and Search Bar -->
+    <br />
+    <v-row>
+      <v-col cols="3">
+        <h1>View Investors</h1>
+      </v-col>
+      <v-col cols="4">
+        <!-- Search -->
+        <v-text-field
+          prepend-icon="mdi-magnify"
+          placholder="Search"
+          label="Search"
+          v-model="searchInvestors"
+        ></v-text-field>
+      </v-col>
+      <v-col cols="4">
+        <!-- </v-col>
+        <v-col cols="3"> -->
+        <v-btn-toggle v-model="icon" borderless>
+          <v-btn value="home" color="green" @click="home">
+
+            <v-icon right> mdi-home </v-icon>
+          </v-btn>
+
+          <v-btn value="refresh" color="secondary" @click="refresh">
+            <span>Refresh</span>
+
+            <v-icon right> mdi-refresh </v-icon>
+          </v-btn>
+
+          <v-btn value="create" color="primary" @click="create">
+            <span class="hidden-sm-and-down">Create</span>
+
+            <v-icon right> mdi-account-plus </v-icon>
+          </v-btn>
+
+          <!-- <v-btn value="right">
+          <span class="hidden-sm-and-down">Right</span>
+
+          <v-icon right>
+            mdi-format-align-right
+          </v-icon>
+        </v-btn>
+
+        <v-btn value="justify">
+          <span class="hidden-sm-and-down">Justify</span>
+
+          <v-icon right>
+            mdi-format-align-justify
+          </v-icon>
+        </v-btn> -->
+        </v-btn-toggle>
+      </v-col>
+    </v-row>
+
+    <!-- Table -->
+    <v-simple-table v-resize="onResize" align="center" justify="center">
+      <template v-slot:default>
+        <thead>
+          <tr>
+            <th class="text-left">Investor Code</th>
+            <th class="text-left">Name</th>
+            <th class="text-left">Email</th>
+            <th class="text-left">ID</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="investor in investorsFiltered" :key="investor.investor_id">
+            <td>
+              <v-btn :id="investor.investor_id" text @click="viewInvestor">{{
+                investor.investor_acc_number
+              }}</v-btn>
+
               <!-- <a target="_blank"
                  style="text-decoration: none"
                  v-on:click="openInvestmentView"
                  :id="investor.investor_id"
            >{{ investor.investor_acc_number }} </a> -->
+            </td>
+            <!-- add a link to investmentView.vue - might change on Wayne's opinion  -->
 
-          </td> <!-- add a link to investmentView.vue - might change on Wayne's opinion  -->
-                   
-          <td>{{ investor.investor_name }} {{ investor.investor_surname }} </td>
-          <td>{{ investor.investor_email }} </td>
-          <td>{{ investor.investor_id_number }} </td>
-        </tr>
-      </tbody>
-    </template>
-  </v-simple-table>
+            <td>
+              {{ investor.investor_name }} {{ investor.investor_surname }}
+            </td>
+            <td>{{ investor.investor_email }}</td>
+            <td>{{ investor.investor_id_number }}</td>
+          </tr>
+        </tbody>
+      </template>
+    </v-simple-table>
+
     <InvestmentView
       v-if="openInvestmentViewForm"
       :dialog="openInvestmentViewForm"
-      :investorId="investorId"      
+      :investorId="investorId"
       @closeForm="closeForm"
     />
   </div>
 </template>
 
 <script>
-
 import axios from "axios";
 import InvestmentView from "../views/InvestmentView.vue";
 //let url = process.env.VUE_APP_BASEURL;
 
-//import * as dayjs from "dayjs";
-//import * as imageConversion from "image-conversion";
-//import draggable from "vuedraggable";
-
 export default {
   name: "investorview",
   components: {
-      InvestmentView
+    InvestmentView,
   },
 
   metaInfo: {
@@ -89,43 +133,92 @@ export default {
       searchInvestors: "",
       investorId: "",
       SelectedInvestorId: "",
-      openInvestmentUpdateForm: false,
+      openInvestmentViewForm: false,
+      text: "center",
+      icon: "justify",
+
+      windowSize: {
+        x: 0,
+        y: 0,
+      },
     };
   },
 
   async mounted() {
     this.getAllInvestors();
+    this.onResize();
   },
 
-  computed: {    
-      pageUrl() {
-      return 'page.html?id=' + this.investorId;
-    }
+  computed: {
+    pageUrl() {
+      return "page.html?id=" + this.investorId;
+    },
+    investorsFiltered() {
+      if (this.searchInvestors === "") {
+        console.log("InvestorList = ", this.InvestorList);
+        return this.InvestorList;
+      } else {
+        return this.InvestorList.filter((el) => {
+          console.log("Search Investors  ", this.searchInvestors);
+          return (
+            !this.searchInvestors ||
+            el.investor_name
+              .toLowerCase()
+              .indexOf(this.searchInvestors.toLowerCase()) > -1 ||
+            el.investor_surname
+              .toLowerCase()
+              .indexOf(this.searchInvestors.toLowerCase()) > -1 ||
+            el.investor_acc_number
+              .toLowerCase()
+              .indexOf(this.searchInvestors.toLowerCase()) > -1 ||
+            el.investor_email
+              .toLowerCase()
+              .indexOf(this.searchInvestors.toLowerCase()) > -1 ||
+            el.investor_id_number
+              .toLowerCase()
+              .indexOf(this.searchInvestors.toLowerCase()) > -1
+          );
+        });
+      }
+    },
   },
 
-  watch: {  
-  },
+  watch: {},
 
   methods: {
-      viewInvestor(event) {
-            console.log(event.currentTarget.id)
-            // this.$router.push({})
-            this.$router.push({name: 'investmentview', params: { id: event.currentTarget.id } })
-      },
+    home() {
+
+    },
+    create() {
+      this.$router.push({
+        name: "investoradd",
+        //params: { id: event.currentTarget.id },
+      });
+    },
+    refresh() {
+      location.reload()
+    },
+    onResize() {
+      this.windowSize = { x: window.innerWidth, y: window.innerHeight };
+    },
+    viewInvestor(event) {
+      console.log(event.currentTarget.id);
+      // this.$router.push({})
+      this.$router.push({
+        name: "investmentview",
+        params: { id: event.currentTarget.id },
+      });
+    },
     openInvestmentUpdate(theEvent) {
-        this.SelectedInvestorId = theEvent.srcElement.id
-        console.log("Open Investment View - investor_id", this.SelectedInvestorId)
-        // open InvestmentView.vue with the investor_id input 
-        //window.open("../investmentview.vue?investorId=" + this.SelectedInvestorId, "_self")
-        this.openInvestmentUpdateForm = !this.openInvestmentUpdateForm;
-        // // code for the InvestmentView.vue
-        // var url_string = "http://www.example.com/t.html?a=1&b=3&c=m2-m3-m4-m5"; //window.location.href
-        // var url = new URL(url_string);
-        // var investorId = url.searchParams.get("investorId");
-        // console.log(investorId);
+      this.SelectedInvestorId = theEvent.srcElement.id;
+      console.log(
+        "Open Investment View - investor_id",
+        this.SelectedInvestorId
+      );
+      this.openInvestmentViewForm = !this.openInvestmentViewForm;
     },
     closeForm(event) {
-      this.openInvestmentViewForm = event;
+      this.openInvestmentUpdateForm = event;
     },
 
     async getAllInvestors() {
@@ -140,7 +233,7 @@ export default {
       })
         .then(
           (response) => {
-            response.data.forEach((investor) => {              
+            response.data.forEach((investor) => {
               this.InvestorList.push(investor);
             });
             console.log("this.InvetorsList = ", this.InvestorList);

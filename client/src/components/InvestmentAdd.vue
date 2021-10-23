@@ -71,7 +71,7 @@
                 label="Project:"
                 required
                 @blur="checkNames"
-              ></v-text-field> 
+              ></v-text-field>
 
               <v-text-field
                 ref="linkedEmailInput"
@@ -164,39 +164,38 @@
           </v-container>
           <v-container>
             <v-row>
-              
               <v-col cols="12" sm="4">
-              <v-text-field
-                ref="nameInput"
-                v-model="repaymentDate"
-                :counter="20"
-                maxValue="20"
-                :rules="nameRules"
-                label="Repayment Date:"
-                required
-                @blur="checkNames"
-              ></v-text-field>
+                <v-text-field
+                  ref="nameInput"
+                  v-model="repaymentDate"
+                  :counter="20"
+                  maxValue="20"
+                  :rules="nameRules"
+                  label="Repayment Date:"
+                  required
+                  @blur="checkNames"
+                ></v-text-field>
               </v-col>
               <v-col cols="12" sm="4">
-              <v-text-field
-                ref="surnameInput"
-                v-model="repaymentAmount"
-                :counter="20"
-                maxValue="20"
-                :rules="nameRules"
-                label="Repayment Amount:"
-                required
-                @blur="checkNames"
-              ></v-text-field>
+                <v-text-field
+                  ref="surnameInput"
+                  v-model="repaymentAmount"
+                  :counter="20"
+                  maxValue="20"
+                  :rules="nameRules"
+                  label="Repayment Amount:"
+                  required
+                  @blur="checkNames"
+                ></v-text-field>
               </v-col>
               <v-col cols="12" sm="3">
-              <!-- to be a checkbox -->
-              <v-checkbox
-                v-model="investmentClosed"
-                label="Investment Closed?"
-                color="success"
-                value="success"
-                hide-details
+                <!-- to be a checkbox -->
+                <v-checkbox
+                  v-model="investmentClosed"
+                  label="Investment Closed?"
+                  color="success"
+                  value="success"
+                  hide-details
                 ></v-checkbox>
               </v-col>
             </v-row>
@@ -214,9 +213,7 @@
           <!-- investor1 file uploads -->
           <v-container>
             <v-row>
-              <v-col cols="12" sm="12">
-               
-              </v-col>
+              <v-col cols="12" sm="12"> </v-col>
               <v-file-input
                 v-model="singedLoanAgreementFile"
                 label="Signed Loan Agreement"
@@ -241,19 +238,18 @@
               <v-col cols="12" sm="12"> -->
             </v-row>
             <v-row>
-            <v-col cols="12" sm="12">
-              <v-file-input
-                v-model="attorneyConfirmLetterFile"
-                label="Attorney Confirmation Letter"
-                accept="image/jpeg, image/jpg, image/png, image/bmp, application/pdf"
-                filled
-                hint="Upload POA"
-                persistent-hint
-              ></v-file-input>
-            </v-col>
+              <v-col cols="12" sm="12">
+                <v-file-input
+                  v-model="attorneyConfirmLetterFile"
+                  label="Attorney Confirmation Letter"
+                  accept="image/jpeg, image/jpg, image/png, image/bmp, application/pdf"
+                  filled
+                  hint="Upload POA"
+                  persistent-hint
+                ></v-file-input>
+              </v-col>
             </v-row>
           </v-container>
-
 
           <!-- Action Buttons -->
           <v-container>
@@ -307,7 +303,7 @@ let url = process.env.VUE_APP_BASEURL;
 export default {
   name: "investmentadd",
   components: {
-   // VuePhoneNumberInput,
+    // VuePhoneNumberInput,
   },
   metaInfo: {
     title: "Create Investor",
@@ -325,7 +321,7 @@ export default {
   },
   data: () => ({
     // add data models here
-    
+
     roleId: null,
     jobId: null,
     jobType: null,
@@ -352,7 +348,7 @@ export default {
     singedLoanAgreementFile: null,
     POPFile: null,
     attorneyConfirmLetterFile: null,
-    // 
+    //
 
     linkedEmail: "",
 
@@ -441,23 +437,21 @@ export default {
       (v) => !!v || "E-mail is required",
       (v) => /.+@.+\..+/.test(v) || "E-mail must be valid",
     ],
-    
   }),
 
   async mounted() {
     this.testServer();
   },
-  watch: {    
-  },
+  watch: {},
 
-  methods: {    
+  methods: {
     async testServer() {
       await axios({
         method: "get",
         url: `http://localhost:3000/test`,
       }).then(
         (response) => {
-          console.log(response.data)              
+          console.log(response.data);
         },
         (error) => {
           console.log(error);
@@ -469,13 +463,10 @@ export default {
       console.log(event);
     },
 
-    personCompanySwitch() {      
+    personCompanySwitch() {
       this.buyers = "1";
     },
-
-    async saveInvestment() {
-
-
+    getFiles() {
       let files = [];
       let contains = [];
       if (this.singedLoanAgreementFile !== null) {
@@ -493,29 +484,37 @@ export default {
         contains.push("attorneyConfirmLetterFile");
         files.push(this.attorneyConfirmLetterFile); // append mimetype here?
       }
+      return files;
+    },
+    async saveInvestment() {
+      // let files = [];
+      // let contains = [];
+      // if (this.singedLoanAgreementFile !== null) {
+      //   contains.push("singedLoanAgreementFile");
+      //   files.push(this.singedLoanAgreementFile); // append mimetype here?
+      // }
+
+      // // investorOneDisclaimerFile: null,
+      // if (this.POPFile !== null) {
+      //   contains.push("POPFile");
+      //   files.push(this.POPFile); // append mimetype here?
+      // }
+      // // investorOneIDFile: null,
+      // if (this.attorneyConfirmLetterFile !== null) {
+      //   contains.push("attorneyConfirmLetterFile");
+      //   files.push(this.attorneyConfirmLetterFile); // append mimetype here?
+      // }
+      // let formData = new FormData();
+      // for (var x = 0; x < files.length; x++) {
+      //   formData.append("documents", files[x]);
+      // }
+
+      let files = getFiles();
       let formData = new FormData();
       for (var x = 0; x < files.length; x++) {
         formData.append("documents", files[x]);
       }
 
-
-    // investorCode: "",
-    // project: "",
-    // linkedUnit: "",
-    // investmentAmount: "",
-    // loanAgreementSignDate: "",
-    // investmentDate: "",
-    // investmentPerc: "",
-    // releaseDate: "",
-    // releaseAmount: "",
-    // releasePerc: "",
-    // repaymentDate: "",
-    // repaymentAmount: "",
-    // investmentClosed: false,
-    // singedLoanAgreementFile: null,
-    // POPFile: null,
-    // attorneyConfirmLetterFile: null,
-    
       formData.append("investorCode", this.investorCode);
       formData.append("project", this.project);
       formData.append("linkedUnit", this.linkedUnit);
@@ -535,11 +534,7 @@ export default {
       formData.append("companyRepIDNumber", this.companyRepIDNumber);
 
       formData.append("investmentClosed", this.investmentClosed);
-
-  
-      
       formData.append("ficaDate", this.ficaDate);
-
       formData.append("person", this.person);
 
       await axios({
@@ -549,15 +544,13 @@ export default {
       }).then(
         (response) => {
           console.log(response.data);
-          this.snackbar = true;          
+          this.snackbar = true;
         },
         (error) => {
           console.log(error);
         }
       );
     },
-  
-
     reset() {
       this.$refs.form.reset();
       this.checkbox = false;

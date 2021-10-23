@@ -1,48 +1,66 @@
 <template>
-  <v-container>
-    <h1>Header of InvestorApp (components/Header.vue)</h1>
+  <v-app-bar app color="#393e46" dark class="mobile">
+    <h2>Investor Web App</h2>
+    <div class="text-center">
+      <v-menu
+        dark
+        text-align-left
+        offsetX
+        offsetY
+        min-width="25%"
+        max-width="100%"
+        :value="shown"
+      >
+        <template v-slot:activator="{ on, attrs }">
+          <v-btn dark text v-bind="attrs" v-on="on">
+            <v-icon>mdi-dots-vertical</v-icon>
+          </v-btn>
+        </template>
 
-    <v-list>
-      <template>
-        <div v-for="item in superUser" :key="item.id">
-          <v-list-group v-if="item.items" no-action :group="'items'">
-            <template v-slot:activator>
-              <v-list-item-content>
-                <v-list-item-title
-                  :close-on-content-click="false"
-                  style="text-align: left; margin-left: 5%"
+        <v-list>
+          <template>
+            <div v-for="item in superUser" :key="item.id">
+              <v-list-group v-if="item.items" no-action :group="'items'">
+                <template v-slot:activator>
+                  <v-list-item-content>
+                    <v-list-item-title
+                      :close-on-content-click="false"
+                      style="text-align: left; margin-left: 5%"
+                    >
+                      <v-icon :color="item.color">{{ item.icon }}</v-icon>
+                      {{ item.title }}</v-list-item-title
+                    >
+                  </v-list-item-content>
+                </template>
+                <v-list-item
+                  v-for="subItem in item.items"
+                  :key="subItem.id"
+                  :to="{ name: subItem.name }"
                 >
-                  <v-icon :color="item.color">{{ item.icon }}</v-icon>
-                  {{ item.title }}</v-list-item-title
-                >
-              </v-list-item-content>
-            </template>
-            <v-list-item
-              v-for="subItem in item.items"
-              :key="subItem.id"
-              :to="{ name: subItem.name }"
-              @click="closeMenu"
-            >
-              <v-list-item-content>
-                <v-list-item-title style="text-align: left; margin-left: 5%">
-                  <v-icon :color="subItem.color">{{ subItem.icon }}</v-icon>
-                  {{ subItem.title }}</v-list-item-title
-                >
-              </v-list-item-content>
-            </v-list-item>
-          </v-list-group>
-          <v-list-item v-else :to="{ name: item.name }" @click="closeMenu">
-            <v-list-item-content>
-              <v-list-item-title style="text-align: left; margin-left: 5%">
-                <v-icon :color="item.color">{{ item.icon }}</v-icon>
-                {{ item.title }}</v-list-item-title
-              >
-            </v-list-item-content>
-          </v-list-item>
-        </div>
-      </template>
-    </v-list>
-  </v-container>
+                  <v-list-item-content>
+                    <v-list-item-title
+                      style="text-align: left; margin-left: 5%"
+                    >
+                      <v-icon :color="subItem.color">{{ subItem.icon }}</v-icon>
+                      {{ subItem.title }}</v-list-item-title
+                    >
+                  </v-list-item-content>
+                </v-list-item>
+              </v-list-group>
+              <v-list-item v-else :to="{ name: item.name }">
+                <v-list-item-content>
+                  <v-list-item-title style="text-align: left; margin-left: 5%">
+                    <v-icon :color="item.color">{{ item.icon }}</v-icon>
+                    {{ item.title }}</v-list-item-title
+                  >
+                </v-list-item-content>
+              </v-list-item>
+            </div>
+          </template>
+        </v-list>
+      </v-menu>
+    </div>
+  </v-app-bar>
 </template>
 
 <script>
@@ -60,15 +78,15 @@ export default {
         id: "investors",
         color: "blue",
         items: [
-          {
-            title: "Portal User",
-            name: "PortalUser",
-            icon: "mdi-quality-high",
-            role: 3,
-            menu: 1,
-            id: "PortalUser",
-            color: "orange",
-          },
+          // {
+          //   title: "Portal User",
+          //   name: "PortalUser",
+          //   icon: "mdi-quality-high",
+          //   role: 3,
+          //   menu: 1,
+          //   id: "PortalUser",
+          //   color: "orange",
+          // },
           {
             title: "Add Investor",
             name: "investoradd",
@@ -87,34 +105,34 @@ export default {
             id: "investorview",
             color: "lime accent-5",
           },
-          {
-            title: "Report - Investor Listing",
-            name: "InvestorListingReport",
-            icon: "mdi-chart-gantt",
-            role: 3,
-            menu: 1,
-            id: "InvestorListingReport",
-            color: "light-green accent-2",
-          },
-          {
-            title: "Report - Investor Statement",
-            name: "InvestorStatementReport",
-            icon: "mdi-certificate",
-            role: 3,
-            menu: 1,
-            id: "InvestorStatementReport",
-            color: "lime",
-          },
+          // {
+          //   title: "Report - Investor Listing",
+          //   name: "InvestorListingReport",
+          //   icon: "mdi-chart-gantt",
+          //   role: 3,
+          //   menu: 1,
+          //   id: "InvestorListingReport",
+          //   color: "light-green accent-2",
+          // },
+          // {
+          //   title: "Report - Investor Statement",
+          //   name: "InvestorStatementReport",
+          //   icon: "mdi-certificate",
+          //   role: 3,
+          //   menu: 1,
+          //   id: "InvestorStatementReport",
+          //   color: "lime",
+          // },
 
-          {
-            title: "Report - Investors Excel",
-            name: "InvestorExcelReport",
-            icon: "mdi-calendar-check",
-            role: 3,
-            menu: 1,
-            id: "InvestorExcelReport",
-            color: "amber accent-3",
-          },
+          // {
+          //   title: "Report - Investors Excel",
+          //   name: "InvestorExcelReport",
+          //   icon: "mdi-calendar-check",
+          //   role: 3,
+          //   menu: 1,
+          //   id: "InvestorExcelReport",
+          //   color: "amber accent-3",
+          // },
         ],
       },
 
@@ -424,6 +442,7 @@ export default {
         color: "amber",
       },
     ],
+    shown: "",
   }),
 
   mounted() {
@@ -442,8 +461,8 @@ export default {
       if (this.$route.name !== "Home") {
         this.$router.push({ name: "Home" });
       }
-    }
-  }
+    },
+  },
 };
 </script>
 

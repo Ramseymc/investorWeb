@@ -539,7 +539,7 @@ export default {
 
       await axios({
         method: "post",
-        url: `${url}/createInvestor`,
+        url: `${url}/createInvestment`,
         data: formData,
       }).then(
         (response) => {

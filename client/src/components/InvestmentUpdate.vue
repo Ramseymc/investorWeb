@@ -473,126 +473,64 @@ export default {
       this.buyers = "1";
     },
 
-    async saveInvestor() {
+    async getInvestmentDetails() {
+
+    },
+
+    getFiles() {
       let files = [];
       let contains = [];
-      if (this.investorOneDisclaimerFile !== null) {
-        contains.push("investorOneDisclaimerFile");
-        files.push(this.investorOneDisclaimerFile); // append mimetype here?
+      if (this.singedLoanAgreementFile !== null) {
+        contains.push("singedLoanAgreementFile");
+        files.push(this.singedLoanAgreementFile); // append mimetype here?
       }
 
       // investorOneDisclaimerFile: null,
-      if (this.investorOneIDFile !== null) {
-        contains.push("investorOneIDFile");
-        files.push(this.investorOneIDFile); // append mimetype here?
+      if (this.POPFile !== null) {
+        contains.push("POPFile");
+        files.push(this.POPFile); // append mimetype here?
       }
       // investorOneIDFile: null,
-      if (this.investorOnePOAFile !== null) {
-        contains.push("investorOnePOAFile");
-        files.push(this.investorOnePOAFile); // append mimetype here?
+      if (this.attorneyConfirmLetterFile !== null) {
+        contains.push("attorneyConfirmLetterFile");
+        files.push(this.attorneyConfirmLetterFile); // append mimetype here?
       }
-      // investorOnePOAFile: null,
+      return files;
+    },
+    
 
-      if (this.investorTwoDisclaimerFile !== null) {
-        contains.push("investorTwoDisclaimerFile");
-        files.push(this.investorTwoDisclaimerFile); // append mimetype here?
-      }
-      // investorTwoDisclaimerFile: null,
-      if (this.investorTwoIDFile !== null) {
-        contains.push("investorTwoIDFile");
-        files.push(this.investorTwoIDFile); // append mimetype here?
-      }
-      // investorTwoIDFile: null,
-      if (this.investorTwoPOAFile !== null) {
-        contains.push("investorTwoPOAFile");
-        files.push(this.investorTwoPOAFile); // append mimetype here?
-      }
-      // investorTwoPOAFile: null,
-
-      if (this.representativeDisclaimerFile !== null) {
-        contains.push("representativeDisclaimerFile");
-        files.push(this.representativeDisclaimerFile); // append mimetype here?
-      }
-      // representativeDisclaimerFile: null,
-      if (this.representativeIDFile !== null) {
-        contains.push("representativeIDFile");
-        files.push(this.representativeIDFile); // append mimetype here?
-      }
-      // representativeIDFile: null,
-      if (this.representativePOAFile !== null) {
-        contains.push("representativePOAFile");
-        files.push(this.representativePOAFile); // append mimetype here?
-      }
-      // representativePOAFile: null,
-      if (this.companyResolutionFile !== null) {
-        contains.push("companyResolutionFile");
-        files.push(this.companyResolutionFile); // append mimetype here?
-      }
-      // companyResolutionFile: null,
-      if (this.companyRefDocsFile !== null) {
-        contains.push("companyRefDocsFile");
-        files.push(this.companyRefDocsFile); // append mimetype here?
-      }
-      // companyRefDocsFile: null,
-      if (this.companyPOAFile !== null) {
-        contains.push("companyPOAFile");
-        files.push(this.companyPOAFile); // append mimetype here?
-      }
-      // companyPOAFile: null
-
+    async saveInvestor() {
+      
+      let files = this.getFiles();
       let formData = new FormData();
       for (var x = 0; x < files.length; x++) {
         formData.append("documents", files[x]);
       }
 
       formData.append("investorCode", this.investorCode);
-      formData.append("linkedEmail", this.linkedEmail);
-      formData.append("investorInitials", this.investorInitials);
-      formData.append("investorSurname", this.investorSurname);
-      formData.append("investorIDNumber", this.investorIDNumber);
+      formData.append("project", this.project);
+      formData.append("linkedUnit", this.linkedUnit);
+      formData.append("investmentAmount", this.investmentAmount);
+      formData.append("loanAgreementSignDate", this.loanAgreementSignDate);
 
-      formData.append("investorTwoCode", this.investorTwoCode);
-      formData.append("investorTwoInitials", this.investorTwoInitials);
-      formData.append("investorTwoSurname", this.investorTwoSurname);
-      formData.append("investorTwoIDNumber", this.investorTwoIDNumber);
+      formData.append("investmentDate", this.investmentDate);
+      formData.append("releaseDate", this.releaseDate);
+      formData.append("releaseAmount", this.releaseAmount);
+      formData.append("releasePerc", this.releasePerc);
 
-      formData.append("companyName", this.companyName);
-      formData.append("regNumber", this.regNumber);
+      formData.append("repaymentDate", this.repaymentDate);
+      formData.append("repaymentAmount", this.repaymentAmount);
 
       formData.append("companyRepInitials", this.companyRepInitials);
       formData.append("companyRepSurname", this.companyRepSurname);
       formData.append("companyRepIDNumber", this.companyRepIDNumber);
 
-      formData.append("contactEmail", this.contactEmail);
-      formData.append("contactTwoEmail", this.contactTwoEmail);
-
-      formData.append("mobile", this.mobile.phoneNumber);
-      formData.append("landline", this.landline.phoneNumber);
-      formData.append("mobileTwo", this.mobile.phoneNumberTwo);
-      formData.append("landlineTwo", this.landline.phoneNumberTwo);
-
-      formData.append("streetNo", this.streetNo);
-      formData.append("streetName", this.streetName);
-      formData.append("addressSuburb", this.addressSuburb);
-      formData.append("province", this.province);
-      formData.append("addressPostalCode", this.addressPostalCode);
-
-      formData.append("boxNo", this.boxNo);
-      formData.append("postalSuburb", this.postalSuburb);
-      formData.append("postalCode", this.postalCode);
-
-      formData.append("bankName", this.bankName);
-      formData.append("accountName", this.accountName);
-      formData.append("branchCode", this.branchCode);
-      formData.append("accountNumber", this.accountNumber);
-
+      formData.append("investmentClosed", this.investmentClosed);
       formData.append("ficaDate", this.ficaDate);
-
       formData.append("person", this.person);
-
       await axios({
         method: "post",
-        url: `${url}/createInvestor`,
+        url: `${url}/updateInvestment`,
         data: formData,
       }).then(
         (response) => {

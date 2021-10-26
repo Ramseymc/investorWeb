@@ -312,7 +312,7 @@ export default {
     investmentId: String,
   },
   metaInfo: {
-    title: "Create Investor",
+    title: "Update Investment",
     titleTemplate: "CPC - %s",
     meta: [
       {
@@ -339,6 +339,7 @@ export default {
 
     // investment form data
     investorCode: "",
+    investorId: "",
     project: "",
     linkedUnit: "",
     investmentAmount: "",
@@ -354,95 +355,11 @@ export default {
     singedLoanAgreementFile: null,
     POPFile: null,
     attorneyConfirmLetterFile: null,
-    //
-
-    linkedEmail: "",
-
-    person: "",
-    buyers: 0,
-    buyersSwicth: 1,
-
-    investorInitials: "",
-    investorSurname: "",
-    investorIDNumber: "",
-
-    investorTwoCode: "",
-    investorTwoInitials: "",
-    investorTwoSurname: "",
-    investorTwoIDNumber: "",
-
-    companyName: "",
-    regNumber: "",
-
-    companyRepInitials: "",
-    companyRepSurname: "",
-    companyRepIDNumber: "",
-
-    contact: "",
-    contactEmail: "",
-    contactTwoEmail: "",
-
-    streetNo: "",
-    streetName: "",
-    addressSuburb: "",
-    province: "",
-    addressPostalCode: "",
-
-    boxNo: "",
-    postalSuburb: "",
-    postalCode: "",
-
-    bankName: "",
-    accountName: "",
-    branchCode: "",
-    accountNumber: "",
-
-    ficaDate: "",
-
-    investorOneDisclaimerFile: "",
-    investorOneIDFile: null,
-    investorOnePOAFile: null,
-
-    investorTwoDisclaimerFile: null,
-    investorTwoIDFile: null,
-    investorTwoPOAFile: null,
-
-    representativeDisclaimerFile: null,
-    representativeIDFile: null,
-    representativePOAFile: null,
-    companyResolutionFile: null,
-    companyRefDocsFile: null,
-    companyPOAFile: null,
-
-    mobile: {
-      countryCode: "ZA",
-      isValid: false,
-      phoneNumber: "",
-      phoneNumberTwo: "",
-    },
-    landline: {
-      countryCode: "ZA",
-      isValid: false,
-      phoneNumber: "",
-      phoneNumberTwo: "",
-    },
 
     snackbar: false,
     snackbarMessage: "",
     checkbox: false,
-    // ^^ wip
-
-    mobileResults: {},
-    // good rules examples
-    nameRules: [
-      (v) => !!v || "Name is required",
-      (v) => (v && v.length <= 20) || "Name must be less than 15 characters",
-    ],
-    email: "",
-    emailRules: [
-      (v) => !!v || "E-mail is required",
-      (v) => /.+@.+\..+/.test(v) || "E-mail must be valid",
-    ],
+     
   }),
 
   async mounted() {
@@ -506,7 +423,7 @@ export default {
       for (var x = 0; x < files.length; x++) {
         formData.append("documents", files[x]);
       }
-
+      formData.append("investorCode", this.investorId);
       formData.append("investorCode", this.investorCode);
       formData.append("project", this.project);
       formData.append("linkedUnit", this.linkedUnit);

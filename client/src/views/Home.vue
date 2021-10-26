@@ -1,6 +1,9 @@
 <template>
   <div>
-    <h1>TESTING views/HOME.vue</h1>
+    <input type="file" onchange="this.loadFile(this.files[0])">
+    <br>
+    <pre id="output"></pre>
+    
   </div>
 </template>
 
@@ -9,7 +12,23 @@ export default {
   name: "Home",
   components: {},
   mounted() {
-    console.log("Mounted the Home");
+    // Requiring fs module in which 
+// readFile function is defined.
+    fetch('Input.txt')
+  .then(response => response.text())
+  .then(data => {
+  	// Do something with your data
+  	console.log(data);
+  });
   },
+method: {
+      async loadFile(file) {
+        let text = await file.text();
+        document.getElementById('output').textContent = text;
+      },
+      
+}
+
 };
+
 </script>

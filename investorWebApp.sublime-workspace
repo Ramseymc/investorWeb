@@ -11,7 +11,7 @@
 			"file": "client/src/views/InvestmentView.vue",
 			"settings":
 			{
-				"buffer_size": 0,
+				"buffer_size": 6836,
 				"line_ending": "Unix"
 			}
 		},
@@ -19,7 +19,15 @@
 			"file": "client/src/components/InvestmentAdd.vue",
 			"settings":
 			{
-				"buffer_size": 16000,
+				"buffer_size": 16002,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "client/src/views/Home.vue",
+			"settings":
+			{
+				"buffer_size": 206,
 				"line_ending": "Unix"
 			}
 		}
@@ -159,7 +167,7 @@
 	"groups":
 	[
 		{
-			"selected": 1,
+			"selected": 2,
 			"sheets":
 			[
 				{
@@ -168,7 +176,7 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 0,
+						"buffer_size": 6836,
 						"regions":
 						{
 						},
@@ -189,7 +197,7 @@
 						"translation.y": 900.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 1,
+					"stack_index": 2,
 					"type": "text"
 				},
 				{
@@ -198,15 +206,15 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 16000,
+						"buffer_size": 16002,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								1532,
-								1532
+								0,
+								0
 							]
 						],
 						"settings":
@@ -216,7 +224,35 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 611.887850467,
+						"translation.y": 612.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 1,
+					"type": "text"
+				},
+				{
+					"buffer": 2,
+					"file": "client/src/views/Home.vue",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 206,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Vuejs Complete Package/vue.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
 					"stack_index": 0,

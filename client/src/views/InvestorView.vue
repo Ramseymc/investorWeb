@@ -187,20 +187,16 @@ export default {
 
   methods: {
     home() {
-
+      this.$router.push({
+        name: "home",       
+      });
     },
     create() {
       this.$router.push({
-        name: "investoradd",
-        //params: { id: event.currentTarget.id },
+        name: "investoradd",       
       });
     },
-    refresh() {
-      location.reload()
-    },
-    onResize() {
-      this.windowSize = { x: window.innerWidth, y: window.innerHeight };
-    },
+    
     viewInvestor(event) {
       console.log(event.currentTarget.id);
       // this.$router.push({})
@@ -209,12 +205,14 @@ export default {
         params: { id: event.currentTarget.id },
       });
     },
+    refresh() {
+      location.reload()
+    },
+    onResize() {
+      this.windowSize = { x: window.innerWidth, y: window.innerHeight };
+    },
     openInvestmentUpdate(theEvent) {
-      this.SelectedInvestorId = theEvent.srcElement.id;
-      console.log(
-        "Open Investment View - investor_id",
-        this.SelectedInvestorId
-      );
+      this.SelectedInvestorId = theEvent.srcElement.id;  
       this.openInvestmentViewForm = !this.openInvestmentViewForm;
     },
     closeForm(event) {
@@ -235,8 +233,7 @@ export default {
           (response) => {
             response.data.forEach((investor) => {
               this.InvestorList.push(investor);
-            });
-            console.log("this.InvetorsList = ", this.InvestorList);
+            });            
           },
           (error) => {
             console.log(error);

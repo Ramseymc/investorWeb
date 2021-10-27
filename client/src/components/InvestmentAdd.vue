@@ -377,6 +377,7 @@ export default {
     personCompanySwitch() {
       this.buyers = "1";
     },
+
     getFiles() {
       let files = [];
       let contains = [];
@@ -397,6 +398,7 @@ export default {
       }
       return files;
     },
+    
     async saveInvestment() {
       // let files = [];
       // let contains = [];

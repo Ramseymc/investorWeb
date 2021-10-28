@@ -28,6 +28,14 @@ const routes = [
       ),
   },
   {
+    path: "/investorupdate",
+    name: "investorupdate",
+    component: () =>
+      import(
+        /* webpackChunkName: "investoradd" */ "../components/InvestorUpdate.vue"
+      ),
+  },
+  {
     path: "/investorview",
     name: "investorview",
     component: () =>

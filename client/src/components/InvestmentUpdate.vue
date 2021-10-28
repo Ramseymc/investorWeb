@@ -273,9 +273,9 @@
                 color="success"
                 class="mr-4"
                 v-if="checkbox"
-                @click="createUser"
+                @click="updateInvestment"
               >
-                Create Investor
+                Update sInvestment
               </v-btn>
               <v-btn text color="error" class="mr-4" @click="reset">
                 Reset Form
@@ -371,7 +371,7 @@ export default {
     async testServer() {
       await axios({
         method: "get",
-        url: `http://localhost:3000/test`,
+        url: `${url}/test`,
       }).then(
         (response) => {
           console.log(response.data);
@@ -411,14 +411,30 @@ export default {
       if (this.attorneyConfirmLetterFile !== null) {
         contains.push("attorneyConfirmLetterFile");
         files.push(this.attorneyConfirmLetterFile); // append mimetype here?
-      }
+      } 
       return files;
     },
     
 
-    async saveInvestor() {
-      
-      let files = this.getFiles();
+    async updateInvestment() {
+      let files = [];
+      let contains = [];
+      if (this.singedLoanAgreementFile !== null) {
+        contains.push("singedLoanAgreementFile");
+        files.push(this.singedLoanAgreementFile); // append mimetype here?
+      }
+
+      // investorOneDisclaimerFile: null,
+      if (this.POPFile !== null) {
+        contains.push("POPFile");
+        files.push(this.POPFile); // append mimetype here?
+      }
+      // investorOneIDFile: null,
+      if (this.attorneyConfirmLetterFile !== null) {
+        contains.push("attorneyConfirmLetterFile");
+        files.push(this.attorneyConfirmLetterFile); // append mimetype here?
+      } 
+
       let formData = new FormData();
       for (var x = 0; x < files.length; x++) {
         formData.append("documents", files[x]);

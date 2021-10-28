@@ -7,7 +7,7 @@
 
       <v-layout align-center justify-center style="padding: 8px">
         <v-form ref="form" v-model="valid" lazy-validation>
-          <h2>Create Investor</h2>
+          <h2>Update Investor</h2>
 
           <!-- Person / company and 2 People radio buttons -->
           <v-container>
@@ -532,7 +532,7 @@
                 color="success"
                 class="mr-4"
                 v-if="checkbox"
-                @click="createUser"
+                @click="updateInvestor"
               >
                 Update Investor
               </v-btn>
@@ -562,7 +562,7 @@ import "vue-phone-number-input/dist/vue-phone-number-input.css";
 let url = process.env.VUE_APP_BASEURL;
 
 export default {
-  name: "investoradd",
+  name: "investorupdate",
   components: {
     VuePhoneNumberInput,
   },
@@ -694,7 +694,7 @@ export default {
     async testServer() {
       await axios({
         method: "get",
-        url: `http://localhost:3000/test`,
+        url: `${url}/test`,
       }).then(
         (response) => {
           console.log(response.data);

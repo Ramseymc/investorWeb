@@ -19,7 +19,7 @@
 			"file": "client/src/components/InvestmentAdd.vue",
 			"settings":
 			{
-				"buffer_size": 16002,
+				"buffer_size": 14242,
 				"line_ending": "Unix"
 			}
 		},
@@ -27,7 +27,7 @@
 			"file": "client/src/views/Home.vue",
 			"settings":
 			{
-				"buffer_size": 206,
+				"buffer_size": 608,
 				"line_ending": "Unix"
 			}
 		}
@@ -82,14 +82,6 @@
 		"side_bar_visible": false,
 		"status_bar_visible": false
 	},
-	"expanded_folders":
-	[
-		"/C/dev/investorWeb",
-		"/C/dev/investorWeb/client",
-		"/C/dev/investorWeb/client/src",
-		"/C/dev/investorWeb/client/src/components",
-		"/C/dev/investorWeb/client/src/views"
-	],
 	"file_history":
 	[
 		"/D/dev/todo.txt",
@@ -206,7 +198,7 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 16002,
+						"buffer_size": 14242,
 						"regions":
 						{
 						},
@@ -236,7 +228,7 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 206,
+						"buffer_size": 608,
 						"regions":
 						{
 						},

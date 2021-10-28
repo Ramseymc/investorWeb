@@ -137,6 +137,8 @@ const chalk = require("chalk")
         mysql = `${mysql} ${additionalSQL}` 
         + ` WHERE investor_id = '${req.body.investorId}' `
         + ` AND investment_id = ${req.body.investmentId}' ; ` 
+        console.log(chalk.pink("createInvestment SQL = ",mysql))
+        excecuteSQL(mysql, res);
     }),
 
     // complete sql
@@ -227,7 +229,7 @@ const chalk = require("chalk")
                         
                         end_date,
                         investment_interest_rate,    
-                        repayment_amount                  
+                        repayment_amount,                  
                         lastupdated,
 
                         release_percentage, 
@@ -260,7 +262,8 @@ const chalk = require("chalk")
                         '${POPFile}', 
                         '${attorneyConfirmLetterFile}'
                       )`
-               
+                      
+        console.log(chalk.green("createInvestment SQL = ",mysql))
         excecuteSQL(mysql, res)
     }),
 
@@ -286,7 +289,7 @@ const chalk = require("chalk")
         // });
     }),
 
-    // db fields
+    // test
     router.post("/updateInvestor", upload.array("documents"), (req, res) => {
         console.log("updateInvestor req", req.body)
         console.log("Files: ", req.files);
@@ -330,7 +333,7 @@ const chalk = require("chalk")
             })
         })
 
-        let mysql = `UPDATE investor 
+        let mysql = `UPDATE investors
         SET 
         investor_name = '${req.body.investorName}',
         investor_surname= '${req.body.investorSurname}',
@@ -340,7 +343,7 @@ const chalk = require("chalk")
         investor_landline= '${req.body.landline}',                                              
         investor_two_name= '${req.body.investorTwoInitials}',
         investor_two_surname='${req.body.investorTwoSurname}',
-        investor_two_id_number'${req.body.investorTwoIDNumber}',
+        investor_two_id_number = '${req.body.investorTwoIDNumber}',
         company_name = '${req.body.companyName}',
         ref_number =  '${req.body.regNumber}',
         company_rep_initals = '${req.body.companyRepInitials}',
@@ -366,7 +369,7 @@ const chalk = require("chalk")
         fica_date = '${req.body.ficaDate}' ,             
         person_mode = '${req.body.person}'`;
 
-          let additionalSQL = ""
+          let additionalSQL = ","
           // investorOneFiles
           let investorOneDisclaimerFileSQL = fileDetails.filter((el) => { return el.fileType === 'investorOneDisclaimerFile' })            
             if (investorOneDisclaimerFileSQL.length > 0) { investorOneDisclaimerFileSQL.forEach((el) => {
@@ -390,9 +393,9 @@ const chalk = require("chalk")
                 additionalSQL = `${additionalSQL}, investorTwoDisclaimerFile = '${el.fileName}'`
                 })
           }
-          let investorTwoPOAFileSQL = fileDetails.filter((el) => {  return el.fileType === 'investorTwoIDFile' })  
-            if (investorTwoPOAFileSQL.length > 0) { investorTwoPOAFileSQL.forEach((el) => {
-                additionalSQL = `${additionalSQL}, investorTwoPOAFile = '${el.fileName}'`
+          let investorTwoIdFileSQL = fileDetails.filter((el) => {  return el.fileType === 'investorTwoIDFile' })  
+            if (investorTwoIdFileSQL.length > 0) { investorTwoIdFileSQL.forEach((el) => {
+                additionalSQL = `${additionalSQL}, investorTwoIdFile = '${el.fileName}'`
                 })
           }         
           let investorTwoPOAFileSQL = fileDetails.filter((el) => {  return el.fileType === 'investorTwoPOAFile' })  
@@ -435,13 +438,18 @@ const chalk = require("chalk")
                 })
           }         
 
+          if(additionalSQL !== ',') {
         mysql = `${mysql} ${additionalSQL}` 
               + ` WHERE investor_id = '${req.body.investorId}'; ` 
+          } else {
+            mysql = `${mysql}` + ` WHERE investor_id = '${req.body.investorId}'; ` 
+          }
               // +  `WHERE id = ${req.body.id}`
-
+        console.log(chalk.yellow("updateInvestor SQL = ",mysql))
         excecuteSQL(mysql, res);
     }),
-     
+
+    // works
     router.post("/createInvestor", upload.array("documents"), (req, res) => {
         console.log(req.body)
         console.log(req.files)
@@ -609,7 +617,7 @@ const chalk = require("chalk")
         }
 
             // add the formData names to database fields
-        let mysql1 = `INSERT INTO investors (
+        let mysql = `INSERT INTO investors (
             investor_acc_number,
             investor_name,
             investor_surname,
@@ -625,9 +633,9 @@ const chalk = require("chalk")
             contact_email,
             contact_two_email,
             mobile,
-            landline,
+            landline,            
             mobile_two,
-            landline_two,                  
+            landline_two,   
             street_no,
             street_name,
             address_suburb,
@@ -642,7 +650,6 @@ const chalk = require("chalk")
             account_no,
             fica_date,
             person_mode,
-
             investorOneDisclaimerFile,
             investorOneIDFile,
             investorOnePOAFile,
@@ -651,35 +658,29 @@ const chalk = require("chalk")
             investorTwoPOAFile,
             representativeDisclaimerFile,
             representativeIDFile,
-            reresentativePOAFile,
+            representativePOAFile,
             companyResolutionFile,
             companyRefDocsFile,
             companyPOAFile
-
             ) VALUES ( 
             '${req.body.investorCode}',
             '${req.body.investorInitials}',
             '${req.body.investorSurname}',
-            '${req.body.investorIDNumber}',
-                            
+            '${req.body.investorIDNumber}',                            
             '${req.body.investorTwoInitials}',
             '${req.body.investorTwoSurname}',
             '${req.body.investorTwoIDNumber}',
-
             '${req.body.companyName}',
             '${req.body.regNumber}',
-
             '${req.body.companyRepInitials}',
             '${req.body.companyRepSurname}',
             '${req.body.companyRepIDNumber}',
-
             '${req.body.contactEmail}',
             '${req.body.contactTwoEmail}',
             '${req.body.mobile}',
             '${req.body.landline}',
             '${req.body.mobileTwo}',
-            '${req.body.landlineTwo}',
-            
+            '${req.body.landlineTwo}',        
             '${req.body.streetNo}',
             '${req.body.streetName}',
             '${req.body.addressSuburb}',
@@ -692,8 +693,8 @@ const chalk = require("chalk")
             '${req.body.accountName}',
             '${req.body.branchCode}',
             '${req.body.accountNumber}',
+            '${req.body.ficaDate}',
             '${req.body.person}',
-
             '${investorOneDisclaimerFile}', 
             '${investorOneIDFile}', 
             '${investorOnePOAFile}', 
@@ -702,11 +703,13 @@ const chalk = require("chalk")
             '${investorTwoPOAFile}', 
             '${representativeDisclaimerFile}', 
             '${representativeIDFile}', 
-            '${reresentativePOAFile}', 
+            '${representativePOAFile}',             
             '${companyResolutionFile}', 
             '${companyRefDocsFile}', 
             '${companyPOAFile}'            
         )`
+
+        console.log(chalk.blue("createInvestor SQL = ",mysql))
             // + the 'let' file variables
         excecuteSQL(mysql, res)
         // pool.getConnection(function (err, connection) {

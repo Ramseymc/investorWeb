@@ -103,7 +103,7 @@
 <script>
 import axios from "axios";
 import InvestmentView from "../views/InvestmentView.vue";
-//let url = process.env.VUE_APP_BASEURL;
+let url = process.env.VUE_APP_BASEURL;
 
 export default {
   name: "investorview",
@@ -226,7 +226,7 @@ export default {
       };
       await axios({
         method: "post",
-        url: `http://localhost:3000/getAllInvestors`, // use the store url
+        url: `${url}/getAllInvestors`, // use the store url
         data: data,
       })
         .then(

@@ -111,7 +111,7 @@
 
 <script>
 import axios from "axios";
-//let url = process.env.VUE_APP_BASEURL;
+let url = process.env.VUE_APP_BASEURL;
 import InvestmentUpdate from "../components/InvestmentUpdate.vue";
 //import * as dayjs from "dayjs";
 //import * as imageConversion from "image-conversion";
@@ -226,7 +226,7 @@ export default {
       console.log(data);
       await axios({
         method: "post",
-        url: `http://localhost:3000/getAllInvestments`, // use store url
+        url: `${url}/getAllInvestments`, // use store url
         data: data,
       })
         .then(

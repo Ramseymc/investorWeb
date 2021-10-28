@@ -537,7 +537,7 @@
                 color="success"
                 class="mr-4"
                 v-if="checkbox"
-                @click="createUser"
+                @click="saveInvestor"
               >
                 Create Investor
               </v-btn>
@@ -713,6 +713,7 @@ export default {
     personCompanySwitch() {
       this.buyers = "1";
     },
+    
 
     async saveInvestor() {
       let files = [];

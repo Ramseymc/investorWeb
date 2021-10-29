@@ -192,6 +192,15 @@ export default {
   watch: {},
 
   methods: {
+    viewInvestment(event) {
+      console.log(event.currentTarget.id);
+      // this.$router.push({})
+      this.$router.push({
+        //name: "investmentview",
+        name: "investmentupdate",
+        params: { id: event.currentTarget.id },
+      });
+    },
     create() {
       this.$router.push({
         name: "investmentadd",
@@ -208,15 +217,15 @@ export default {
         //params: { id: event.currentTarget.id },
       });
     },
-    viewInvestment(event) {
-      console.log(event.currentTarget.id);
-      // this.$router.push({})
-      this.$router.push({
-        name: "investmentupdate",
-        params: { id: event.currentTarget.id },
-      });
-      console.log("view investment done");
-    },
+    // viewInvestment(event) {
+    //   console.log(event.currentTarget.id);
+    //   // this.$router.push({})
+    //   this.$router.push({
+    //     name: "investmentupdate",
+    //     params: { id: event.currentTarget.id },
+    //   });
+    //   console.log("view investment done");
+    // },
     async getAllInvestments() {
       this.InvestmentList = [];
       let data = {

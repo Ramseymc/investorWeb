@@ -61,6 +61,7 @@
         <thead>
           <tr>
             <th class="text-left">Investor Code</th>
+            <th class="text-left">View</th>
             <th class="text-left">Name</th>
             <th class="text-left">Email</th>
             <th class="text-left">ID</th>
@@ -80,9 +81,13 @@
            >{{ investor.investor_acc_number }} </a> -->
             </td>
             <!-- add a link to investmentView.vue - might change on Wayne's opinion  -->
-
+            <td> <v-btn :id="investor.investor_id" text @click="viewInvestments" color="blue">
+              Investments
+              </v-btn></td>
             <td>
+             
               {{ investor.investor_name }} {{ investor.investor_surname }}
+      
             </td>
             <td>{{ investor.investor_email }}</td>
             <td>{{ investor.investor_id_number }}</td>
@@ -97,18 +102,26 @@
       :investorId="investorId"
       @closeForm="closeForm"
     />
+    <InvestorUpdate
+      v-if="openInvestmentViewForm"
+      :dialog="openInvestmentViewForm"
+      :investorId="investorId"
+      @closeForm="closeForm"
+    />
   </div>
 </template>
 
 <script>
 import axios from "axios";
 import InvestmentView from "../views/InvestmentView.vue";
+import InvestorUpdate from "../components/InvestmentUpdate.vue";
 let url = process.env.VUE_APP_BASEURL;
 
 export default {
   name: "investorview",
   components: {
     InvestmentView,
+    InvestorUpdate
   },
 
   metaInfo: {
@@ -201,7 +214,17 @@ export default {
       console.log(event.currentTarget.id);
       // this.$router.push({})
       this.$router.push({
+        //name: "investmentview",
+        name: "investorupdate",
+        params: { id: event.currentTarget.id },
+      });
+    },
+    viewInvestments(event) {
+      console.log(event.currentTarget.id);
+      // this.$router.push({})
+      this.$router.push({
         name: "investmentview",
+        //name: "investorupdate",
         params: { id: event.currentTarget.id },
       });
     },

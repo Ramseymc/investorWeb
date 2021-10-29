@@ -88,7 +88,7 @@ const chalk = require("chalk")
                 fileDetails.push(insert)
             })
         })
-
+        console.log("Server: ", fileDetails)
         // renaming files if required
         fileDetails.forEach((el) => {
             let filtered = req.files.filter((el2) => {
@@ -102,8 +102,11 @@ const chalk = require("chalk")
                 //throw err
             })
         })
+
+        var today = new Date();
+        let dateToday = today.getFullYear() + "-" + (today.getMonth() + 1) + "-" + today.getDate();
       
-        let mysql = `UPDATE investment 
+        let mysql = `UPDATE investments 
             SET     
                 investment_amount = '${req.body.investmentAmount}',                
                 end_date = '${req.body.repaymentDate}',
@@ -118,7 +121,7 @@ const chalk = require("chalk")
 
         // investment files
         let additionalSQL = ""
-        let singedLoanAgreementFileSQL = fileDetails.filter((el) => { return el.fileType === 'investorOneDisingedLoanAgreementFilesclaimerFile' })          
+        let singedLoanAgreementFileSQL = fileDetails.filter((el) => { return el.fileType === 'singedLoanAgreementFile' })          
             if (singedLoanAgreementFileSQL.length > 0) { singedLoanAgreementFileSQL.forEach((el) => {
                 additionalSQL = `${additionalSQL}, singedLoanAgreementFile = '${el.fileName}'`
             })
@@ -134,10 +137,17 @@ const chalk = require("chalk")
             })
         }
     
-        mysql = `${mysql} ${additionalSQL}` 
+        if(additionalSQL.length) {
+            mysql = `${mysql} ${additionalSQL}` 
+            + ` WHERE investor_id = '${req.body.investorId}' `
+            + ` AND investment_id = '${req.body.investmentId}' ; ` 
+          } else {
+            mysql = `${mysql} `
         + ` WHERE investor_id = '${req.body.investorId}' `
-        + ` AND investment_id = ${req.body.investmentId}' ; ` 
-        console.log(chalk.pink("createInvestment SQL = ",mysql))
+        + ` AND investment_id = '${req.body.investmentId}' ; ` 
+          }
+         
+        console.log(chalk.green("createInvestment SQL = ",mysql))
         excecuteSQL(mysql, res);
     }),
 
@@ -214,7 +224,7 @@ const chalk = require("chalk")
         }
         
         var today = new Date();
-        var dateToday = today.getFullYear() + "-" + (today.getMonth() + 1) + "-" + today.getDate();
+        let dateToday = today.getFullYear() + "-" + (today.getMonth() + 1) + "-" + today.getDate();
 
         // add to database , 
         // then do the update like the salesone :) ! :) 
@@ -262,7 +272,7 @@ const chalk = require("chalk")
                         '${POPFile}', 
                         '${attorneyConfirmLetterFile}'
                       )`
-                      
+
         console.log(chalk.green("createInvestment SQL = ",mysql))
         excecuteSQL(mysql, res)
     }),
@@ -288,7 +298,26 @@ const chalk = require("chalk")
         //     connection.release();
         // });
     }),
-
+    router.post("/getInvestmentDetails", (req, res) => {
+        console.log(req.body)
+        let mysql = `select * from investments iv join investors i on i.investor_id = iv.investor_id WHERE iv.investment_id = ${req.body.paramId}` 
+        console.log("GET INVESTOR DEETS SQL = ", mysql)
+        excecuteSQL(mysql, res)
+        // pool.getConnection(function (err, connection) {
+        //     if (err) {
+        //         connection.release();
+        //         resizeBy.send("Error with connection");
+        //     }
+        //     connection.query(mysql, function (error, result) {
+        //         if (error) {
+        //             console.log(error);
+        //         } else {
+        //             res.json(result);
+        //         }
+        //     });
+        //     connection.release();
+        // });
+    }),
     // test
     router.post("/updateInvestor", upload.array("documents"), (req, res) => {
         console.log("updateInvestor req", req.body)
@@ -367,9 +396,12 @@ const chalk = require("chalk")
         branch_code = '${req.body.branchCode}',
         account_no = '${req.body.accountNumber}',
         fica_date = '${req.body.ficaDate}' ,             
-        person_mode = '${req.body.person}'`;
+        person_mode = '${req.body.person}',
+        buyers = '${req.body.buyers}',
+        linked_email = '${req.body.linkedEmail}'`;
 
-          let additionalSQL = ","
+
+          let additionalSQL = ""
           // investorOneFiles
           let investorOneDisclaimerFileSQL = fileDetails.filter((el) => { return el.fileType === 'investorOneDisclaimerFile' })            
             if (investorOneDisclaimerFileSQL.length > 0) { investorOneDisclaimerFileSQL.forEach((el) => {
@@ -438,8 +470,8 @@ const chalk = require("chalk")
                 })
           }         
 
-          if(additionalSQL !== ',') {
-        mysql = `${mysql} ${additionalSQL}` 
+          if(additionalSQL.length) {
+            mysql = `${mysql} ${additionalSQL}` 
               + ` WHERE investor_id = '${req.body.investorId}'; ` 
           } else {
             mysql = `${mysql}` + ` WHERE investor_id = '${req.body.investorId}'; ` 
@@ -661,7 +693,9 @@ const chalk = require("chalk")
             representativePOAFile,
             companyResolutionFile,
             companyRefDocsFile,
-            companyPOAFile
+            companyPOAFile,
+            buyers,
+            linked_email
             ) VALUES ( 
             '${req.body.investorCode}',
             '${req.body.investorInitials}',
@@ -706,7 +740,9 @@ const chalk = require("chalk")
             '${representativePOAFile}',             
             '${companyResolutionFile}', 
             '${companyRefDocsFile}', 
-            '${companyPOAFile}'            
+            '${companyPOAFile}',
+            '${req.body.buyers}',
+            '${req.body.linkedEmail}'
         )`
 
         console.log(chalk.blue("createInvestor SQL = ",mysql))
@@ -733,6 +769,27 @@ const chalk = require("chalk")
     router.post("/getAllInvestors", (req, res) => {
 
         let mysql = `select * from investors i`
+        excecuteSQL(mysql, res)
+        // pool.getConnection(function (err, connection) {
+        //     if (err) {
+        //         connection.release();
+        //         resizeBy.send("Error with connection");
+        //     }
+        //     connection.query(mysql, function (error, result) {
+        //         if (error) {
+        //             console.log(error);
+        //         } else {
+        //             res.json(result);
+        //         }
+        //     });
+        //     connection.release();
+        // });
+    }),
+
+    router.post("/getInvestorDetails", (req, res) => {
+        console.log(req.body)
+        let mysql = `select * from investors i WHERE i.investor_id = ${req.body.paramId}` 
+        console.log("GET INVESTOR DEETS SQL = ", mysql)
         excecuteSQL(mysql, res)
         // pool.getConnection(function (err, connection) {
         //     if (err) {

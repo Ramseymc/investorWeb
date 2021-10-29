@@ -831,6 +831,8 @@ export default {
       formData.append("ficaDate", this.ficaDate);
 
       formData.append("person", this.person);
+      formData.append("buyers", this.buyers);
+
 
       await axios({
         method: "post",

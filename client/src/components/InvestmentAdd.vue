@@ -7,7 +7,9 @@
 
       <v-layout align-center justify-center style="padding: 8px">
         <v-form ref="form" v-model="valid" lazy-validation>
-          <h2>Create Investment</h2>
+          <h2>
+            Create Investment - {{ this.SelectedInvestor[0].investor_name }}
+          </h2>
 
           <!-- Person / company and 2 People radio buttons -->
           <!-- <v-container>
@@ -320,7 +322,11 @@ export default {
     },
   },
   data: () => ({
+    // input investorId param
+    paramId: 0,
+
     // add data models here
+
     roleId: null,
     jobId: null,
     jobType: null,
@@ -347,15 +353,56 @@ export default {
     singedLoanAgreementFile: null,
     POPFile: null,
     attorneyConfirmLetterFile: null,
-   
+    SelectedInvestor: [],
   }),
 
   async mounted() {
+    this.paramId = parseInt(this.$route.params.id);
+    console.log("Mounted add investment investorID = ", this.paramId);
+    //this.getAllInvestments();
     this.testServer();
+    this.getInvestorDetails();
   },
   watch: {},
 
   methods: {
+    async getInvestorDetails() {
+      this.SelectedInvestor = [];
+      let data = {
+        id: 1, // use the $store.developement.id
+        paramId: this.paramId,
+      };
+      console.log(data);
+      await axios({
+        method: "post",
+        url: `${url}/getInvestorDetails`, // use store url
+        data: data,
+      })
+        .then(
+          (response) => {
+            response.data.forEach((investor) => {
+              this.SelectedInvestor.push(investor);
+              // this.InvestorCode = investment.investor_acc_number;
+            });
+            console.log("this.SelectedInvestor List = ", this.SelectedInvestor);
+            // use a method here to set the local properties for v-models setFormValues()
+            // this.setFormValues() // this.InvestorName = this.SelectedInvestor.investor_name etc
+            this.setFormValues();
+            // get this working, demo when ready, see if Wayne is coming
+            // set and see the form values (this.investorId) here console.log is my friend
+            // create a new control for the id, so i have two, use a different model for each of them
+            // and try sending to the route as idNumberThis and idNumberSelected
+            // 2 controls, bothgoing into  form append, both being unwrapped in updateinvestor investorroutes
+          },
+          (error) => {
+            console.log(error);
+          }
+        )
+        .catch((e) => {
+          console.log(e);
+        });
+      // get the details from the selected investorId
+    },
     async testServer() {
       await axios({
         method: "get",
@@ -398,7 +445,7 @@ export default {
       }
       return files;
     },
-    
+
     async saveInvestment() {
       let files = [];
       let contains = [];

@@ -52,21 +52,16 @@
           <v-container>
             <v-row>
               <v-text-field
-                ref="codeInput"
+                
                 v-model="investorCode"
-                :counter="20"
-                maxValue="20"
-                :rules="nameRules"
+                
                 label="Investor Code"
-                required
+                readonly 
               ></v-text-field>
 
               <v-text-field
                 ref="linkedEmailInput"
-                v-model="linkedEmail"
-                :counter="20"
-                maxValue="20"
-                :rules="nameRules"
+                v-model="linkedEmail"            
                 label="Linked User Email (Portal):"
                 required
               ></v-text-field>
@@ -79,21 +74,13 @@
               <v-col cols="12" sm="12">
                 <h3>Investor One Details</h3>
               </v-col>
-              <v-text-field
-                ref="nameInput"
-                v-model="investorInitials"
-                :counter="20"
-                maxValue="20"
-                :rules="nameRules"
+              <v-text-field           
+                v-model="investorInitials"            
                 label="Investor Initials"
                 required
               ></v-text-field>
-              <v-text-field
-                ref="surnameInput"
-                v-model="investorSurname"
-                :counter="20"
-                maxValue="20"
-                :rules="nameRules"
+              <v-text-field                
+                v-model="investorSurname"                
                 label="Investor Surname"
                 required
               ></v-text-field>
@@ -111,21 +98,13 @@
               <v-col cols="12" sm="12">
                 <h3>Investor Two Details</h3>
               </v-col>
-              <v-text-field
-                ref="nameInput"
-                v-model="investorTwoInitials"
-                :counter="20"
-                maxValue="20"
-                :rules="nameRules"
+              <v-text-field                
+                v-model="investorTwoInitials"      
                 label="Investor Two Initials"
                 required
               ></v-text-field>
-              <v-text-field
-                ref="surnameInput"
-                v-model="investorTwoSurname"
-                :counter="20"
-                maxValue="20"
-                :rules="nameRules"
+              <v-text-field                
+                v-model="investorTwoSurname"               
                 label="Investor Two Surname"
                 required
               ></v-text-field>
@@ -143,21 +122,13 @@
               <v-col cols="12" sm="12">
                 <h3>Company Details</h3>
               </v-col>
-              <v-text-field
-                ref="companyNameInput"
-                v-model="companyName"
-                :counter="20"
-                maxValue="20"
-                :rules="nameRules"
+              <v-text-field                
+                v-model="companyName"             
                 label="Company Name"
                 required
               ></v-text-field>
-              <v-text-field
-                ref="companyRegInput"
-                v-model="regNumber"
-                :counter="20"
-                maxValue="20"
-                :rules="nameRules"
+              <v-text-field                
+                v-model="regNumber"               
                 label="Registration/Trust No"
                 required
               ></v-text-field>
@@ -170,21 +141,14 @@
               <v-col cols="12" sm="12">
                 <h3>Company Representative Details</h3>
               </v-col>
-              <v-text-field
-                ref="nameInput"
-                v-model="companyRepInitials"
-                :counter="20"
-                maxValue="20"
-                :rules="nameRules"
+              <v-text-field      
+                v-model="companyRepInitials"               
                 label="Investor Two Initials"
                 required
               ></v-text-field>
               <v-text-field
                 ref="surnameInput"
-                v-model="companyRepSurname"
-                :counter="20"
-                maxValue="20"
-                :rules="nameRules"
+                v-model="companyRepSurname"               
                 label="Investor Two Surname"
                 required
               ></v-text-field>
@@ -217,7 +181,7 @@
                   default-country-code="ZA"
                   show-code-on-list
                   :only-countries="['ZA']"
-                  @update="mobileStuff"
+                  
                 />
               </v-col>
               <v-col cols="6" style="background-color: lightgrey">
@@ -230,7 +194,7 @@
                   default-country-code="ZA"
                   show-code-on-list
                   :only-countries="['ZA']"
-                  @update="mobileStuff"
+                  
                 />
               </v-col>
             </v-row>
@@ -259,7 +223,7 @@
                   default-country-code="ZA"
                   show-code-on-list
                   :only-countries="['ZA']"
-                  @update="mobileStuff"
+                  
                 />
               </v-col>
               <v-col cols="6" style="background-color: lightgrey">
@@ -274,7 +238,7 @@
                   default-country-code="ZA"
                   show-code-on-list
                   :only-countries="['ZA']"
-                  @update="mobileStuff"
+                  
                 />
               </v-col>
             </v-row>
@@ -466,6 +430,7 @@
               <v-col cols="12" sm="12">
                 <h3>Company & Representative File Uploads</h3>
               </v-col>
+              <v-col cols="4" sm="4">
               <v-file-input
                 v-model="representativeDisclaimerFile"
                 label="Upload Representation Disclaimer Letter"
@@ -474,46 +439,57 @@
                 hint="Upload Disclaimer Letter"
                 persistent-hint
               ></v-file-input>
-              <v-file-input
-                v-model="representativeIDFile"
-                label="Upload Representation ID"
-                accept="image/jpeg, image/jpg, image/png, image/bmp, application/pdf"
-                filled
-                hint="Upload ID"
-                persistent-hint
-              ></v-file-input>
-              <v-file-input
-                v-model="representativePOAFile"
-                label="Representative POA"
-                accept="image/jpeg, image/jpg, image/png, image/bmp, application/pdf"
-                filled
-                hint="Upload POA"
-                persistent-hint
-              ></v-file-input>
-              <v-file-input
-                v-model="companyResolutionFile"
-                label="Company / Trust Resolution"
-                accept="image/jpeg, image/jpg, image/png, image/bmp, application/pdf"
-                filled
-                hint="Upload Company / Trust Resolution"
-                persistent-hint
-              ></v-file-input>
-              <v-file-input
-                v-model="companyRefDocsFile"
-                label="Company / Trust Reg Docs"
-                accept="image/jpeg, image/jpg, image/png, image/bmp, application/pdf"
-                filled
-                hint="Upload Company / Trust Reg Docs"
-                persistent-hint
-              ></v-file-input>
-              <v-file-input
-                v-model="companyPOAFile"
-                label="Company / Trust POA"
-                accept="image/jpeg, image/jpg, image/png, image/bmp, application/pdf"
-                filled
-                hint="Upload Company / Trust POA"
-                persistent-hint
-              ></v-file-input>
+              </v-col>
+              <v-col cols="4" sm="4">
+                <v-file-input
+                  v-model="representativeIDFile"
+                  label="Upload Representation ID"
+                  accept="image/jpeg, image/jpg, image/png, image/bmp, application/pdf"
+                  filled
+                  hint="Upload ID"
+                  persistent-hint
+                ></v-file-input>
+              </v-col>
+              <v-col cols="4" sm="4">
+                <v-file-input
+                  v-model="representativePOAFile"
+                  label="Representative POA"
+                  accept="image/jpeg, image/jpg, image/png, image/bmp, application/pdf"
+                  filled
+                  hint="Upload POA"
+                  persistent-hint
+                ></v-file-input>
+              </v-col>
+              <v-col cols="4" sm="4">
+                <v-file-input
+                  v-model="companyResolutionFile"
+                  label="Company / Trust Resolution"
+                  accept="image/jpeg, image/jpg, image/png, image/bmp, application/pdf"
+                  filled
+                  hint="Upload Company / Trust Resolution"
+                  persistent-hint
+                ></v-file-input>
+              </v-col>
+              <v-col cols="4" sm="4">
+                <v-file-input
+                  v-model="companyRefDocsFile"
+                  label="Company / Trust Reg Docs"
+                  accept="image/jpeg, image/jpg, image/png, image/bmp, application/pdf"
+                  filled
+                  hint="Upload Company / Trust Reg Docs"
+                  persistent-hint
+                ></v-file-input>
+              </v-col>
+              <v-col cols="4" sm="4">
+                <v-file-input
+                  v-model="companyPOAFile"
+                  label="Company / Trust POA"
+                  accept="image/jpeg, image/jpg, image/png, image/bmp, application/pdf"
+                  filled
+                  hint="Upload Company / Trust POA"
+                  persistent-hint
+                ></v-file-input>
+              </v-col>
             </v-row>
           </v-container>
 
@@ -586,6 +562,7 @@ export default {
     },
   },
   data: () => ({
+    paramId: 0,
     roleId: null,
     jobId: null,
     jobType: null,
@@ -672,6 +649,7 @@ export default {
     snackbarMessage: "",
     checkbox: false,
     // ^^ wip
+    investorSuffix: 0,
 
     mobileResults: {},
     // good rules examples
@@ -686,12 +664,46 @@ export default {
     ],
   }),
 
-  async mounted() {
-    this.testServer();
-  },
+  async mounted() {},
   watch: {},
 
   methods: {
+    async getInvestorDetails() {
+      let data = {
+        id: 1, // use the $store.developement.id
+        paramId: this.paramId,
+      };
+      console.log(data);
+      await axios({
+        method: "post",
+        url: `${url}/getInvestorDetails`, // use store url
+        data: data,
+      })
+        .then(
+          (response) => {
+            response.data.forEach((investor) => {
+              this.SelectedInvestor.push(investor);
+              // this.InvestorCode = investment.investor_acc_number;
+            });
+            console.log("this.SelectedInvestor List = ", this.SelectedInvestor);
+            // use a method here to set the local properties for v-models setFormValues()
+            // this.setFormValues() // this.InvestorName = this.SelectedInvestor.investor_name etc
+            this.setFormValues();
+            // get this working, demo when ready, see if Wayne is coming
+            // set and see the form values (this.investorId) here console.log is my friend
+            // create a new control for the id, so i have two, use a different model for each of them
+            // and try sending to the route as idNumberThis and idNumberSelected
+            // 2 controls, bothgoing into  form append, both being unwrapped in updateinvestor investorroutes
+          },
+          (error) => {
+            console.log(error);
+          }
+        )
+        .catch((e) => {
+          console.log(e);
+        });
+      // get the details from the selected investorId
+    },
     async testServer() {
       await axios({
         method: "get",
@@ -713,7 +725,31 @@ export default {
     personCompanySwitch() {
       this.buyers = "1";
     },
-    
+
+     async getInvestorSuffixNumber(investorPrefix) {
+    let formData = new FormData();
+    formData.append("investorPrefix", investorPrefix);
+     await axios({
+        method: "post",
+        url: `${url}/getInvestorSuffix`,
+        data: formData,
+      }).then(
+        (response) => {
+          this.investorSuffix = response.data[0].count
+          this.snackbar = true;
+          console.log("SNEK",response.data)
+        //   if( response.data[0].count  < 10  ) {
+        //     return "0" + response.data[0].count
+        //   } else {
+        //     return response.data[0].count
+        //   }
+        // },
+        },
+        (error) => {
+          console.log(error);
+        }
+      );
+  },
 
     async saveInvestor() {
       let files = [];
@@ -787,7 +823,22 @@ export default {
         formData.append("documents", files[x]);
       }
 
-      formData.append("investorCode", this.investorCode);
+      let _investSurnameSnippet = this.investorSurname.substring(0,3);
+      _investSurnameSnippet = _investSurnameSnippet.toUpperCase();
+      // need a method to get next investor if one with Z and MCL 01 exists, find COUNT(*) where code = this code here, 
+      // let investorSuffixNum = this.getInvestorSuffixNumber(_investSurnameSnippet)
+      // console.log("Investor Suffix Number: ", this.investorSuffix)
+      //     console.log("Investor Suffix Number: ", investorSuffixNum)
+      this.getInvestorSuffixNumber(_investSurnameSnippet)
+      let _investorCode = ""
+      if (this.investorSuffix < 10) {
+         _investorCode = "Z" + _investSurnameSnippet +  "0" + this.investorSuffix;
+      } else {
+        _investorCode = "Z" + _investSurnameSnippet +  this.investorSuffix;
+      }
+
+
+      formData.append("investorCode", _investorCode);
       formData.append("linkedEmail", this.linkedEmail);
       formData.append("investorInitials", this.investorInitials);
       formData.append("investorSurname", this.investorSurname);
@@ -833,7 +884,6 @@ export default {
       formData.append("person", this.person);
       formData.append("buyers", this.buyers);
 
-
       await axios({
         method: "post",
         url: `${url}/createInvestor`,
@@ -847,6 +897,7 @@ export default {
           console.log(error);
         }
       );
+      
     },
 
     reset() {
@@ -854,6 +905,7 @@ export default {
       this.checkbox = false;
     },
   },
+ 
 };
 </script>
 

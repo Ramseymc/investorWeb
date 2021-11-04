@@ -151,6 +151,14 @@ const chalk = require("chalk")
         excecuteSQL(mysql, res);
     }),
 
+    router.post("/getInvestorSuffix", upload.array("documents"), (req, res) => {
+        // sql to get the count of investors whos surname is like ${req.body.investorPrefix}
+        let mysql = `SELECT COUNT(*) + 1 as count FROM investors i WHERE i.investor_surname LIKE '${req.body.investorPrefix}%' ` 
+        console.log(chalk.green("getInvestorSuffixNumber SQL = ",mysql))
+        excecuteSQL(mysql, res);
+
+    }),
+    //getInvestorSuffixNumber()
     // complete sql
     router.post("/createInvestment", upload.array("documents"), (req, res) => {
         let fileDetails = [];
@@ -320,9 +328,7 @@ const chalk = require("chalk")
     }),
     // test
     router.post("/updateInvestor", upload.array("documents"), (req, res) => {
-        console.log("updateInvestor req", req.body)
-        console.log("Files: ", req.files);
-        console.log("Info: ", req.body);
+        console.log("$$$ 100 % $$$ updateInvestor request.body", req.body)     
 
         let fileDetails = []
         //console.log(req.body.contains)
@@ -354,6 +360,7 @@ const chalk = require("chalk")
                 return el2.filename === el.originalName
             })
             // el.fileNameUpdated = `${el.fileName}.${filtered[0].mimetype.split("/")[1]}`
+            // fix some file naming stuff on update of investor - check same lpace in the creaye firsy
             el.fileNameUpdated = `${el.fileName}`
             fs.rename(`public/uploads/${el.originalName}`, `public/uploads/${el.fileNameUpdated}`, (err) => {
                 if (err)
@@ -517,7 +524,9 @@ const chalk = require("chalk")
                         if (err) console.log("Error renaming", err);
                         //throw err
                     }
+                    
                 );
+                console.log("CONNOR:: file renamed from" + `${el.originalName}` + " to " + `${el.fileNameUpdated}`)
             });
         }
 

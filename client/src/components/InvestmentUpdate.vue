@@ -51,14 +51,14 @@
           <!-- Investor Code & Linked email - read-only fields -->
           <v-container>
             <v-row>
-              <v-text-field            
-                v-model="this.SelectedInvestment[0].investor_acc_number"              
-                label="Investor Code:"               
+              <v-text-field
+                v-model="this.SelectedInvestment[0].investor_acc_number"
+                label="Investor Code:"
               ></v-text-field>
 
               <v-text-field
-                v-model="this.SelectedInvestment[0].project"             
-                label="Project:"      
+                v-model="this.SelectedInvestment[0].project"
+                label="Project:"
               ></v-text-field>
 
               <v-text-field
@@ -66,10 +66,8 @@
                 v-model="this.SelectedInvestment[0].linked_unit"
                 :counter="20"
                 maxValue="20"
-              
                 label="Linked Unit:"
                 required
-         
               ></v-text-field>
 
               <v-text-field
@@ -77,10 +75,8 @@
                 v-model="this.SelectedInvestment[0].investment_amount"
                 :counter="20"
                 maxValue="20"
-           
                 label="Investment Amount:"
                 required
-           
               ></v-text-field>
             </v-row>
           </v-container>
@@ -96,20 +92,16 @@
                 v-model="this.SelectedInvestment[0].end_date"
                 :counter="20"
                 maxValue="20"
-              
                 label="Loan Agreement Sign Date (enddate*):"
                 required
-     
               ></v-text-field>
               <v-text-field
                 ref="surnameInput"
                 v-model="this.SelectedInvestment[0].datecreated"
                 :counter="20"
                 maxValue="20"
-          
                 label="Investment Date:"
                 required
-            
               ></v-text-field>
               <v-text-field
                 v-model="this.SelectedInvestment[0].investment_interest_rate"
@@ -128,20 +120,16 @@
                 v-model="this.SelectedInvestment[0].releaseDate"
                 :counter="20"
                 maxValue="20"
-              
                 label="Release Date:"
                 required
-        
               ></v-text-field>
               <v-text-field
                 ref="surnameInput"
                 v-model="this.SelectedInvestment[0].releaseAmount"
                 :counter="20"
                 maxValue="20"
-            
                 label="Release Amount:"
                 required
-               
               ></v-text-field>
               <v-text-field
                 v-model="this.SelectedInvestment[0].releasePerc"
@@ -156,22 +144,12 @@
                 <!-- <h3>Investor One Details</h3> -->
               </v-col>
               <v-text-field
-             
                 v-model="this.SelectedInvestment[0].end_date"
-              
-              
                 label="Repayment Date(*end date):"
-             
-          
               ></v-text-field>
               <v-text-field
-               
                 v-model="this.SelectedInvestment[0].repayment_amount"
-             
-         
                 label="Repayment Amount:"
-             
-
               ></v-text-field>
               <!-- to be a checkbox -->
               <v-checkbox
@@ -346,7 +324,6 @@ export default {
     snackbar: false,
     snackbarMessage: "",
     checkbox: false,
-     
   }),
 
   async mounted() {
@@ -372,12 +349,15 @@ export default {
           (response) => {
             response.data.forEach((investment) => {
               this.SelectedInvestment.push(investment);
-             // this.InvestorCode = investment.investor_acc_number;
+              // this.InvestorCode = investment.investor_acc_number;
             });
-            console.log("this.SelectedInvestment List = ", this.SelectedInvestment);
+            console.log(
+              "this.SelectedInvestment List = ",
+              this.SelectedInvestment
+            );
             // use a method here to set the local properties for v-models setFormValues()
-           // this.setFormValues() // this.InvestorName = this.SelectedInvestor.investor_name etc 
-           this.setFormValues()
+            // this.setFormValues() // this.InvestorName = this.SelectedInvestor.investor_name etc
+            this.setFormValues();
           },
           (error) => {
             console.log(error);
@@ -413,7 +393,10 @@ export default {
     getFiles() {
       let files = [];
       let contains = [];
-      console.log("(this.singedLoanAgreementFile) = ", this.singedLoanAgreementFile)
+      console.log(
+        "(this.singedLoanAgreementFile) = ",
+        this.singedLoanAgreementFile
+      );
       if (this.singedLoanAgreementFile !== null) {
         contains.push("singedLoanAgreementFile");
         files.push(this.singedLoanAgreementFile); // append mimetype here?
@@ -428,15 +411,17 @@ export default {
       if (this.attorneyConfirmLetterFile !== null) {
         contains.push("attorneyConfirmLetterFile");
         files.push(this.attorneyConfirmLetterFile); // append mimetype here?
-      } 
+      }
       return files;
     },
-    
 
     async updateInvestment() {
       let files = [];
       let contains = [];
-      console.log("(this.singedLoanAgreementFile) = ", this.singedLoanAgreementFile)
+      console.log(
+        "(this.singedLoanAgreementFile) = ",
+        this.singedLoanAgreementFile
+      );
       if (this.singedLoanAgreementFile !== null) {
         contains.push("singedLoanAgreementFile");
         files.push(this.singedLoanAgreementFile); // append mimetype here?
@@ -451,15 +436,15 @@ export default {
       if (this.attorneyConfirmLetterFile !== null) {
         contains.push("attorneyConfirmLetterFile");
         files.push(this.attorneyConfirmLetterFile); // append mimetype here?
-      } 
+      }
 
-      console.log("contains:", contains)
-      console.log("files:", files)
+      console.log("contains:", contains);
+      console.log("files:", files);
 
       let formData = new FormData();
       for (var x = 0; x < files.length; x++) {
         formData.append("documents", files[x]);
-      }// get it in the route and see if documents has stuff
+      } // get it in the route and see if documents has stuff
       formData.append("contains", contains);
       formData.append("investorCode", this.investorId);
       formData.append("investorCode", this.investorCode);

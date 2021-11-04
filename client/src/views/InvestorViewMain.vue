@@ -54,16 +54,56 @@
       </v-col>
     </v-row>
 
+    <v-data-table
+      :headers="headers"
+      :items="desserts"
+      :items-per-page="5"
+      class="elevation-1"
+    >
+      <!--       
+        <template v-slot:item.viewInvestor="{ item }">
+            <v-chip :id="item.investor_id" small color="orange" @click="viewInvestor"> 
+              View
+            </v-chip>
+          </template>
+
+          -->
+      <template v-slot:item.viewInvestor="{ item }">
+        <v-chip
+          :id="item.investor_id"
+          small
+          dark
+          color="blue"
+          @click="viewInvestor"
+        >
+          Edit
+        </v-chip>
+      </template>
+
+      <template v-slot:item.viewInvestments="{ item }">
+        <v-chip
+          :id="item.investor_id"
+          small
+          dark
+          color="green"
+          @click="viewInvestments"
+        >
+          View
+        </v-chip>
+      </template>
+    </v-data-table>
+
     <!-- Table -->
+    <!--    
     <v-simple-table v-resize="onResize" align="center" justify="center">
       <template v-slot:default>
         <thead>
           <tr>
-            <th class="text-left">Investor Code | Edit Investor</th>
-            <th class="text-left">| View Investments</th>
-            <th class="text-left">| Name</th>
-            <th class="text-left">| Email</th>
-            <th class="text-left">| ID</th>
+            <th class="text-left">Investor Code   | Edit Investor </th>
+            <th class="text-left"> | View Investments </th>
+            <th class="text-left"> | Name </th>
+            <th class="text-left"> | Email </th>
+            <th class="text-left"> | ID </th>
           </tr>
         </thead>
         <tbody>
@@ -71,35 +111,30 @@
             <td>
               {{ investor.investor_acc_number }}
               <v-btn :id="investor.investor_id" text @click="viewInvestor">
+                
                 <v-icon right> mdi-account-edit </v-icon>
-              </v-btn>
+                </v-btn>
+                
 
-              <!-- <a target="_blank"
-                 style="text-decoration: none"
-                 v-on:click="openInvestmentView"
-                 :id="investor.investor_id"
-           >{{ investor.investor_acc_number }} </a> -->
+             
             </td>
-            <!-- add a link to investmentView.vue - might change on Wayne's opinion  -->
-            <td>
-              <v-btn
-                :id="investor.investor_id"
-                @click="viewInvestments"
-                color="blue"
-              >
+           
+            <td> <v-btn :id="investor.investor_id"  @click="viewInvestments" color="blue">
                 <v-icon right> mdi-magnify </v-icon>
                 <v-icon right> mdi-format-list-bulleted </v-icon>
               </v-btn>
-            </td>
+              </td>
             <td>
+             
               {{ investor.investor_name }} {{ investor.investor_surname }}
+      
             </td>
             <td>{{ investor.investor_email }}</td>
             <td>{{ investor.investor_id_number }}</td>
           </tr>
         </tbody>
       </template>
-    </v-simple-table>
+    </v-simple-table> -->
 
     <InvestmentView
       v-if="openInvestmentViewForm"
@@ -118,12 +153,12 @@
 
 <script>
 import axios from "axios";
-import InvestmentView from "../views/InvestmentView.vue";
+import InvestmentView from "./InvestmentView.vue";
 import InvestorUpdate from "../components/InvestmentUpdate.vue";
 let url = process.env.VUE_APP_BASEURL;
 
 export default {
-  name: "investorview",
+  name: "investorviewmain",
   components: {
     InvestmentView,
     InvestorUpdate,
@@ -147,6 +182,8 @@ export default {
   data() {
     return {
       // investor data
+
+      // write a method to this get all investor
       InvestorList: [],
       searchInvestors: "",
       investorId: "",
@@ -159,6 +196,22 @@ export default {
         x: 0,
         y: 0,
       },
+
+      //how do you wrap a button into a cell
+      headers: [
+        {
+          text: "Investor Code",
+          value: "investor_acc_number",
+          sortable: true,
+          width: 100,
+        },
+
+        { text: "Edit ", value: "viewInvestor", width: "50" },
+        { text: "View Investments ", value: "viewInvestments", width: "50" },
+        { text: "Name", value: "investor_name" },
+        { text: "Email", value: "investor_email" },
+      ],
+      desserts: [],
     };
   },
 
@@ -228,7 +281,7 @@ export default {
       console.log(event.currentTarget.id);
       // this.$router.push({})
       this.$router.push({
-        name: "investmentview",
+        name: "investmentviewmain",
         //name: "investorupdate",
         params: { id: event.currentTarget.id },
       });
@@ -248,7 +301,7 @@ export default {
     },
 
     async getAllInvestors() {
-      this.InvetorsList = [];
+      this.desserts = [];
       let data = {
         id: 1, //   id: this.$store.state.development.id
       };
@@ -260,7 +313,8 @@ export default {
         .then(
           (response) => {
             response.data.forEach((investor) => {
-              this.InvestorList.push(investor);
+              investor.investorUpdateHref = `<a href="${process.env.VUE_APP_BASEURL}/investorupdate/${investor.investor_id}> View </a>`;
+              this.desserts.push(investor);
             });
           },
           (error) => {

@@ -32,7 +32,11 @@
               </v-col>
 
               <v-col cols="12" md="4">
-                <v-radio-group v-model="this.SelectedInvestor[0].buyers" v-if="this.SelectedInvestor[0].person_mode === 'person'" row>
+                <v-radio-group
+                  v-model="this.SelectedInvestor[0].buyers"
+                  v-if="this.SelectedInvestor[0].person_mode === 'person'"
+                  row
+                >
                   <v-radio
                     label="1 Person"
                     color="blue darken-3"
@@ -52,22 +56,14 @@
           <v-container>
             <v-row>
               <v-text-field
-           
                 v-model="this.SelectedInvestor[0].investor_acc_number"
-
-         
                 label="Investor Code"
                 required
               ></v-text-field>
 
               <v-text-field
-                ref="linkedEmailInput"
                 v-model="this.SelectedInvestor[0].linked_email"
-                :counter="20"
-                maxValue="20"
-                :rules="nameRules"
                 label="Linked User Email (Portal):"
-                required
               ></v-text-field>
             </v-row>
           </v-container>
@@ -81,9 +77,6 @@
               <v-text-field
                 ref="nameInput"
                 v-model="this.SelectedInvestor[0].investor_name"
-                :counter="20"
-                maxValue="20"
-                :rules="nameRules"
                 label="Investor Initials"
                 required
               ></v-text-field>
@@ -98,42 +91,64 @@
               ></v-text-field>
               <v-text-field
                 v-model="this.SelectedInvestor[0].investor_id_number"
-                label="ID Number*"
+                label="ID Number (selectedInvestor)*"
+                required
+              ></v-text-field>
+              <v-text-field
+                v-model="investorIDNumber"
+                label="ID Number (this.investorIDNumber)"
+                required
+              ></v-text-field>
+            </v-row>
+          </v-container>
+
+          <v-container>
+            <v-col cols="12" sm="12">
+              <h3>Investor ID Testing</h3>
+            </v-col>
+            <v-row>
+              <v-text-field
+                v-model="this.SelectedInvestor[0].investor_id_number"
+                label="ID Number (selectedInvestor)*"
+                required
+              ></v-text-field>
+              <v-text-field
+                v-model="investorIDNumber"
+                label="ID Number (this.investorIDNumber)"
                 required
               ></v-text-field>
             </v-row>
           </v-container>
 
           <!-- 2nd investor details -->
-          <v-container v-if="this.SelectedInvestor[0].person_mode === 'person' && this.SelectedInvestor[0].buyers === '2'">
+          <v-container
+            v-if="
+              this.SelectedInvestor[0].person_mode === 'person' &&
+              this.SelectedInvestor[0].buyers === '2'
+            "
+          >
             <v-row>
               <v-col cols="12" sm="12">
                 <h3>Investor Two Details</h3>
               </v-col>
               <v-text-field
-    
                 v-model="this.SelectedInvestor[0].investor_two_name"
-             
                 label="Investor Two Initials"
-                
               ></v-text-field>
               <v-text-field
-      
                 v-model="this.SelectedInvestor[0].investor_two_surname"
-         
-              
                 label="Investor Two Surname"
-              
               ></v-text-field>
               <v-text-field
                 v-model="this.SelectedInvestor[0].investor_two_id_number"
-  
               ></v-text-field>
             </v-row>
           </v-container>
 
           <!-- company details -->
-          <v-container v-if="this.SelectedInvestor[0].person_mode === 'company'">
+          <v-container
+            v-if="this.SelectedInvestor[0].person_mode === 'company'"
+          >
             <v-row>
               <v-col cols="12" sm="12">
                 <h3>Company Details</h3>
@@ -160,7 +175,9 @@
           </v-container>
 
           <!-- company representative details -->
-          <v-container v-if="this.SelectedInvestor[0].person_mode === 'company'">
+          <v-container
+            v-if="this.SelectedInvestor[0].person_mode === 'company'"
+          >
             <v-row>
               <v-col cols="12" sm="12">
                 <h3>Company Representative Details</h3>
@@ -212,7 +229,6 @@
                   default-country-code="ZA"
                   show-code-on-list
                   :only-countries="['ZA']"
-                
                 />
               </v-col>
               <v-col cols="6" style="background-color: lightgrey">
@@ -225,14 +241,18 @@
                   default-country-code="ZA"
                   show-code-on-list
                   :only-countries="['ZA']"
-  
                 />
               </v-col>
             </v-row>
           </v-container>
 
           <!-- contact 2 details - show if 2 people or trust/company mode-->
-          <v-container v-if="this.SelectedInvestor[0].person_mode === 'person' && buyers === '2'">
+          <v-container
+            v-if="
+              this.SelectedInvestor[0].person_mode === 'person' &&
+              buyers === '2'
+            "
+          >
             <v-row>
               <v-col cols="12" sm="12">
                 <h3>Contact Two Details</h3>
@@ -254,7 +274,6 @@
                   default-country-code="ZA"
                   show-code-on-list
                   :only-countries="['ZA']"
-     
                 />
               </v-col>
               <v-col cols="6" style="background-color: lightgrey">
@@ -269,7 +288,6 @@
                   default-country-code="ZA"
                   show-code-on-list
                   :only-countries="['ZA']"
-                 
                 />
               </v-col>
             </v-row>
@@ -345,7 +363,7 @@
                 required
               ></v-text-field>
               <v-text-field
-                v-model="this.SelectedInvestor[0].account_name "
+                v-model="this.SelectedInvestor[0].account_name"
                 label="Account Name"
                 required
               ></v-text-field>
@@ -423,7 +441,12 @@
           </v-container>
 
           <!-- investor2 file uploads - show if company mode-->
-          <v-container v-if="this.SelectedInvestor[0].person_mode === 'person' && this.SelectedInvestor[0].buyers === '2'">
+          <v-container
+            v-if="
+              this.SelectedInvestor[0].person_mode === 'person' &&
+              this.SelectedInvestor[0].buyers === '2'
+            "
+          >
             <v-row>
               <v-col cols="12" sm="12">
                 <h3>Investor Two File Uploads</h3>
@@ -456,59 +479,73 @@
           </v-container>
 
           <!-- company/trust file uploads -->
-          <v-container v-if="this.SelectedInvestor[0].person_mode === 'company'">
+          <v-container
+            v-if="this.SelectedInvestor[0].person_mode === 'company'"
+          >
             <v-row>
               <v-col cols="12" sm="12">
                 <h3>Company & Representative File Uploads</h3>
               </v-col>
-              <v-file-input
-                v-model="this.SelectedInvestor[0].representativeDisclaimerFile"
-                label="Upload Representation Disclaimer Letter"
-                accept="image/jpeg, image/jpg, image/png, image/bmp, application/pdf"
-                filled
-                hint="Upload Disclaimer Letter"
-                persistent-hint
-              ></v-file-input>
-              <v-file-input
-                v-model="this.SelectedInvestor[0].representativeIDFile"
-                label="Upload Representation ID"
-                accept="image/jpeg, image/jpg, image/png, image/bmp, application/pdf"
-                filled
-                hint="Upload ID"
-                persistent-hint
-              ></v-file-input>
-              <v-file-input
-                v-model="this.SelectedInvestor[0].representativePOAFile"
-                label="Representative POA"
-                accept="image/jpeg, image/jpg, image/png, image/bmp, application/pdf"
-                filled
-                hint="Upload POA"
-                persistent-hint
-              ></v-file-input>
-              <v-file-input
-                v-model="this.SelectedInvestor[0].companyResolutionFile"
-                label="Company / Trust Resolution"
-                accept="image/jpeg, image/jpg, image/png, image/bmp, application/pdf"
-                filled
-                hint="Upload Company / Trust Resolution"
-                persistent-hint
-              ></v-file-input>
-              <v-file-input
-                v-model="this.SelectedInvestor[0].companyRefDocsFile"
-                label="Company / Trust Reg Docs"
-                accept="image/jpeg, image/jpg, image/png, image/bmp, application/pdf"
-                filled
-                hint="Upload Company / Trust Reg Docs"
-                persistent-hint
-              ></v-file-input>
-              <v-file-input
-                v-model="this.SelectedInvestor[0].companyPOAFile"
-                label="Company / Trust POA"
-                accept="image/jpeg, image/jpg, image/png, image/bmp, application/pdf"
-                filled
-                hint="Upload Company / Trust POA"
-                persistent-hint
-              ></v-file-input>
+              <v-col cols="4" sm="4">
+                <v-file-input
+                  v-model="this.SelectedInvestor[0].representativeDisclaimerFile"
+                  label="Upload Representation Disclaimer Letter"
+                  accept="image/jpeg, image/jpg, image/png, image/bmp, application/pdf"
+                  filled
+                  hint="Upload Disclaimer Letter"
+                  persistent-hint
+                ></v-file-input>
+              </v-col>
+              <v-col cols="4" sm="4">
+                <v-file-input
+                  v-model="this.SelectedInvestor[0].representativeIDFile"
+                  label="Upload Representation ID"
+                  accept="image/jpeg, image/jpg, image/png, image/bmp, application/pdf"
+                  filled
+                  hint="Upload ID"
+                  persistent-hint
+                ></v-file-input>
+              </v-col>
+              <v-col cols="4" sm="4">
+                <v-file-input
+                  v-model="this.SelectedInvestor[0].representativePOAFile"
+                  label="Representative POA"
+                  accept="image/jpeg, image/jpg, image/png, image/bmp, application/pdf"
+                  filled
+                  hint="Upload POA"
+                  persistent-hint
+                ></v-file-input>
+              </v-col>
+              <v-col cols="4" sm="4">
+                <v-file-input
+                  v-model="this.SelectedInvestor[0].companyResolutionFile"
+                  label="Company / Trust Resolution"
+                  accept="image/jpeg, image/jpg, image/png, image/bmp, application/pdf"
+                  filled
+                  hint="Upload Company / Trust Resolution"
+                  persistent-hint
+                ></v-file-input>
+              </v-col>
+              <v-col cols="4" sm="4">
+                <v-file-input
+                  v-model="this.SelectedInvestor[0].companyRefDocsFile"
+                  label="Company / Trust Reg Docs"
+                  accept="image/jpeg, image/jpg, image/png, image/bmp, application/pdf"
+                  filled
+                  hint="Upload Company / Trust Reg Docs"
+                  persistent-hint
+                ></v-file-input>
+              </v-col>
+              <v-col cols="4" sm="4">
+                <v-file-input
+                  v-model="this.SelectedInvestor[0].companyPOAFile"
+                  label="Company / Trust POA"
+                  accept="image/jpeg, image/jpg, image/png, image/bmp, application/pdf"
+                  filled
+                  hint="Upload Company / Trust POA"
+                  persistent-hint
+                ></v-file-input>
+              </v-col>
             </v-row>
           </v-container>
 
@@ -517,7 +554,7 @@
             <v-row>
               <v-checkbox
                 v-model="checkbox"
-                color="#111d5e"              
+                color="#111d5e"
                 label="Confirm Information is Correct?"
                 required
               ></v-checkbox>
@@ -680,98 +717,100 @@ export default {
 
   async mounted() {
     this.paramId = parseInt(this.$route.params.id);
-    console.log("Mounted update investorID = ", this.paramId)
+    console.log("Mounted update investorID = ", this.paramId);
     //this.getAllInvestments();
     this.testServer();
-    this.getInvestorDetails()
+    this.getInvestorDetails();
   },
   watch: {},
 
   methods: {
     async setFormValues() {
-      this.person = this.SelectedInvestor[0].person
-      this.investorCode = this.SelectedInvestor[0].investor_acc_number
-      this.linkedEmail = this.SelectedInvestor[0].linked_email
-      this.mobile.phoneNumber = this.SelectedInvestor[0].investor_mobile
+      this.person = this.SelectedInvestor[0].person;
+      this.investorCode = this.SelectedInvestor[0].investor_acc_number;
+      this.linkedEmail = this.SelectedInvestor[0].linked_email;
+      this.mobile.phoneNumber = this.SelectedInvestor[0].investor_mobile;
 
-  // need to get the form details to savethem just put this method in both and copy data() - 25 minuteas bro
+      this.investorIDNumber = this.SelectedInvestor[0].investor_id_number;
 
-      console.log("this.investorCode = " , this.investorCode)
-//  investorCode: "",
-//     linkedEmail: "",
+      // need to get the form details to savethem just put this method in both and copy data() - 25 minuteas bro
 
-//     person: "",
-//     buyers: 0,
-//     buyersSwicth: 1,
+      console.log("this.investorCode = ", this.investorCode);
+      //  investorCode: "",
+      //     linkedEmail: "",
 
-//     investorInitials: "",
-//     investorSurname: "",
-//     investorIDNumber: "",
+      //     person: "",
+      //     buyers: 0,
+      //     buyersSwicth: 1,
 
-//     investorTwoCode: "",
-//     investorTwoInitials: "",
-//     investorTwoSurname: "",
-//     investorTwoIDNumber: "",
+      //     investorInitials: "",
+      //     investorSurname: "",
+      //     investorIDNumber: "",
 
-//     companyName: "",
-//     regNumber: "",
+      //     investorTwoCode: "",
+      //     investorTwoInitials: "",
+      //     investorTwoSurname: "",
+      //     investorTwoIDNumber: "",
 
-//     companyRepInitials: "",
-//     companyRepSurname: "",
-//     companyRepIDNumber: "",
+      //     companyName: "",
+      //     regNumber: "",
 
-//     contact: "",
-//     contactEmail: "",
-//     contactTwoEmail: "",
+      //     companyRepInitials: "",
+      //     companyRepSurname: "",
+      //     companyRepIDNumber: "",
 
-//     streetNo: "",
-//     streetName: "",
-//     addressSuburb: "",
-//     province: "",
-//     addressPostalCode: "",
+      //     contact: "",
+      //     contactEmail: "",
+      //     contactTwoEmail: "",
 
-//     boxNo: "",
-//     postalSuburb: "",
-//     postalCode: "",
+      //     streetNo: "",
+      //     streetName: "",
+      //     addressSuburb: "",
+      //     province: "",
+      //     addressPostalCode: "",
 
-//     bankName: "",
-//     accountName: "",
-//     branchCode: "",
-//     accountNumber: "",
+      //     boxNo: "",
+      //     postalSuburb: "",
+      //     postalCode: "",
 
-//     ficaDate: "",
+      //     bankName: "",
+      //     accountName: "",
+      //     branchCode: "",
+      //     accountNumber: "",
 
-//     investorOneDisclaimerFile: "",
-//     investorOneIDFile: null,
-//     investorOnePOAFile: null,
+      //     ficaDate: "",
 
-//     investorTwoDisclaimerFile: null,
-//     investorTwoIDFile: null,
-//     investorTwoPOAFile: null,
+      //     investorOneDisclaimerFile: "",
+      //     investorOneIDFile: null,
+      //     investorOnePOAFile: null,
 
-//     representativeDisclaimerFile: null,
-//     representativeIDFile: null,
-//     representativePOAFile: null,
-//     companyResolutionFile: null,
-//     companyRefDocsFile: null,
-//     companyPOAFile: null,
+      //     investorTwoDisclaimerFile: null,
+      //     investorTwoIDFile: null,
+      //     investorTwoPOAFile: null,
 
-//     mobile: {
-//       countryCode: "ZA",
-//       isValid: false,
-//       phoneNumber: "",
-//       phoneNumberTwo: "",
-//     },
-//     landline: {
-//       countryCode: "ZA",
-//       isValid: false,
-//       phoneNumber: "",
-//       phoneNumberTwo: "",
-//     },
+      //     representativeDisclaimerFile: null,
+      //     representativeIDFile: null,
+      //     representativePOAFile: null,
+      //     companyResolutionFile: null,
+      //     companyRefDocsFile: null,
+      //     companyPOAFile: null,
 
-//     snackbar: false,
-//     snackbarMessage: "",
-//     checkbox: false,
+      //     mobile: {
+      //       countryCode: "ZA",
+      //       isValid: false,
+      //       phoneNumber: "",
+      //       phoneNumberTwo: "",
+      //     },
+      //     landline: {
+      //       countryCode: "ZA",
+      //       isValid: false,
+      //       phoneNumber: "",
+      //       phoneNumberTwo: "",
+      //     },
+
+      //     snackbar: false,
+      //     snackbarMessage: "",
+      //     checkbox: false,
     },
     async getInvestorDetails() {
       let data = {
@@ -788,12 +827,17 @@ export default {
           (response) => {
             response.data.forEach((investor) => {
               this.SelectedInvestor.push(investor);
-             // this.InvestorCode = investment.investor_acc_number;
+              // this.InvestorCode = investment.investor_acc_number;
             });
             console.log("this.SelectedInvestor List = ", this.SelectedInvestor);
             // use a method here to set the local properties for v-models setFormValues()
-           // this.setFormValues() // this.InvestorName = this.SelectedInvestor.investor_name etc 
-           this.setFormValues()
+            // this.setFormValues() // this.InvestorName = this.SelectedInvestor.investor_name etc
+            this.setFormValues();
+            // get this working, demo when ready, see if Wayne is coming
+            // set and see the form values (this.investorId) here console.log is my friend
+            // create a new control for the id, so i have two, use a different model for each of them
+            // and try sending to the route as idNumberThis and idNumberSelected
+            // 2 controls, bothgoing into  form append, both being unwrapped in updateinvestor investorroutes
           },
           (error) => {
             console.log(error);
@@ -903,6 +947,12 @@ export default {
       formData.append("investorInitials", this.investorInitials);
       formData.append("investorSurname", this.investorSurname);
       formData.append("investorIDNumber", this.investorIDNumber);
+
+      formData.append("investorIDNumber_this", this.investorIDNumber);
+      formData.append(
+        "investorIDNumber_selectedInvestor",
+        this.SelectedInvestor[0].investor_id_number
+      );
 
       formData.append("investorTwoCode", this.investorTwoCode);
       formData.append("investorTwoInitials", this.investorTwoInitials);

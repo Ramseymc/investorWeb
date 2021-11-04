@@ -40,7 +40,23 @@ const routes = [
     name: "investorview",
     component: () =>
       import(
-        /* webpackChunkName: "investorview" */ "../views/InvestorView.vue"
+        /* webpackChunkName: "investorview" */ "../views/InvestorViewMain.vue"
+      ),
+  },
+  {
+    path: "/investorviewmain",
+    name: "investorviewmain",
+    component: () =>
+      import(
+        /* webpackChunkName: "investorview" */ "../views/InvestorViewMain.vue"
+      ),
+  },
+  {
+    path: "/investmentviewmain",
+    name: "investmentviewmain",
+    component: () =>
+      import(
+        /* webpackChunkName: "investorview" */ "../views/InvestmentViewMain.vue"
       ),
   },
   {
@@ -49,7 +65,7 @@ const routes = [
     // params: true,
     component: () =>
       import(
-        /* webpackChunkName: "investmentview" */ "../views/InvestmentView.vue"
+        /* webpackChunkName: "investmentview" */ "../views/InvestmentViewMain.vue"
       ),
   },
   {

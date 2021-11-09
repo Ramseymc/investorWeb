@@ -20,7 +20,7 @@
             <v-icon right> mdi-keyboard-backspace </v-icon>
           </v-btn>
 
-          <v-btn value="refresh" color="secondary" @click="refresh">
+          <v-btn value="refresh" color="green lighten-1" @click="refresh">
             <span>Refresh</span>
 
             <v-icon right> mdi-refresh </v-icon>
@@ -40,11 +40,14 @@
       </v-col>
     </v-row>
 
+    <span v-if="!investmentsExist"> Does not have any investments yet, you may create one using the 'Create' button </span>
+
     <v-data-table
       :headers="headers"
       :items="desserts"
-      :items-per-page="5"
+      :items-per-page="10"
       class="elevation-1"
+      v-if="investmentsExist"
     >
       <template v-slot:item.edit="{ item }">
         <v-chip
@@ -63,7 +66,7 @@
       v-if="openInvestmentUpdateForm"
       :dialog="openInvestmentUpdateForm"
       :investorId="investorId"
-      @closeForm="closeForm"
+      @closeForm="closeUpdateForm"
     />
     <InvestmentAdd
       v-if="openInvestmentViewForm"
@@ -117,6 +120,7 @@ export default {
       icon: "justify",
       InvestorCode: "",
       InvestorName: "",
+      investmentsExist: false,
       //investorId: "",
       headers: [
         {
@@ -174,6 +178,10 @@ export default {
   watch: {},
 
   methods: {
+    closeUpdateForm() {
+      console.log("Closing update form investorId = ", this.investorId)
+      this.refresh()
+    },
     viewInvestment(event) {
       console.log(event.currentTarget.id);
       // this.$router.push({})
@@ -209,6 +217,37 @@ export default {
     //   });
     //   console.log("view investment done");
     // },
+
+    async getInvestorDetails() {
+      this.desserts = [];
+      let data = {
+        id: 1, // use the $store.developement.id
+        paramId: this.paramId,
+      };
+      console.log(data);
+      await axios({
+        method: "post",
+        url: `${url}/getInvestorDetails`, // use store url
+        data: data,
+      })
+        .then(
+          (response) => {
+            response.data.forEach((investment) => {
+              this.desserts.push(investment);
+              this.InvestorCode = investment.investor_acc_number;
+              this.InvestorName =
+                investment.investor_name + " " +  investment.investor_surname;
+            });            
+            console.log("this.Investment List = ", this.desserts);
+          },
+          (error) => {
+            console.log(error);
+          }
+        )
+        .catch((e) => {
+          console.log(e);
+        });
+    },
     async getAllInvestments() {
       this.desserts = [];
       let data = {
@@ -227,8 +266,15 @@ export default {
               this.desserts.push(investment);
               this.InvestorCode = investment.investor_acc_number;
               this.InvestorName =
-                investment.investor_name + investment.investor_surname;
+                investment.investor_name + " " + investment.investor_surname;
             });
+            if(this.desserts.length === 0) {
+              this.investmentsExist = false
+              this.getInvestorDetails()
+             
+            } else {
+              this.investmentsExist = true
+            }
             console.log("this.Investment List = ", this.desserts);
           },
           (error) => {

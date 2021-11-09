@@ -19,11 +19,11 @@
         <!-- </v-col>
         <v-col cols="3"> -->
         <v-btn-toggle v-model="icon" borderless>
-          <v-btn value="home" color="green" @click="home">
+          <v-btn value="home" color="cyan lighten-2" @click="home">
             <v-icon right> mdi-home </v-icon>
           </v-btn>
 
-          <v-btn value="refresh" color="secondary" @click="refresh">
+          <v-btn value="refresh" color="green lighten-1" @click="refresh">
             <span>Refresh</span>
 
             <v-icon right> mdi-refresh </v-icon>
@@ -34,6 +34,8 @@
 
             <v-icon right> mdi-account-plus </v-icon>
           </v-btn>
+
+          
 
           <!-- <v-btn value="right">
           <span class="hidden-sm-and-down">Right</span>
@@ -57,7 +59,7 @@
     <v-data-table
       :headers="headers"
       :items="desserts"
-      :items-per-page="5"
+      :items-per-page="15"
       class="elevation-1"
     >
       <!--       
@@ -210,6 +212,8 @@ export default {
         { text: "View Investments ", value: "viewInvestments", width: "50" },
         { text: "Name", value: "investor_name" },
         { text: "Email", value: "investor_email" },
+        { text: "Contact No", value: "investor_mobile" },
+        { text: "IDNumber", value: "investor_id_number" },         
       ],
       desserts: [],
     };

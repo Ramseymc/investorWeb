@@ -1,6 +1,29 @@
 <template>
   <v-container fluid>
+    <br />
+    <v-row>
+      <v-col cols="7">
+      </v-col>
+      <v-col cols="4">
+        <v-btn-toggle v-model="icon" borderless>
+  
+
+          <v-btn value="cancel" color="orange lighten-1" @click="cancel">
+            <span>Cancel</span>
+
+            <v-icon right> mdi-cancel </v-icon>
+          </v-btn>
+
+          <v-btn value="create" color="primary" @click="save">
+            <span class="hidden-sm-and-down">Save Changes</span>
+
+            <v-icon right> mdi-content-save </v-icon>
+          </v-btn>
+        </v-btn-toggle>
+      </v-col>
+    </v-row>
     <div>
+
       <br />
       <!-- <v-row> -->
       <!-- <v-col > -->
@@ -52,18 +75,20 @@
           <v-container>
             <v-row>
               <v-text-field
-                v-model="this.SelectedInvestment[0].investor_acc_number"
+                v-model="investorCode"
                 label="Investor Code:"
+                readonly
               ></v-text-field>
 
               <v-text-field
-                v-model="this.SelectedInvestment[0].project"
+                v-model="project"
                 label="Project:"
+                readonly
               ></v-text-field>
 
               <v-text-field
                 ref="linkedEmailInput"
-                v-model="this.SelectedInvestment[0].linked_unit"
+                v-model="linkedUnit"
                 :counter="20"
                 maxValue="20"
                 label="Linked Unit:"
@@ -72,7 +97,7 @@
 
               <v-text-field
                 ref="linkedEmailInput"
-                v-model="this.SelectedInvestment[0].investment_amount"
+                v-model="investmentAmount"
                 :counter="20"
                 maxValue="20"
                 label="Investment Amount:"
@@ -89,7 +114,7 @@
               </v-col>
               <v-text-field
                 ref="nameInput"
-                v-model="this.SelectedInvestment[0].end_date"
+                v-model="endDate"
                 :counter="20"
                 maxValue="20"
                 label="Loan Agreement Sign Date (enddate*):"
@@ -97,14 +122,14 @@
               ></v-text-field>
               <v-text-field
                 ref="surnameInput"
-                v-model="this.SelectedInvestment[0].datecreated"
+                v-model="investmentDate"
                 :counter="20"
                 maxValue="20"
                 label="Investment Date:"
                 required
               ></v-text-field>
               <v-text-field
-                v-model="this.SelectedInvestment[0].investment_interest_rate"
+                v-model="investmentPerc"
                 label="Investment %:"
                 required
               ></v-text-field>
@@ -117,7 +142,7 @@
               </v-col>
               <v-text-field
                 ref="nameInput"
-                v-model="this.SelectedInvestment[0].releaseDate"
+                v-model="releaseDate"
                 :counter="20"
                 maxValue="20"
                 label="Release Date:"
@@ -125,14 +150,14 @@
               ></v-text-field>
               <v-text-field
                 ref="surnameInput"
-                v-model="this.SelectedInvestment[0].releaseAmount"
+                v-model="releaseAmount"
                 :counter="20"
                 maxValue="20"
                 label="Release Amount:"
                 required
               ></v-text-field>
               <v-text-field
-                v-model="this.SelectedInvestment[0].releasePerc"
+                v-model="releasePerc"
                 label="Release %:"
                 required
               ></v-text-field>
@@ -144,16 +169,16 @@
                 <!-- <h3>Investor One Details</h3> -->
               </v-col>
               <v-text-field
-                v-model="this.SelectedInvestment[0].end_date"
+                v-model="endDate"
                 label="Repayment Date(*end date):"
               ></v-text-field>
               <v-text-field
-                v-model="this.SelectedInvestment[0].repayment_amount"
+                v-model="repaymentAmount"
                 label="Repayment Amount:"
               ></v-text-field>
               <!-- to be a checkbox -->
               <v-checkbox
-                v-model="this.SelectedInvestment[0].investment_closed"
+                v-model="investmentClosed"
                 label="Investment Closed?"
                 color="success"
                 value="success"
@@ -181,7 +206,7 @@
             <v-row>
               <v-col cols="12" sm="12"> </v-col>
               <v-file-input
-                v-model="this.SelectedInvestment[0].singedLoanAgreementFile"
+                v-model="singedLoanAgreementFile"
                 label="Signed Loan Agreement"
                 accept="image/jpeg, image/jpg, image/png, image/bmp, application/pdf"
                 filled
@@ -191,7 +216,7 @@
               <!-- </v-col>
               <v-col cols="12" sm="12"> -->
               <v-file-input
-                v-model="this.SelectedInvestment[0].POPFile"
+                v-model="POPFile"
                 label="POP File"
                 accept="image/jpeg, image/jpg, image/png, image/bmp, application/pdf"
                 filled
@@ -206,7 +231,7 @@
             <v-row>
               <v-col cols="12" sm="12">
                 <v-file-input
-                  v-model="this.SelectedInvestment[0].attorneyConfirmLetterFile"
+                  v-model="attorneyConfirmLetterFile"
                   label="Attorney Confirmation Letter"
                   accept="image/jpeg, image/jpg, image/png, image/bmp, application/pdf"
                   filled
@@ -218,7 +243,7 @@
           </v-container>
 
           <!-- Action Buttons -->
-          <v-container>
+          <!-- <v-container>
             <v-row>
               <v-checkbox
                 v-model="checkbox"
@@ -251,7 +276,7 @@
                 </v-btn>
               </v-snackbar>
             </v-row>
-          </v-container>
+          </v-container> -->
         </v-form>
       </v-layout>
       <!-- </v-col> -->
@@ -316,6 +341,7 @@ export default {
     releasePerc: "",
     repaymentDate: "",
     repaymentAmount: "",
+    endDate: "",
     investmentClosed: false,
     singedLoanAgreementFile: null,
     POPFile: null,
@@ -334,6 +360,36 @@ export default {
   watch: {},
 
   methods: {
+    cancel() {
+      this.$router.push({
+        name: "investmentview",
+        params: {id: this.investorId}
+        //params: { id: event.currentTarget.id },
+      });
+    },
+    save() {
+      this.updateInvestment();
+    },
+    setFormValues() {
+      this.investorCode = this.SelectedInvestment[0].investor_acc_number
+      this.investorId = this.SelectedInvestment[0].investor_id
+      this.project = this.SelectedInvestment[0].project
+      this.linkedUnit = this.SelectedInvestment[0].linked_unit
+      this.investmentAmount = this.SelectedInvestment[0].investment_amount
+      this.loanAgreementSignDate = this.SelectedInvestment[0].datecreated
+      this.investmentDate = this.SelectedInvestment[0].datecreated
+      this.investmentPerc = this.SelectedInvestment[0].investment_interest_rate
+      this.releaseDate = this.SelectedInvestment[0].release_date
+      this.releaseAmount = this.SelectedInvestment[0].release_amount
+      this.releasePerc = this.SelectedInvestment[0].release_percentage
+      this.repaymentDate = this.SelectedInvestment[0].end_date
+      this.endDate  = this.SelectedInvestment[0].end_date
+      this.repaymentAmount  = this.SelectedInvestment[0].repayment_amount
+      this.investmentClosed  = this.SelectedInvestment[0].investment_closed
+      // singedLoanAgreementFile  = this.SelectedInvestment[0].investor_acc_number
+      // POPFile  = this.SelectedInvestment[0].investor_acc_number
+      // attorneyConfirmLetterFile  = this.SelectedInvestment[0].investor_acc_number
+    },
     async getInvestmentDetails() {
       let data = {
         id: 1, // use the $store.developement.id

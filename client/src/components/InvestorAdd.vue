@@ -1,5 +1,32 @@
 <template>
   <v-container fluid>
+    <br />
+    <v-row>
+      <v-col cols="8">
+      </v-col>
+      <v-col cols="4">
+        <v-btn-toggle v-model="icon" borderless>
+  
+          <v-btn value="cancel" color="red lighten-1" @click="cancel">
+            <span>Cancel</span>
+
+            <v-icon right> mdi-cancel </v-icon>
+          </v-btn>
+
+          <v-btn value="reset" color="orange lighten-1" @click="reset">
+            <span class="hidden-sm-and-down">Reset</span>
+
+            <v-icon right> mdi-rotate-left </v-icon>
+          </v-btn>
+
+          <v-btn value="create" color="green" @click="save">
+            <span class="hidden-sm-and-down">Create</span>
+
+            <v-icon right> mdi-account-plus </v-icon>
+          </v-btn>
+        </v-btn-toggle>
+      </v-col>
+    </v-row>
     <div>
       <br />
       <!-- <v-row> -->
@@ -494,7 +521,7 @@
           </v-container>
 
           <!-- Action Buttons -->
-          <v-container>
+          <!-- <v-container>
             <v-row>
               <v-checkbox
                 v-model="checkbox"
@@ -527,7 +554,7 @@
                 </v-btn>
               </v-snackbar>
             </v-row>
-          </v-container>
+          </v-container> -->
         </v-form>
       </v-layout>
       <!-- </v-col> -->
@@ -668,6 +695,15 @@ export default {
   watch: {},
 
   methods: {
+    cancel() {
+      this.$router.push({
+        name: "investorview",        
+        //params: { id: event.currentTarget.id },
+      });
+    },
+    save() {
+      this.saveInvestor();
+    },
     async getInvestorDetails() {
       let data = {
         id: 1, // use the $store.developement.id
@@ -823,7 +859,8 @@ export default {
         formData.append("documents", files[x]);
       }
 
-      let _investSurnameSnippet = this.investorSurname.substring(0,3);
+      let _investSurnameSnippet = this.investorSurname.replace(' ', "")
+      _investSurnameSnippet = _investSurnameSnippet.substring(0,3);
       _investSurnameSnippet = _investSurnameSnippet.toUpperCase();
       // need a method to get next investor if one with Z and MCL 01 exists, find COUNT(*) where code = this code here, 
       // let investorSuffixNum = this.getInvestorSuffixNumber(_investSurnameSnippet)

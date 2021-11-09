@@ -30,6 +30,7 @@ const chalk = require("chalk")
     });
 
     function excecuteSQL(sql, res) {
+        console.log("EXECUTIUNG SQL STATEMENT")
         pool.getConnection(function (err, connection) {
             if (err) {
                 connection.release();
@@ -40,8 +41,8 @@ const chalk = require("chalk")
                     console.log(error);
                 } else {
                     res.json(result);
-                    console.log("After SQL stmnt, result = ");
-                    console.log(result);
+                    console.log("SQL Statement executed successfully - see json result in browser.");
+                    //console.log(result);
                 }
             });
             connection.release();
@@ -154,7 +155,6 @@ const chalk = require("chalk")
     router.post("/getInvestorSuffix", upload.array("documents"), (req, res) => {
         // sql to get the count of investors whos surname is like ${req.body.investorPrefix}
         let mysql = `SELECT COUNT(*) + 1 as count FROM investors i WHERE i.investor_surname LIKE '${req.body.investorPrefix}%' ` 
-        console.log(chalk.green("getInvestorSuffixNumber SQL = ",mysql))
         excecuteSQL(mysql, res);
 
     }),
@@ -393,11 +393,16 @@ const chalk = require("chalk")
         street_no = '${req.body.streetNo}',
         street_name = '${req.body.streetName}',
         address_suburb = '${req.body.addressSuburb}',
+        investor_physical_suburb = '${req.body.addressSuburb}',
         province = '${req.body.province}',
-        address_postal_code = '${req.body.addressPostalCode}',
+        investor_physical_province = '${req.body.province}',
+        investor_physical_postal_code = '${req.body.addressPostalCode}',
         box_no = '${req.body.boxNo}',
+        investor_postal_street_box = '${req.body.boxNo}',
         postal_suburb = '${req.body.postalSuburb}',
+        investor_postal_suburb = '${req.body.postalSuburb}',
         postal_code = '${req.body.postalCode}',                                
+        investor_postal_code = '${req.body.postalCode}',                                
         bank_name =  '${req.body.bankName}',
         account_name =  '${req.body.accountName}',
         branch_code = '${req.body.branchCode}',
@@ -481,7 +486,7 @@ const chalk = require("chalk")
             mysql = `${mysql} ${additionalSQL}` 
               + ` WHERE investor_id = '${req.body.investorId}'; ` 
           } else {
-            mysql = `${mysql}` + ` WHERE investor_id = '${req.body.investorId}'; ` 
+            mysql = `${mysql}` + ` WHERE investor_id = '${req.body.id}'; ` 
           }
               // +  `WHERE id = ${req.body.id}`
         console.log(chalk.yellow("updateInvestor SQL = ",mysql))

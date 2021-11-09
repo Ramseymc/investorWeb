@@ -63,6 +63,8 @@
             <th class="text-left">| View Investments</th>
             <th class="text-left">| Name</th>
             <th class="text-left">| Email</th>
+            <th class="text-left">| ContactNo</th>
+            <th class="text-left">| DOB</th>
             <th class="text-left">| ID</th>
           </tr>
         </thead>
@@ -95,11 +97,15 @@
               {{ investor.investor_name }} {{ investor.investor_surname }}
             </td>
             <td>{{ investor.investor_email }}</td>
+            <td>{{ investor.investor_mobile }}</td>
+            <td> {{substr(investor.investor_id_number , 1, 6)}}</td>
             <td>{{ investor.investor_id_number }}</td>
           </tr>
         </tbody>
       </template>
     </v-simple-table>
+
+    
 
     <InvestmentView
       v-if="openInvestmentViewForm"

@@ -13,19 +13,12 @@ Real life - <3(love/trust/believe)
 ${code} Developement: ${code}
 ---------------  
 
-  Problem to fix -> building the update values from the form to the route, as they currently aren't displaying 
-
-  Try this -> run the update and try with two form value formAppnd values, and two different vtextfields ,
-  one with selectedInvestor[0].investor_id_number, 
-  one with investorId 
-    which is set after the getinvestorr details call in the mounted method
+  Problem to fix -> file uploading - make sure the original name is kept, and give the user a way to view the file once it has been uploaded 
+    - logic exists in ClientUpdate.vue and Salesroutes.js (cpc2) 
 
 
 -------
 other to dos: 
 ---
-  get the investorid in create investment to show his investor_code and investor_name at the top 
-
----
-  build a way to display the uploaded files
-  fix the file renaming system - debug why the filenames arent going through, on createInvestor
+  
+  see cards on trello https://trello.com/b/ciVViIAl/investorweb

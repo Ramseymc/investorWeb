@@ -221,7 +221,7 @@ export default {
     async getInvestorDetails() {
       this.desserts = [];
       let data = {
-        id: 1, // use the $store.developement.id
+        id: this.$store.state.development.id,
         paramId: this.paramId,
       };
       console.log(data);

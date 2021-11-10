@@ -406,7 +406,7 @@ export default {
     async getInvestorDetails() {
       this.SelectedInvestor = [];
       let data = {
-        id: 1, // use the $store.developement.id
+        id: this.$store.state.development.id,
         paramId: this.paramId,
       };
       console.log(data);

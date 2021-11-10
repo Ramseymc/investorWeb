@@ -58,7 +58,7 @@
 
     <v-data-table
       :headers="headers"
-      :items="desserts"
+      :items="investorsFiltered"
       :items-per-page="15"
       class="elevation-1"
     >
@@ -90,7 +90,7 @@
           color="green"
           @click="viewInvestments"
         >
-          View
+          Investments
         </v-chip>
       </template>
     </v-data-table>
@@ -202,14 +202,14 @@ export default {
       //how do you wrap a button into a cell
       headers: [
         {
-          text: "Investor Code",
+          text: "Code",
           value: "investor_acc_number",
           sortable: true,
           width: 100,
         },
 
-        { text: "Edit ", value: "viewInvestor", width: "50" },
-        { text: "View Investments ", value: "viewInvestments", width: "50" },
+        { text: "Edit", value: "viewInvestor", width: "50" },
+        { text: "View", value: "viewInvestments", width: "50" },
         { text: "Name", value: "investor_name" },
         { text: "Email", value: "investor_email" },
         { text: "Contact No", value: "investor_mobile" },
@@ -230,10 +230,10 @@ export default {
     },
     investorsFiltered() {
       if (this.searchInvestors === "") {
-        console.log("InvestorList = ", this.InvestorList);
-        return this.InvestorList;
+        console.log("InvestorList = ", this.desserts);
+        return this.desserts;
       } else {
-        return this.InvestorList.filter((el) => {
+        return this.desserts.filter((el) => {
           console.log("Search Investors  ", this.searchInvestors);
           return (
             !this.searchInvestors ||
@@ -307,7 +307,7 @@ export default {
     async getAllInvestors() {
       this.desserts = [];
       let data = {
-        id: 1, //   id: this.$store.state.development.id
+        id: this.$store.state.development.id
       };
       await axios({
         method: "post",
@@ -316,6 +316,7 @@ export default {
       })
         .then(
           (response) => {
+            console.log("store dev = ", this.$store.state.development.id)
             response.data.forEach((investor) => {
               investor.investorUpdateHref = `<a href="${process.env.VUE_APP_BASEURL}/investorupdate/${investor.investor_id}> View </a>`;
               this.desserts.push(investor);

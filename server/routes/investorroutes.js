@@ -289,22 +289,7 @@ const chalk = require("chalk")
     router.post("/getAllInvestments", (req, res) => {
 
         let mysql = `select * from investors i join investments iv on iv.investor_id = i.investor_id where iv.investment_amount > 0 and i.investor_id = ${req.body.paramId}`
-        excecuteSQL(mysql, res)
-
-        // pool.getConnection(function (err, connection) {
-        //     if (err) {
-        //         connection.release();
-        //         resizeBy.send("Error with connection");
-        //     }
-        //     connection.query(mysql, function (error, result) {
-        //         if (error) {
-        //             console.log(error);
-        //         } else {
-        //             res.json(result);
-        //         }
-        //     });
-        //     connection.release();
-        // });
+        excecuteSQL(mysql, res)       
     }),
     router.post("/getInvestmentDetails", (req, res) => {
         console.log(req.body)
@@ -402,7 +387,7 @@ const chalk = require("chalk")
         postal_suburb = '${req.body.postalSuburb}',
         investor_postal_suburb = '${req.body.postalSuburb}',
         postal_code = '${req.body.postalCode}',                                
-        investor_postal_code = '${req.body.postalCode}',                                
+        investor_postal_postal_code = '${req.body.postalCode}',                                
         bank_name =  '${req.body.bankName}',
         account_name =  '${req.body.accountName}',
         branch_code = '${req.body.branchCode}',
@@ -761,43 +746,14 @@ const chalk = require("chalk")
 
         console.log(chalk.blue("createInvestor SQL = ",mysql))
             // + the 'let' file variables
-        excecuteSQL(mysql, res)
-        // pool.getConnection(function (err, connection) {
-        //     if (err) {
-        //         connection.release();
-        //         resizeBy.send("Error with connection");
-        //     }
-        //     connection.query(mysql, function (error, result) {
-        //         if (error) {
-        //             console.log(error);
-        //         } else {
-        //             res.json(result);
-        //             console.log("After INSERT stmnt");
-        //             console.log(result);
-        //         }
-        //     });
-        //     connection.release();
-        // });
+        excecuteSQL(mysql, res)     
     }),
 
     router.post("/getAllInvestors", (req, res) => {
 
         let mysql = `select * from investors i`
         excecuteSQL(mysql, res)
-        // pool.getConnection(function (err, connection) {
-        //     if (err) {
-        //         connection.release();
-        //         resizeBy.send("Error with connection");
-        //     }
-        //     connection.query(mysql, function (error, result) {
-        //         if (error) {
-        //             console.log(error);
-        //         } else {
-        //             res.json(result);
-        //         }
-        //     });
-        //     connection.release();
-        // });
+       
     }),
 
     router.post("/getInvestorDetails", (req, res) => {
@@ -805,20 +761,7 @@ const chalk = require("chalk")
         let mysql = `select * from investors i WHERE i.investor_id = ${req.body.paramId}` 
         console.log("GET INVESTOR DEETS SQL = ", mysql)
         excecuteSQL(mysql, res)
-        // pool.getConnection(function (err, connection) {
-        //     if (err) {
-        //         connection.release();
-        //         resizeBy.send("Error with connection");
-        //     }
-        //     connection.query(mysql, function (error, result) {
-        //         if (error) {
-        //             console.log(error);
-        //         } else {
-        //             res.json(result);
-        //         }
-        //     });
-        //     connection.release();
-        // });
+       
     }),
     // ------------------------------------------------------------------------------------------------
     // Investor App Methods End 

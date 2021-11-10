@@ -3,11 +3,7 @@
 Real life - <3(love/trust/believe) 
 --------------------
 
-  ready for demo now, working on a few things which should be done for next week friday, 
-  i would like to show you what i have
-  and what I still plan to do
-  and get suggestions and feeback from yourself and Nick if he would like to see too.
-
+  almost ready for demo and v1 handover and publish - a few things to do to publish so get the file shit done so I can make a list of that and publish by Monday onto live
 
 ------
 ${code} Developement: ${code}

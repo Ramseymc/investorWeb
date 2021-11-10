@@ -7,12 +7,12 @@
       </v-col>
       <!-- Search -->
       <v-col cols="4">
-        <!-- <v-text-field
+        <v-text-field
           prepend-icon="mdi-magnify"
           placholder="Search"
           label="Search"
           v-model="searchInvestments"
-        ></v-text-field> -->
+        ></v-text-field>
       </v-col>
       <v-col cols="4">
         <v-btn-toggle v-model="icon" borderless>
@@ -44,7 +44,7 @@
 
     <v-data-table
       :headers="headers"
-      :items="desserts"
+      :items="investmentsFiltered"
       :items-per-page="10"
       class="elevation-1"
       v-if="investmentsExist"
@@ -116,6 +116,7 @@ export default {
       searchInvestments: "",
       paramId: 0,
       openInvestmentUpdateForm: "",
+      openInvestmentViewForm: false,
       text: "center",
       icon: "justify",
       InvestorCode: "",
@@ -150,10 +151,10 @@ export default {
   computed: {
     investmentsFiltered() {
       if (this.searchInvestments === "") {
-        console.log("InvestorList = ", this.InvestmentList);
-        return this.InvestmentList;
+        console.log("InvestorList = ", this.desserts);
+        return this.desserts;
       } else {
-        return this.InvestmentList.filter((el) => {
+        return this.desserts.filter((el) => {
           console.log("Search Investors  ", this.searchInvestments);
           return (
             !this.searchInvestments ||
@@ -232,8 +233,9 @@ export default {
       })
         .then(
           (response) => {
-            response.data.forEach((investment) => {
+            response.data.forEach((investment) => {              
               this.desserts.push(investment);
+              
               this.InvestorCode = investment.investor_acc_number;
               this.InvestorName =
                 investment.investor_name + " " +  investment.investor_surname;

@@ -505,7 +505,7 @@ export default {
       for (var x = 0; x < files.length; x++) {
         formData.append("documents", files[x]);
       }
-
+      formData.append("contains", contains);
 
       formData.append("investorId", this.paramId);
       formData.append("investorCode", this.investorCode);

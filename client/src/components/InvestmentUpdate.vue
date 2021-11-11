@@ -2,12 +2,9 @@
   <v-container fluid>
     <br />
     <v-row>
-      <v-col cols="7">
-      </v-col>
+      <v-col cols="7"> </v-col>
       <v-col cols="4">
         <v-btn-toggle v-model="icon" borderless>
-  
-
           <v-btn value="cancel" color="orange lighten-1" @click="cancel">
             <span>Cancel</span>
 
@@ -23,7 +20,6 @@
       </v-col>
     </v-row>
     <div>
-
       <br />
       <!-- <v-row> -->
       <!-- <v-col > -->
@@ -203,8 +199,17 @@
 
           <!-- investor1 file uploads -->
           <v-container>
+            <v-col cols="12" sm="12"> </v-col>
             <v-row>
-              <v-col cols="12" sm="12"> </v-col>
+              View
+              <a
+                :href="`http://localhost:3000/uploads/${singedLoanAgreementFile}`"
+                download
+                target="_blank"
+                style="text-decoration: none"
+              >
+                <v-icon color="green">mdi-file-pdf-box</v-icon>
+              </a>
               <v-file-input
                 v-model="singedLoanAgreementFile"
                 label="Signed Loan Agreement"
@@ -213,8 +218,19 @@
                 hint="Upload Disclaimer Letter"
                 persistent-hint
               ></v-file-input>
-              <!-- </v-col>
+            </v-row>
+            <!-- </v-col>
               <v-col cols="12" sm="12"> -->
+            <v-row>
+              View
+              <a
+                :href="`http://localhost:3000/uploads/${POPFile}`"
+                download
+                target="_blank"
+                style="text-decoration: none"
+              >
+                <v-icon color="green">mdi-file-pdf-box</v-icon>
+              </a>
               <v-file-input
                 v-model="POPFile"
                 label="POP File"
@@ -223,22 +239,30 @@
                 hint="Upload ID"
                 persistent-hint
               ></v-file-input>
-              <!-- </v-col>
+            </v-row>
+            <!-- </v-col>
               
               <v-col cols="12" sm="12">
               <v-col cols="12" sm="12"> -->
-            </v-row>
+
             <v-row>
-              <v-col cols="12" sm="12">
-                <v-file-input
-                  v-model="attorneyConfirmLetterFile"
-                  label="Attorney Confirmation Letter"
-                  accept="image/jpeg, image/jpg, image/png, image/bmp, application/pdf"
-                  filled
-                  hint="Upload POA"
-                  persistent-hint
-                ></v-file-input>
-              </v-col>
+              View
+              <a
+                :href="`http://localhost:3000/uploads/${attorneyConfirmLetterFile}`"
+                download
+                target="_blank"
+                style="text-decoration: none"
+              >
+                <v-icon color="green">mdi-file-pdf-box</v-icon>
+              </a>
+              <v-file-input
+                v-model="attorneyConfirmLetterFile"
+                label="Attorney Confirmation Letter"
+                accept="image/jpeg, image/jpg, image/png, image/bmp, application/pdf"
+                filled
+                hint="Upload POA"
+                persistent-hint
+              ></v-file-input>
             </v-row>
           </v-container>
 
@@ -363,7 +387,7 @@ export default {
     cancel() {
       this.$router.push({
         name: "investmentview",
-        params: {id: this.investorId}
+        params: { id: this.investorId },
         //params: { id: event.currentTarget.id },
       });
     },
@@ -371,24 +395,26 @@ export default {
       this.updateInvestment();
     },
     setFormValues() {
-      this.investorCode = this.SelectedInvestment[0].investor_acc_number
-      this.investorId = this.SelectedInvestment[0].investor_id
-      this.project = this.SelectedInvestment[0].project
-      this.linkedUnit = this.SelectedInvestment[0].linked_unit
-      this.investmentAmount = this.SelectedInvestment[0].investment_amount
-      this.loanAgreementSignDate = this.SelectedInvestment[0].datecreated
-      this.investmentDate = this.SelectedInvestment[0].datecreated
-      this.investmentPerc = this.SelectedInvestment[0].investment_interest_rate
-      this.releaseDate = this.SelectedInvestment[0].release_date
-      this.releaseAmount = this.SelectedInvestment[0].release_amount
-      this.releasePerc = this.SelectedInvestment[0].release_percentage
-      this.repaymentDate = this.SelectedInvestment[0].end_date
-      this.endDate  = this.SelectedInvestment[0].end_date
-      this.repaymentAmount  = this.SelectedInvestment[0].repayment_amount
-      this.investmentClosed  = this.SelectedInvestment[0].investment_closed
-      // singedLoanAgreementFile  = this.SelectedInvestment[0].investor_acc_number
-      // POPFile  = this.SelectedInvestment[0].investor_acc_number
-      // attorneyConfirmLetterFile  = this.SelectedInvestment[0].investor_acc_number
+      this.investorCode = this.SelectedInvestment[0].investor_acc_number;
+      this.investorId = this.SelectedInvestment[0].investor_id;
+      this.project = this.SelectedInvestment[0].project;
+      this.linkedUnit = this.SelectedInvestment[0].linked_unit;
+      this.investmentAmount = this.SelectedInvestment[0].investment_amount;
+      this.loanAgreementSignDate = this.SelectedInvestment[0].datecreated;
+      this.investmentDate = this.SelectedInvestment[0].datecreated;
+      this.investmentPerc = this.SelectedInvestment[0].investment_interest_rate;
+      this.releaseDate = this.SelectedInvestment[0].release_date;
+      this.releaseAmount = this.SelectedInvestment[0].release_amount;
+      this.releasePerc = this.SelectedInvestment[0].release_percentage;
+      this.repaymentDate = this.SelectedInvestment[0].end_date;
+      this.endDate = this.SelectedInvestment[0].end_date;
+      this.repaymentAmount = this.SelectedInvestment[0].repayment_amount;
+      this.investmentClosed = this.SelectedInvestment[0].investment_closed;
+      this.singedLoanAgreementFile =
+        this.SelectedInvestment[0].singedLoanAgreementFile;
+      this.POPFile = this.SelectedInvestment[0].POPFile;
+      this.attorneyConfirmLetterFile =
+        this.SelectedInvestment[0].attorneyConfirmLetterFile;
     },
     async getInvestmentDetails() {
       let data = {

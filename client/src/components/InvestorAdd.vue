@@ -874,7 +874,7 @@ export default {
         _investorCode = "Z" + _investSurnameSnippet +  this.investorSuffix;
       }
 
-
+      formData.append("contains", contains);
       formData.append("investorCode", _investorCode);
       formData.append("linkedEmail", this.linkedEmail);
       formData.append("investorInitials", this.investorInitials);

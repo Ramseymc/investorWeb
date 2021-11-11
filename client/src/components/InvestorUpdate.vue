@@ -2,18 +2,14 @@
   <v-container fluid>
     <br />
     <v-row>
-      <v-col cols="8">
-      </v-col>
+      <v-col cols="8"> </v-col>
       <v-col cols="4">
         <v-btn-toggle v-model="icon" borderless>
-  
-
           <v-btn value="cancel" color="orange lighten-1" @click="cancel">
             <span>Cancel</span>
 
             <v-icon right> mdi-cancel </v-icon>
           </v-btn>
-        
 
           <v-btn value="save" color="primary" @click="save">
             <span class="hidden-sm-and-down">Save Changes</span>
@@ -120,8 +116,6 @@
             </v-row>
           </v-container>
 
-         
-
           <!-- 2nd investor details -->
           <v-container
             v-if="
@@ -141,9 +135,7 @@
                 v-model="investorTwoSurname"
                 label="Investor Two Surname"
               ></v-text-field>
-              <v-text-field
-                v-model="investorTwoIDNumber"
-              ></v-text-field>
+              <v-text-field v-model="investorTwoIDNumber"></v-text-field>
             </v-row>
           </v-container>
 
@@ -407,10 +399,19 @@
 
           <!-- investor1 file uploads -->
           <v-container v-if="this.SelectedInvestor[0].person_mode === 'person'">
+            <v-col cols="12" sm="12">
+              <h3>Investor One File Uploads</h3>
+            </v-col>
             <v-row>
-              <v-col cols="12" sm="12">
-                <h3>Investor One File Uploads</h3>
-              </v-col>
+              View
+              <a
+                :href="`http://localhost:3000/uploads/${investorOneDisclaimerFile}`"
+                download
+                target="_blank"
+                style="text-decoration: none"
+              >
+                <v-icon color="green">mdi-file-pdf-box</v-icon>
+              </a>
               <v-file-input
                 v-model="investorOneDisclaimerFile"
                 label="Upload Disclaimer Letter"
@@ -419,8 +420,19 @@
                 hint="Upload Disclaimer Letter"
                 persistent-hint
               ></v-file-input>
+            </v-row>
+            <v-row>
               <!-- </v-col>
               <v-col cols="12" sm="12"> -->
+              View
+              <a
+                :href="`http://localhost:3000/uploads/${investorOneIDFile}`"
+                download
+                target="_blank"
+                style="text-decoration: none"
+              >
+                <v-icon color="green">mdi-file-pdf-box</v-icon>
+              </a>
               <v-file-input
                 v-model="investorOneIDFile"
                 label="Upload ID"
@@ -429,8 +441,19 @@
                 hint="Upload ID"
                 persistent-hint
               ></v-file-input>
-              <!-- </v-col>
+            </v-row>
+            <!-- </v-col>
               <v-col cols="12" sm="12"> -->
+            <v-row>
+              View
+              <a
+                :href="`http://localhost:3000/uploads/${investorOnePOAFile}`"
+                download
+                target="_blank"
+                style="text-decoration: none"
+              >
+                <v-icon color="green">mdi-file-pdf-box</v-icon>
+              </a>
               <v-file-input
                 v-model="investorOnePOAFile"
                 label="Upload POA"
@@ -449,10 +472,20 @@
               this.SelectedInvestor[0].buyers === '2'
             "
           >
+            <v-col cols="12" sm="12">
+              <h3>Investor Two File Uploads</h3>
+            </v-col>
+
             <v-row>
-              <v-col cols="12" sm="12">
-                <h3>Investor Two File Uploads</h3>
-              </v-col>
+              View
+              <a
+                :href="`http://localhost:3000/uploads/${investorTwoDisclaimerFile}`"
+                download
+                target="_blank"
+                style="text-decoration: none"
+              >
+                <v-icon color="green">mdi-file-pdf-box</v-icon>
+              </a>
               <v-file-input
                 v-model="investorTwoDisclaimerFile"
                 label="Upload Disclaimer Letter"
@@ -461,6 +494,17 @@
                 hint="Upload Disclaimer Letter"
                 persistent-hint
               ></v-file-input>
+            </v-row>
+            <v-row>
+              View
+              <a
+                :href="`http://localhost:3000/uploads/${investorTwoIDFile}`"
+                download
+                target="_blank"
+                style="text-decoration: none"
+              >
+                <v-icon color="green">mdi-file-pdf-box</v-icon>
+              </a>
               <v-file-input
                 v-model="investorTwoIDFile"
                 label="Upload ID"
@@ -469,6 +513,17 @@
                 hint="Upload ID"
                 persistent-hint
               ></v-file-input>
+            </v-row>
+            <v-row>
+              View
+              <a
+                :href="`http://localhost:3000/uploads/${investorTwoPOAFile}`"
+                download
+                target="_blank"
+                style="text-decoration: none"
+              >
+                <v-icon color="green">mdi-file-pdf-box</v-icon>
+              </a>
               <v-file-input
                 v-model="investorTwoPOAFile"
                 label="Upload POA"
@@ -484,10 +539,19 @@
           <v-container
             v-if="this.SelectedInvestor[0].person_mode === 'company'"
           >
+            <v-col cols="12" sm="12">
+              <h3>Company & Representative File Uploads</h3>
+            </v-col>
             <v-row>
-              <v-col cols="12" sm="12">
-                <h3>Company & Representative File Uploads</h3>
-              </v-col>
+              View
+              <a
+                :href="`http://localhost:3000/uploads/${representativeDisclaimerFile}`"
+                download
+                target="_blank"
+                style="text-decoration: none"
+              >
+                <v-icon color="green">mdi-file-pdf-box</v-icon>
+              </a>
               <v-col cols="4" sm="4">
                 <v-file-input
                   v-model="representativeDisclaimerFile"
@@ -498,6 +562,17 @@
                   persistent-hint
                 ></v-file-input>
               </v-col>
+            </v-row>
+            <v-row>
+              View
+              <a
+                :href="`http://localhost:3000/uploads/${representativeIDFile}`"
+                download
+                target="_blank"
+                style="text-decoration: none"
+              >
+                <v-icon color="green">mdi-file-pdf-box</v-icon>
+              </a>
               <v-col cols="4" sm="4">
                 <v-file-input
                   v-model="representativeIDFile"
@@ -508,6 +583,17 @@
                   persistent-hint
                 ></v-file-input>
               </v-col>
+            </v-row>
+            <v-row>
+              View
+              <a
+                :href="`http://localhost:3000/uploads/${representativePOAFile}`"
+                download
+                target="_blank"
+                style="text-decoration: none"
+              >
+                <v-icon color="green">mdi-file-pdf-box</v-icon>
+              </a>
               <v-col cols="4" sm="4">
                 <v-file-input
                   v-model="representativePOAFile"
@@ -518,6 +604,18 @@
                   persistent-hint
                 ></v-file-input>
               </v-col>
+            </v-row>
+
+            <v-row>
+              View
+              <a
+                :href="`http://localhost:3000/uploads/${companyResolutionFile}`"
+                download
+                target="_blank"
+                style="text-decoration: none"
+              >
+                <v-icon color="green">mdi-file-pdf-box</v-icon>
+              </a>
               <v-col cols="4" sm="4">
                 <v-file-input
                   v-model="companyResolutionFile"
@@ -528,6 +626,17 @@
                   persistent-hint
                 ></v-file-input>
               </v-col>
+            </v-row>
+            <v-row>
+              View
+              <a
+                :href="`http://localhost:3000/uploads/${companyRefDocsFile}`"
+                download
+                target="_blank"
+                style="text-decoration: none"
+              >
+                <v-icon color="green">mdi-file-pdf-box</v-icon>
+              </a>
               <v-col cols="4" sm="4">
                 <v-file-input
                   v-model="companyRefDocsFile"
@@ -538,6 +647,17 @@
                   persistent-hint
                 ></v-file-input>
               </v-col>
+            </v-row>
+            <v-row>
+              View
+              <a
+                :href="`http://localhost:3000/uploads/${companyPOAFile}`"
+                download
+                target="_blank"
+                style="text-decoration: none"
+              >
+                <v-icon color="green">mdi-file-pdf-box</v-icon>
+              </a>
               <v-col cols="4" sm="4">
                 <v-file-input
                   v-model="companyPOAFile"
@@ -594,6 +714,7 @@ import axios from "axios";
 import VuePhoneNumberInput from "vue-phone-number-input";
 import "vue-phone-number-input/dist/vue-phone-number-input.css";
 let url = process.env.VUE_APP_BASEURL;
+//let  baseUrl = "http://localhost:3000"
 
 export default {
   name: "investorupdate",
@@ -722,6 +843,7 @@ export default {
   async mounted() {
     this.paramId = parseInt(this.$route.params.id);
     console.log("Mounted update investorID = ", this.paramId);
+    //console.log("Mounted update investorID = ", baseUurl);
     //this.getAllInvestments();
     this.testServer();
     this.getInvestorDetails();
@@ -731,7 +853,7 @@ export default {
   methods: {
     cancel() {
       this.$router.push({
-        name: "investorview",        
+        name: "investorview",
         //params: { id: event.currentTarget.id },
       });
     },
@@ -740,9 +862,9 @@ export default {
     },
     async setFormValues() {
       this.person_mode = this.SelectedInvestor[0].person_mode;
-      this.investorName = this.SelectedInvestor[0].investor_name
-      this.investorSurname = this.SelectedInvestor[0].investor_surname
-      this.investorInitials = this.SelectedInvestor[0].investor_name
+      this.investorName = this.SelectedInvestor[0].investor_name;
+      this.investorSurname = this.SelectedInvestor[0].investor_surname;
+      this.investorInitials = this.SelectedInvestor[0].investor_name;
       this.investorCode = this.SelectedInvestor[0].investor_acc_number;
       this.linkedEmail = this.SelectedInvestor[0].linked_email;
       this.mobile.phoneNumber = this.SelectedInvestor[0].investor_mobile;
@@ -750,73 +872,82 @@ export default {
       this.investorIDNumber = this.SelectedInvestor[0].investor_id_number;
 
       // need to get the form details to savethem just put this method in both and copy data() - 25 minuteas bro
-// investor form data
-    // SelectedInvestor: [],
-    // this.paramId: 0,
-    // this.investorCode: "",
-    // this.linkedEmail: "",
+      // investor form data
+      // SelectedInvestor: [],
+      // this.paramId: 0,
+      // this.investorCode: "",
+      // this.linkedEmail: "",
 
-    // this.person: "",
-    // this.person_mode: "person",
-    // this.buyers: 0,
-    // this.buyersSwicth: 1,
+      // this.person: "",
+      // this.person_mode: "person",
+      // this.buyers: 0,
+      // this.buyersSwicth: 1,
 
-    // this.investorName: "",
-    // this.investorInitials: "",
-    // this.investorSurname: "",
-    // this.investorIDNumber: "",
+      // this.investorName: "",
+      // this.investorInitials: "",
+      // this.investorSurname: "",
+      // this.investorIDNumber: "",
 
-    // this.investorTwoCode: "",
-    this.investorTwoInitials = this.SelectedInvestor[0].investor_two_name
-    this.investorTwoSurname = this.SelectedInvestor[0].investor_two_surname
-    this.investorTwoIDNumber = this.SelectedInvestor[0].investor_two_id_number
+      // this.investorTwoCode: "",
+      this.investorTwoInitials = this.SelectedInvestor[0].investor_two_name;
+      this.investorTwoSurname = this.SelectedInvestor[0].investor_two_surname;
+      this.investorTwoIDNumber =
+        this.SelectedInvestor[0].investor_two_id_number;
 
-    this.companyName = this.SelectedInvestor[0].company_name
-    this.regNumber = this.SelectedInvestor[0].reg_number
+      this.companyName = this.SelectedInvestor[0].company_name;
+      this.regNumber = this.SelectedInvestor[0].reg_number;
 
-    this.companyRepInitials = this.SelectedInvestor[0].company_rep_initals
-    this.companyRepSurname = this.SelectedInvestor[0].company_rep_surname
-    this.companyRepIDNumber = this.SelectedInvestor[0].company_rep_id_number
+      this.companyRepInitials = this.SelectedInvestor[0].company_rep_initals;
+      this.companyRepSurname = this.SelectedInvestor[0].company_rep_surname;
+      this.companyRepIDNumber = this.SelectedInvestor[0].company_rep_id_number;
 
-    this.contact = this.SelectedInvestor[0].contact
-    this.contactEmail = this.SelectedInvestor[0].contact_email
-    this.contactTwoEmail = this.SelectedInvestor[0].contact_two_email
+      this.contact = this.SelectedInvestor[0].contact;
+      this.contactEmail = this.SelectedInvestor[0].contact_email;
+      this.contactTwoEmail = this.SelectedInvestor[0].contact_two_email;
 
-    this.streetNo = this.SelectedInvestor[0].street_no
-    this.streetName = this.SelectedInvestor[0].investor_physical_street
-    this.addressSuburb = this.SelectedInvestor[0].investor_physical_suburb
-    this.province = this.SelectedInvestor[0].investor_physical_province
-    this.addressPostalCode = this.SelectedInvestor[0].investor_physical_postal_code
+      this.streetNo = this.SelectedInvestor[0].street_no;
+      this.streetName = this.SelectedInvestor[0].investor_physical_street;
+      this.addressSuburb = this.SelectedInvestor[0].investor_physical_suburb;
+      this.province = this.SelectedInvestor[0].investor_physical_province;
+      this.addressPostalCode =
+        this.SelectedInvestor[0].investor_physical_postal_code;
 
-    this.boxNo = this.SelectedInvestor[0].investor_postal_street_box
-    this.postalSuburb = this.SelectedInvestor[0].investor_postal_suburb
-    this.postalCode = this.SelectedInvestor[0].investor_postal_postal_code
+      this.boxNo = this.SelectedInvestor[0].investor_postal_street_box;
+      this.postalSuburb = this.SelectedInvestor[0].investor_postal_suburb;
+      this.postalCode = this.SelectedInvestor[0].investor_postal_postal_code;
 
-    this.bankName = this.SelectedInvestor[0].bank_name
-    this.accountName = this.SelectedInvestor[0].account_name
-    this.branchCode = this.SelectedInvestor[0].branch_code
-    this.accountNumber = this.SelectedInvestor[0].account_number
+      this.bankName = this.SelectedInvestor[0].bank_name;
+      this.accountName = this.SelectedInvestor[0].account_name;
+      this.branchCode = this.SelectedInvestor[0].branch_code;
+      this.accountNumber = this.SelectedInvestor[0].account_number;
 
-    this.ficaDate = this.SelectedInvestor[0].fica_date
+      this.ficaDate = this.SelectedInvestor[0].fica_date;
+      this.investorOneDisclaimerFile =
+        this.SelectedInvestor[0].investorOneDisclaimerFile;
+      // add hrefs
+      // this.investorOneDisclaimerFile: "",
+      this.investorOneIDFile = this.SelectedInvestor[0].investorOneIDFile;
+      (this.investorOnePOAFile = this.SelectedInvestor[0].investorOnePOAFile),
+        (this.investorTwoDisclaimerFile =
+          this.SelectedInvestor[0].investorTwoDisclaimerFile);
+      this.investorTwoIDFile = this.SelectedInvestor[0].investorTwoIDFile;
+      this.investorTwoPOAFile = this.SelectedInvestor[0].investorTwoPOAFile;
 
-    // add hrefs
-    // this.investorOneDisclaimerFile: "",
-    // this.investorOneIDFile: null,
-    // this.investorOnePOAFile: null,
-
-    // this.investorTwoDisclaimerFile: null,
-    // this.investorTwoIDFile: null,
-    // this.investorTwoPOAFile: null,
-
-    // this.representativeDisclaimerFile: null,
-    // this.representativeIDFile: null,
-    // this.representativePOAFile: null,
-    // this.companyResolutionFile: null,
-    // this.companyRefDocsFile: null,
-    // this.companyPOAFile: null,
+      this.representativeDisclaimerFile =
+        this.SelectedInvestor[0].representativeDisclaimerFile;
+      this.representativeIDFile = this.SelectedInvestor[0].representativeIDFile;
+      this.representativePOAFile =
+        this.SelectedInvestor[0].representativePOAFile;
+      this.companyResolutionFile =
+        this.SelectedInvestor[0].companyResolutionFile;
+      this.companyRefDocsFile = this.SelectedInvestor[0].companyRefDocsFile;
+      this.companyPOAFile = this.SelectedInvestor[0].companyPOAFile;
+      console.log(
+        "this.investorOneDisclaimerFile = ",
+        this.investorOneDisclaimerFile
+      );
       console.log("this.investorCode = ", this.investorCode);
 
-  
       //     mobile: {
       //       countryCode: "ZA",
       //       isValid: false,
@@ -854,7 +985,7 @@ export default {
             console.log("this.SelectedInvestor List = ", this.SelectedInvestor);
             // use a method here to set the local properties for v-models setFormValues()
             // this.setFormValues() // this.InvestorName = this.SelectedInvestor.investor_name etc
-            this.setFormValues()
+            this.setFormValues();
             // get this working, demo when ready, see if Wayne is coming
             // set and see the form values (this.investorId) here console.log is my friend
             // create a new control for the id, so i have two, use a different model for each of them
@@ -964,6 +1095,7 @@ export default {
       for (var x = 0; x < files.length; x++) {
         formData.append("documents", files[x]);
       }
+      formData.append("contains", contains);
       formData.append("investorName", this.investorName);
       formData.append("investorCode", this.investorCode);
       formData.append("linkedEmail", this.linkedEmail);

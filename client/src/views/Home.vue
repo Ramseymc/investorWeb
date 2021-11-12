@@ -9,23 +9,23 @@
       <div>
         <br />
         <v-row>
-
           <v-layout align-center justify-center style="padding: 8px">
             <v-container>
               <div>
                 <v-row>
-                  <h1> Dash Board Management </h1>
+                  <h1>Dash Board Management</h1>
 
                   <!-- <v-btn-toggle v-model="icon" borderless> -->
                   <!-- <v-btn value="home" color="green" @click="home">
                     <v-icon right> mdi-home </v-icon>
                   </v-btn> -->
-
-                 
                 </v-row>
               </div>
               <v-row>
-                 <h2> Development: {{this.$store.state.development.developmentName}} </h2>
+                <h2>
+                  Development:
+                  {{ this.$store.state.development.developmentName }}
+                </h2>
               </v-row>
               <v-row>
                 <span> Select Development </span>
@@ -42,7 +42,7 @@
                 </v-col>
                 <!-- <v-col cols="2"> <v-btn @click="setDev(3),''"> HV </v-btn> </v-col> -->
               </v-row>
-           
+
               <!-- totals and calculations -->
               <v-row>
                 <v-col cols="4">
@@ -145,7 +145,6 @@
                  </v-col> -->
               </v-row>
 
-             
               <v-row>
                 <v-col cols="4">
                   <v-btn value="refresh" color="secondary" @click="refresh">

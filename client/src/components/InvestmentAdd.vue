@@ -2,12 +2,9 @@
   <v-container fluid>
     <br />
     <v-row>
-      <v-col cols="7">
-      </v-col>
+      <v-col cols="7"> </v-col>
       <v-col cols="4">
         <v-btn-toggle v-model="icon" borderless>
-  
-
           <v-btn value="cancel" color="red lighten-1" @click="cancel">
             <span>Cancel</span>
 
@@ -396,7 +393,7 @@ export default {
   methods: {
     cancel() {
       this.$router.push({
-        name: "investmentview",        
+        name: "investmentview",
         params: { id: this.paramId },
       });
     },

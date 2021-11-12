@@ -2,11 +2,9 @@
   <v-container fluid>
     <br />
     <v-row>
-      <v-col cols="8">
-      </v-col>
+      <v-col cols="8"> </v-col>
       <v-col cols="4">
         <v-btn-toggle v-model="icon" borderless>
-  
           <v-btn value="cancel" color="red lighten-1" @click="cancel">
             <span>Cancel</span>
 
@@ -79,16 +77,14 @@
           <v-container>
             <v-row>
               <v-text-field
-                
                 v-model="investorCode"
-                
                 label="Investor Code"
-                readonly 
+                readonly
               ></v-text-field>
 
               <v-text-field
                 ref="linkedEmailInput"
-                v-model="linkedEmail"            
+                v-model="linkedEmail"
                 label="Linked User Email (Portal):"
                 required
               ></v-text-field>
@@ -101,13 +97,13 @@
               <v-col cols="12" sm="12">
                 <h3>Investor One Details</h3>
               </v-col>
-              <v-text-field           
-                v-model="investorInitials"            
+              <v-text-field
+                v-model="investorInitials"
                 label="Investor Initials"
                 required
               ></v-text-field>
-              <v-text-field                
-                v-model="investorSurname"                
+              <v-text-field
+                v-model="investorSurname"
                 label="Investor Surname"
                 required
               ></v-text-field>
@@ -125,13 +121,13 @@
               <v-col cols="12" sm="12">
                 <h3>Investor Two Details</h3>
               </v-col>
-              <v-text-field                
-                v-model="investorTwoInitials"      
+              <v-text-field
+                v-model="investorTwoInitials"
                 label="Investor Two Initials"
                 required
               ></v-text-field>
-              <v-text-field                
-                v-model="investorTwoSurname"               
+              <v-text-field
+                v-model="investorTwoSurname"
                 label="Investor Two Surname"
                 required
               ></v-text-field>
@@ -149,13 +145,13 @@
               <v-col cols="12" sm="12">
                 <h3>Company Details</h3>
               </v-col>
-              <v-text-field                
-                v-model="companyName"             
+              <v-text-field
+                v-model="companyName"
                 label="Company Name"
                 required
               ></v-text-field>
-              <v-text-field                
-                v-model="regNumber"               
+              <v-text-field
+                v-model="regNumber"
                 label="Registration/Trust No"
                 required
               ></v-text-field>
@@ -168,14 +164,14 @@
               <v-col cols="12" sm="12">
                 <h3>Company Representative Details</h3>
               </v-col>
-              <v-text-field      
-                v-model="companyRepInitials"               
+              <v-text-field
+                v-model="companyRepInitials"
                 label="Investor Two Initials"
                 required
               ></v-text-field>
               <v-text-field
                 ref="surnameInput"
-                v-model="companyRepSurname"               
+                v-model="companyRepSurname"
                 label="Investor Two Surname"
                 required
               ></v-text-field>
@@ -208,7 +204,6 @@
                   default-country-code="ZA"
                   show-code-on-list
                   :only-countries="['ZA']"
-                  
                 />
               </v-col>
               <v-col cols="6" style="background-color: lightgrey">
@@ -221,7 +216,6 @@
                   default-country-code="ZA"
                   show-code-on-list
                   :only-countries="['ZA']"
-                  
                 />
               </v-col>
             </v-row>
@@ -250,7 +244,6 @@
                   default-country-code="ZA"
                   show-code-on-list
                   :only-countries="['ZA']"
-                  
                 />
               </v-col>
               <v-col cols="6" style="background-color: lightgrey">
@@ -265,7 +258,6 @@
                   default-country-code="ZA"
                   show-code-on-list
                   :only-countries="['ZA']"
-                  
                 />
               </v-col>
             </v-row>
@@ -458,14 +450,14 @@
                 <h3>Company & Representative File Uploads</h3>
               </v-col>
               <v-col cols="4" sm="4">
-              <v-file-input
-                v-model="representativeDisclaimerFile"
-                label="Upload Representation Disclaimer Letter"
-                accept="image/jpeg, image/jpg, image/png, image/bmp, application/pdf"
-                filled
-                hint="Upload Disclaimer Letter"
-                persistent-hint
-              ></v-file-input>
+                <v-file-input
+                  v-model="representativeDisclaimerFile"
+                  label="Upload Representation Disclaimer Letter"
+                  accept="image/jpeg, image/jpg, image/png, image/bmp, application/pdf"
+                  filled
+                  hint="Upload Disclaimer Letter"
+                  persistent-hint
+                ></v-file-input>
               </v-col>
               <v-col cols="4" sm="4">
                 <v-file-input
@@ -697,7 +689,7 @@ export default {
   methods: {
     cancel() {
       this.$router.push({
-        name: "investorview",        
+        name: "investorview",
         //params: { id: event.currentTarget.id },
       });
     },
@@ -762,30 +754,30 @@ export default {
       this.buyers = "1";
     },
 
-     async getInvestorSuffixNumber(investorPrefix) {
-    let formData = new FormData();
-    formData.append("investorPrefix", investorPrefix);
-     await axios({
+    async getInvestorSuffixNumber(investorPrefix) {
+      let formData = new FormData();
+      formData.append("investorPrefix", investorPrefix);
+      await axios({
         method: "post",
         url: `${url}/getInvestorSuffix`,
         data: formData,
       }).then(
         (response) => {
-          this.investorSuffix = response.data[0].count
+          this.investorSuffix = response.data[0].count;
           this.snackbar = true;
-          console.log("SNEK",response.data)
-        //   if( response.data[0].count  < 10  ) {
-        //     return "0" + response.data[0].count
-        //   } else {
-        //     return response.data[0].count
-        //   }
-        // },
+          console.log("SNEK", response.data);
+          //   if( response.data[0].count  < 10  ) {
+          //     return "0" + response.data[0].count
+          //   } else {
+          //     return response.data[0].count
+          //   }
+          // },
         },
         (error) => {
           console.log(error);
         }
       );
-  },
+    },
 
     async saveInvestor() {
       let files = [];
@@ -859,19 +851,19 @@ export default {
         formData.append("documents", files[x]);
       }
 
-      let _investSurnameSnippet = this.investorSurname.replace(' ', "")
-      _investSurnameSnippet = _investSurnameSnippet.substring(0,3);
+      let _investSurnameSnippet = this.investorSurname.replace(" ", "");
+      _investSurnameSnippet = _investSurnameSnippet.substring(0, 3);
       _investSurnameSnippet = _investSurnameSnippet.toUpperCase();
-      // need a method to get next investor if one with Z and MCL 01 exists, find COUNT(*) where code = this code here, 
+      // need a method to get next investor if one with Z and MCL 01 exists, find COUNT(*) where code = this code here,
       // let investorSuffixNum = this.getInvestorSuffixNumber(_investSurnameSnippet)
       // console.log("Investor Suffix Number: ", this.investorSuffix)
       //     console.log("Investor Suffix Number: ", investorSuffixNum)
-      this.getInvestorSuffixNumber(_investSurnameSnippet)
-      let _investorCode = ""
+      this.getInvestorSuffixNumber(_investSurnameSnippet);
+      let _investorCode = "";
       if (this.investorSuffix < 10) {
-         _investorCode = "Z" + _investSurnameSnippet +  "0" + this.investorSuffix;
+        _investorCode = "Z" + _investSurnameSnippet + "0" + this.investorSuffix;
       } else {
-        _investorCode = "Z" + _investSurnameSnippet +  this.investorSuffix;
+        _investorCode = "Z" + _investSurnameSnippet + this.investorSuffix;
       }
 
       formData.append("contains", contains);
@@ -934,7 +926,6 @@ export default {
           console.log(error);
         }
       );
-      
     },
 
     reset() {
@@ -942,7 +933,6 @@ export default {
       this.checkbox = false;
     },
   },
- 
 };
 </script>
 

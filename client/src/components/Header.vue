@@ -1,17 +1,18 @@
 <template>
   <v-app-bar app color="#393e46" dark class="mobile">
-    <v-spacer> 
-    <h2>Investor Web App   -   {{this.$store.state.development.developmentName}}   </h2>
-    </v-spacer> 
-     <v-spacer> 
-     <v-btn-toggle  borderless> 
-      
-          <v-btn value="home" color="cyan lighten-2" @click="home">
-            <v-icon right> mdi-home </v-icon>
-          </v-btn>
-       </v-btn-toggle>
-       </v-spacer>
-       
+    <v-spacer>
+      <h2>
+        Investor Web App - {{ this.$store.state.development.developmentName }}
+      </h2>
+    </v-spacer>
+    <v-spacer>
+      <v-btn-toggle borderless>
+        <v-btn value="home" color="cyan lighten-2" @click="home">
+          <v-icon right> mdi-home </v-icon>
+        </v-btn>
+      </v-btn-toggle>
+    </v-spacer>
+
     <div class="text-center">
       <v-menu
         dark
@@ -22,7 +23,6 @@
         max-width="100%"
         :value="shown"
       >
-      
         <template v-slot:activator="{ on, attrs }">
           <v-btn dark text v-bind="attrs" v-on="on">
             <v-icon>mdi-dots-vertical</v-icon>

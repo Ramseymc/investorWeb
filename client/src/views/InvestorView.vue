@@ -98,14 +98,12 @@
             </td>
             <td>{{ investor.investor_email }}</td>
             <td>{{ investor.investor_mobile }}</td>
-            <td> {{substr(investor.investor_id_number , 1, 6)}}</td>
+            <td>{{ substr(investor.investor_id_number, 1, 6) }}</td>
             <td>{{ investor.investor_id_number }}</td>
           </tr>
         </tbody>
       </template>
     </v-simple-table>
-
-    
 
     <InvestmentView
       v-if="openInvestmentViewForm"

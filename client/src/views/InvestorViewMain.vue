@@ -35,8 +35,6 @@
             <v-icon right> mdi-account-plus </v-icon>
           </v-btn>
 
-          
-
           <!-- <v-btn value="right">
           <span class="hidden-sm-and-down">Right</span>
 
@@ -213,7 +211,7 @@ export default {
         { text: "Name", value: "investor_name" },
         { text: "Email", value: "investor_email" },
         { text: "Contact No", value: "investor_mobile" },
-        { text: "IDNumber", value: "investor_id_number" },         
+        { text: "IDNumber", value: "investor_id_number" },
       ],
       desserts: [],
     };
@@ -307,7 +305,7 @@ export default {
     async getAllInvestors() {
       this.desserts = [];
       let data = {
-        id: this.$store.state.development.id
+        id: this.$store.state.development.id,
       };
       await axios({
         method: "post",
@@ -316,7 +314,7 @@ export default {
       })
         .then(
           (response) => {
-            console.log("store dev = ", this.$store.state.development.id)
+            console.log("store dev = ", this.$store.state.development.id);
             response.data.forEach((investor) => {
               investor.investorUpdateHref = `<a href="${process.env.VUE_APP_BASEURL}/investorupdate/${investor.investor_id}> View </a>`;
               this.desserts.push(investor);

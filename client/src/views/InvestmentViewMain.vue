@@ -40,7 +40,10 @@
       </v-col>
     </v-row>
 
-    <span v-if="!investmentsExist"> Does not have any investments yet, you may create one using the 'Create' button </span>
+    <span v-if="!investmentsExist">
+      Does not have any investments yet, you may create one using the 'Create'
+      button
+    </span>
 
     <v-data-table
       :headers="headers"
@@ -180,8 +183,8 @@ export default {
 
   methods: {
     closeUpdateForm() {
-      console.log("Closing update form investorId = ", this.investorId)
-      this.refresh()
+      console.log("Closing update form investorId = ", this.investorId);
+      this.refresh();
     },
     viewInvestment(event) {
       console.log(event.currentTarget.id);
@@ -233,13 +236,13 @@ export default {
       })
         .then(
           (response) => {
-            response.data.forEach((investment) => {              
+            response.data.forEach((investment) => {
               this.desserts.push(investment);
-              
+
               this.InvestorCode = investment.investor_acc_number;
               this.InvestorName =
-                investment.investor_name + " " +  investment.investor_surname;
-            });            
+                investment.investor_name + " " + investment.investor_surname;
+            });
             console.log("this.Investment List = ", this.desserts);
           },
           (error) => {
@@ -270,12 +273,11 @@ export default {
               this.InvestorName =
                 investment.investor_name + " " + investment.investor_surname;
             });
-            if(this.desserts.length === 0) {
-              this.investmentsExist = false
-              this.getInvestorDetails()
-             
+            if (this.desserts.length === 0) {
+              this.investmentsExist = false;
+              this.getInvestorDetails();
             } else {
-              this.investmentsExist = true
+              this.investmentsExist = true;
             }
             console.log("this.Investment List = ", this.desserts);
           },

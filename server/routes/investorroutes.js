@@ -35,7 +35,7 @@ const chalk = require("chalk")
         if (req.files.length) {
             let contains = req.body.contains.split(",");
        
-            contains.forEach((el, index) => {
+            contains.forEach((el, index, arr) => {
                 let mainIndex = index;
                 if (req.files[mainIndex] !== "undefined" || req.files[mainIndex] !== undefined ) {
                     console.log("FILES AFTER CHECK::: ", req.files[mainIndex])
@@ -165,7 +165,7 @@ const chalk = require("chalk")
 
     router.post("/getInvestorSuffix", upload.array("documents"), (req, res) => {
         // sql to get the count of investors whos surname is like ${req.body.investorPrefix}
-        let mysql = `SELECT COUNT(*) + 1 as count FROM investors i WHERE i.investor_surname LIKE '${req.body.investorPrefix}%' ` 
+        let mysql = `SELECT COUNT(*) + 2 as count FROM investors i WHERE i.investor_surname LIKE '${req.body.investorPrefix}%' ` 
         excecuteSQL(mysql, res);
 
     }),
@@ -335,7 +335,7 @@ const chalk = require("chalk")
         branch_code = '${req.body.branchCode}',
         account_no = '${req.body.accountNumber}',
         fica_date = '${req.body.ficaDate}' ,             
-        person_mode = '${req.body.person}',
+        person_mode = '${req.body.person_mode}',
         buyers = '${req.body.buyers}',
         linked_email = '${req.body.linkedEmail}'`;
 

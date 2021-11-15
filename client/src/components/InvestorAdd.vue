@@ -76,18 +76,23 @@
           <!-- Investor Code & Linked email - read-only fields -->
           <v-container>
             <v-row>
+              <v-col cols="3">
               <v-text-field
                 v-model="investorCode"
                 label="Investor Code"
                 readonly
               ></v-text-field>
-
+              </v-col>
+              <v-col cols="1">
+              </v-col>
+              <v-col cols="6">
               <v-text-field
                 ref="linkedEmailInput"
                 v-model="linkedEmail"
                 label="Linked User Email (Portal):"
                 required
               ></v-text-field>
+              </v-col>
             </v-row>
           </v-container>
 
@@ -106,6 +111,7 @@
                 v-model="investorSurname"
                 label="Investor Surname"
                 required
+                @blur="setInvestorCodeFromSurname"
               ></v-text-field>
               <v-text-field
                 v-model="investorIDNumber"
@@ -353,14 +359,16 @@
           <!-- FICA Details - always ? -->
           <v-container>
             <v-row>
-              <v-col cols="12" sm="12">
+              <v-col cols="8" sm="8">
                 <h3>FICA Details</h3>
-              </v-col>
+              
+              
               <v-text-field
                 v-model="ficaDate"
                 label="FICA Date"
                 required
               ></v-text-field>
+              </v-col>
             </v-row>
           </v-container>
 
@@ -413,7 +421,7 @@
           <!-- investor2 file uploads - show if company mode-->
           <v-container v-if="person === 'person' && buyers === '2'">
             <v-row>
-              <v-col cols="12" sm="12">
+              <v-col cols="8" sm="8">
                 <h3>Investor Two File Uploads</h3>
               </v-col>
               <v-file-input
@@ -551,6 +559,12 @@
       </v-layout>
       <!-- </v-col> -->
       <!-- </v-row> -->
+       <v-snackbar v-model="snackbar" top>
+          {{ snackbarMessage }}
+          <v-btn color="pink" text @click="snackbar = false">
+            Close
+          </v-btn>
+        </v-snackbar>
     </div>
   </v-container>
 </template>
@@ -681,12 +695,39 @@ export default {
       (v) => !!v || "E-mail is required",
       (v) => /.+@.+\..+/.test(v) || "E-mail must be valid",
     ],
+    icon: "",
+    _investorCode: ""
   }),
 
   async mounted() {},
   watch: {},
 
   methods: {
+    setInvestorCodeFromSurname() {
+      // set a local data property to be the generated investor code - take first 3 of surname, call method to get the count + 1 
+      // if less than 10, prefix with a 0 
+     // let _investSurnameSnippet = this.investorSurname.replace(" ", "");
+      let _investSurnameSnippet = this.investorSurname.replace(" ", "");
+      _investSurnameSnippet = _investSurnameSnippet.substring(0, 3);
+      _investSurnameSnippet = _investSurnameSnippet.toUpperCase();
+      // send to db, use the returning count 
+      this.getInvestorSuffixNumber(_investSurnameSnippet)
+      console.log("### Investor Count new logic from Blur = ", this.investorCount)
+      if (this.investorCount === undefined) {
+        this.getInvestorSuffixNumber(_investSurnameSnippet)
+      }
+      if (this.investorCount < 10) {
+        console.log("### InvestorCount before appending to the code = ",this.investorCount )
+        this._investorCode = "Z" + _investSurnameSnippet + "0" + this.investorCount;
+      } else {
+        this._investorCode = "Z" + _investSurnameSnippet + this.investorCount;
+      }
+      this.snackbarMessage = "Investor Code Created : " + this._investorCode
+      console.log("### this._investorCode = ",this._investorCode )
+      this.snackbar = true;
+
+      // use the local property that's set in the formAppend
+    },
     cancel() {
       this.$router.push({
         name: "investorview",
@@ -764,14 +805,20 @@ export default {
       }).then(
         (response) => {
           this.investorSuffix = response.data[0].count;
-          this.snackbar = true;
+ 
           console.log("SNEK", response.data);
+          console.log("investorCount = ", response.data[0].count)
+          this.investorCount =  response.data[0].count
+
+          this.snackbarMessage = "Investor Code Created"
+          this.snackbar = true;
           //   if( response.data[0].count  < 10  ) {
           //     return "0" + response.data[0].count
           //   } else {
           //     return response.data[0].count
           //   }
           // },
+          
         },
         (error) => {
           console.log(error);
@@ -851,23 +898,28 @@ export default {
         formData.append("documents", files[x]);
       }
 
-      let _investSurnameSnippet = this.investorSurname.replace(" ", "");
-      _investSurnameSnippet = _investSurnameSnippet.substring(0, 3);
-      _investSurnameSnippet = _investSurnameSnippet.toUpperCase();
-      // need a method to get next investor if one with Z and MCL 01 exists, find COUNT(*) where code = this code here,
-      // let investorSuffixNum = this.getInvestorSuffixNumber(_investSurnameSnippet)
-      // console.log("Investor Suffix Number: ", this.investorSuffix)
-      //     console.log("Investor Suffix Number: ", investorSuffixNum)
-      this.getInvestorSuffixNumber(_investSurnameSnippet);
-      let _investorCode = "";
-      if (this.investorSuffix < 10) {
-        _investorCode = "Z" + _investSurnameSnippet + "0" + this.investorSuffix;
-      } else {
-        _investorCode = "Z" + _investSurnameSnippet + this.investorSuffix;
-      }
+      // let _investSurnameSnippet = this.investorSurname.replace(" ", "");
+      // _investSurnameSnippet = _investSurnameSnippet.substring(0, 3);
+      // _investSurnameSnippet = _investSurnameSnippet.toUpperCase();
+      // // need a method to get next investor if one with Z and MCL 01 exists, find COUNT(*) where code = this code here,
+      // // let investorSuffixNum = this.getInvestorSuffixNumber(_investSurnameSnippet)
+      // // console.log("Investor Suffix Number: ", this.investorSuffix)
+      // //     console.log("Investor Suffix Number: ", investorSuffixNum)
+      // this.getInvestorSuffixNumber(_investSurnameSnippet);
+      // let _investorCode = "";
+      // if (this.investorSuffix === 0) {
+      //   this.getInvestorSuffixNumber(_investSurnameSnippet);
+      //   console.log("InvestorCount before appending to the code = ",this.investorSuffix )
+      // }
+      // if (this.investorSuffix < 10) {
+      //   console.log("InvestorCount before appending to the code = ",this.investorSuffix )
+      //   _investorCode = "Z" + _investSurnameSnippet + "0" + this.investorSuffix;
+      // } else {
+      //   _investorCode = "Z" + _investSurnameSnippet + this.investorSuffix;
+      // }
 
       formData.append("contains", contains);
-      formData.append("investorCode", _investorCode);
+      formData.append("investorCode", this._investorCode);
       formData.append("linkedEmail", this.linkedEmail);
       formData.append("investorInitials", this.investorInitials);
       formData.append("investorSurname", this.investorSurname);
@@ -920,7 +972,12 @@ export default {
       }).then(
         (response) => {
           console.log(response.data);
-          this.snackbar = true;
+          setTimeout(() => {
+
+         
+          this.$router.push("investorview")
+           },1500)
+          //return response.data[0].count;
         },
         (error) => {
           console.log(error);

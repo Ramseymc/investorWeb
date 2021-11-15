@@ -33,7 +33,7 @@
             <v-row>
               <v-col cols="12" md="4">
                 <v-radio-group
-                  v-model="this.SelectedInvestor[0].person_mode"
+                  v-model="person_mode"
                   @change="personCompanySwitch"
                   row
                 >
@@ -52,19 +52,19 @@
 
               <v-col cols="12" md="4">
                 <v-radio-group
-                  v-model="this.SelectedInvestor[0].buyers"
+                  v-model="buyers"
                   v-if="this.SelectedInvestor[0].person_mode === 'person'"
                   row
                 >
                   <v-radio
                     label="1 Person"
                     color="blue darken-3"
-                    value="1"
+                    value=1
                   ></v-radio>
                   <v-radio
                     label="2 People"
                     color="green darken-3"
-                    value="2"
+                    value=2
                   ></v-radio>
                 </v-radio-group>
               </v-col>
@@ -74,16 +74,23 @@
           <!-- Investor Code & Linked email - read-only fields -->
           <v-container>
             <v-row>
+              <v-col cols="3">
               <v-text-field
                 v-model="investorCode"
                 label="Investor Code"
-                required
+                readonly
               ></v-text-field>
-
+              </v-col>
+              <v-col cols="1">
+              </v-col>
+              <v-col cols="6">
               <v-text-field
+                ref="linkedEmailInput"
                 v-model="linkedEmail"
                 label="Linked User Email (Portal):"
+                required
               ></v-text-field>
+              </v-col>
             </v-row>
           </v-container>
 
@@ -377,14 +384,18 @@
           <!-- FICA Details - always ? -->
           <v-container>
             <v-row>
-              <v-col cols="12" sm="12">
+              <v-col cols="8" sm="8">
                 <h3>FICA Details</h3>
               </v-col>
+            </v-row>
+            <v-row>
+              <v-col cols="8" sm="8">
               <v-text-field
                 v-model="ficaDate"
                 label="FICA Date"
                 required
               ></v-text-field>
+              </v-col>
             </v-row>
           </v-container>
 
@@ -403,17 +414,20 @@
               <h3>Investor One File Uploads</h3>
             </v-col>
             <v-row>
-              View
+              
               <a
                 :href="`http://localhost:3000/uploads/${investorOneDisclaimerFile}`"
                 download
                 target="_blank"
                 style="text-decoration: none"
               >
-                <v-icon color="green">mdi-file-pdf-box</v-icon>
+                <v-icon color="green">mdi-eye-outline</v-icon>
               </a>
+              - View
+            </v-row>
+            <v-row>
               <v-file-input
-                v-model="investorOneDisclaimerFile"
+                v-model="investorOneDisclaimerFileNew"
                 label="Upload Disclaimer Letter"
                 accept="image/jpeg, image/jpg, image/png, image/bmp, application/pdf"
                 filled
@@ -424,17 +438,20 @@
             <v-row>
               <!-- </v-col>
               <v-col cols="12" sm="12"> -->
-              View
+             
               <a
                 :href="`http://localhost:3000/uploads/${investorOneIDFile}`"
                 download
                 target="_blank"
                 style="text-decoration: none"
               >
-                <v-icon color="green">mdi-file-pdf-box</v-icon>
+                <v-icon color="green">mdi-eye-outline</v-icon>
               </a>
+              - View
+              </v-row>
+            <v-row>
               <v-file-input
-                v-model="investorOneIDFile"
+                v-model="investorOneIDFileNew"
                 label="Upload ID"
                 accept="image/jpeg, image/jpg, image/png, image/bmp, application/pdf"
                 filled
@@ -445,17 +462,20 @@
             <!-- </v-col>
               <v-col cols="12" sm="12"> -->
             <v-row>
-              View
+          
               <a
                 :href="`http://localhost:3000/uploads/${investorOnePOAFile}`"
                 download
                 target="_blank"
                 style="text-decoration: none"
               >
-                <v-icon color="green">mdi-file-pdf-box</v-icon>
+                <v-icon color="green">mdi-eye-outline</v-icon>
               </a>
+              - View
+              </v-row>
+            <v-row>
               <v-file-input
-                v-model="investorOnePOAFile"
+                v-model="investorOnePOAFileNew"
                 label="Upload POA"
                 accept="image/jpeg, image/jpg, image/png, image/bmp, application/pdf"
                 filled
@@ -477,17 +497,20 @@
             </v-col>
 
             <v-row>
-              View
+              
               <a
                 :href="`http://localhost:3000/uploads/${investorTwoDisclaimerFile}`"
                 download
                 target="_blank"
                 style="text-decoration: none"
               >
-                <v-icon color="green">mdi-file-pdf-box</v-icon>
+                <v-icon color="green">mdi-eye-outline</v-icon>
               </a>
+              - View
+              </v-row>
+            <v-row>
               <v-file-input
-                v-model="investorTwoDisclaimerFile"
+                v-model="investorTwoDisclaimerFileNew"
                 label="Upload Disclaimer Letter"
                 accept="image/jpeg, image/jpg, image/png, image/bmp, application/pdf"
                 filled
@@ -496,17 +519,20 @@
               ></v-file-input>
             </v-row>
             <v-row>
-              View
+              
               <a
                 :href="`http://localhost:3000/uploads/${investorTwoIDFile}`"
                 download
                 target="_blank"
                 style="text-decoration: none"
               >
-                <v-icon color="green">mdi-file-pdf-box</v-icon>
+                <v-icon color="green">mdi-eye-outline</v-icon>
               </a>
+              - View
+              </v-row>
+            <v-row>
               <v-file-input
-                v-model="investorTwoIDFile"
+                v-model="investorTwoIDFileNew"
                 label="Upload ID"
                 accept="image/jpeg, image/jpg, image/png, image/bmp, application/pdf"
                 filled
@@ -515,17 +541,20 @@
               ></v-file-input>
             </v-row>
             <v-row>
-              View
+              
               <a
                 :href="`http://localhost:3000/uploads/${investorTwoPOAFile}`"
                 download
                 target="_blank"
                 style="text-decoration: none"
               >
-                <v-icon color="green">mdi-file-pdf-box</v-icon>
+                <v-icon color="green">mdi-eye-outline</v-icon>
               </a>
+              - View
+              </v-row>
+            <v-row>
               <v-file-input
-                v-model="investorTwoPOAFile"
+                v-model="investorTwoPOAFileNew"
                 label="Upload POA"
                 accept="image/jpeg, image/jpg, image/png, image/bmp, application/pdf"
                 filled
@@ -543,18 +572,21 @@
               <h3>Company & Representative File Uploads</h3>
             </v-col>
             <v-row>
-              View
+              
               <a
                 :href="`http://localhost:3000/uploads/${representativeDisclaimerFile}`"
                 download
                 target="_blank"
                 style="text-decoration: none"
               >
-                <v-icon color="green">mdi-file-pdf-box</v-icon>
+                <v-icon color="green">mdi-eye-outline</v-icon>
               </a>
+              - View
+              </v-row>
+            <v-row>
               <v-col cols="4" sm="4">
                 <v-file-input
-                  v-model="representativeDisclaimerFile"
+                  v-model="representativeDisclaimerFileNew"
                   label="Upload Representation Disclaimer Letter"
                   accept="image/jpeg, image/jpg, image/png, image/bmp, application/pdf"
                   filled
@@ -564,18 +596,21 @@
               </v-col>
             </v-row>
             <v-row>
-              View
+              
               <a
                 :href="`http://localhost:3000/uploads/${representativeIDFile}`"
                 download
                 target="_blank"
                 style="text-decoration: none"
               >
-                <v-icon color="green">mdi-file-pdf-box</v-icon>
+                <v-icon color="green">mdi-eye-outline</v-icon>
               </a>
+              - View
+              </v-row>
+            <v-row>
               <v-col cols="4" sm="4">
                 <v-file-input
-                  v-model="representativeIDFile"
+                  v-model="representativeIDFileNew"
                   label="Upload Representation ID"
                   accept="image/jpeg, image/jpg, image/png, image/bmp, application/pdf"
                   filled
@@ -585,18 +620,21 @@
               </v-col>
             </v-row>
             <v-row>
-              View
+              
               <a
                 :href="`http://localhost:3000/uploads/${representativePOAFile}`"
                 download
                 target="_blank"
                 style="text-decoration: none"
               >
-                <v-icon color="green">mdi-file-pdf-box</v-icon>
+                <v-icon color="green">mdi-eye-outline</v-icon>
               </a>
+              - View
+              </v-row>
+            <v-row>
               <v-col cols="4" sm="4">
                 <v-file-input
-                  v-model="representativePOAFile"
+                  v-model="representativePOAFileNew"
                   label="Representative POA"
                   accept="image/jpeg, image/jpg, image/png, image/bmp, application/pdf"
                   filled
@@ -607,18 +645,21 @@
             </v-row>
 
             <v-row>
-              View
+              
               <a
                 :href="`http://localhost:3000/uploads/${companyResolutionFile}`"
                 download
                 target="_blank"
                 style="text-decoration: none"
               >
-                <v-icon color="green">mdi-file-pdf-box</v-icon>
+                <v-icon color="green">mdi-eye-outline</v-icon>
               </a>
+              - View
+              </v-row>
+            <v-row>
               <v-col cols="4" sm="4">
                 <v-file-input
-                  v-model="companyResolutionFile"
+                  v-model="companyResolutionFileNew"
                   label="Company / Trust Resolution"
                   accept="image/jpeg, image/jpg, image/png, image/bmp, application/pdf"
                   filled
@@ -628,18 +669,21 @@
               </v-col>
             </v-row>
             <v-row>
-              View
+              
               <a
                 :href="`http://localhost:3000/uploads/${companyRefDocsFile}`"
                 download
                 target="_blank"
                 style="text-decoration: none"
               >
-                <v-icon color="green">mdi-file-pdf-box</v-icon>
+                <v-icon color="green">mdi-eye-outline</v-icon>
               </a>
+              - View
+              </v-row>
+            <v-row>
               <v-col cols="4" sm="4">
                 <v-file-input
-                  v-model="companyRefDocsFile"
+                  v-model="companyRefDocsFileNew"
                   label="Company / Trust Reg Docs"
                   accept="image/jpeg, image/jpg, image/png, image/bmp, application/pdf"
                   filled
@@ -649,18 +693,21 @@
               </v-col>
             </v-row>
             <v-row>
-              View
+              
               <a
                 :href="`http://localhost:3000/uploads/${companyPOAFile}`"
                 download
                 target="_blank"
                 style="text-decoration: none"
               >
-                <v-icon color="green">mdi-file-pdf-box</v-icon>
+                <v-icon color="green">mdi-eye-outline</v-icon>
               </a>
+              - View
+              </v-row>
+            <v-row>
               <v-col cols="4" sm="4">
                 <v-file-input
-                  v-model="companyPOAFile"
+                  v-model="companyPOAFileNew"
                   label="Company / Trust POA"
                   accept="image/jpeg, image/jpg, image/png, image/bmp, application/pdf"
                   filled
@@ -693,18 +740,19 @@
               <v-btn text color="error" class="mr-4" @click="reset">
                 Reset Form
               </v-btn>
-              <v-snackbar v-model="snackbar">
-                {{ snackbarMessage }}
-                <v-btn color="pink" text @click="snackbar = false">
-                  Close
-                </v-btn>
-              </v-snackbar>
+            
             </v-row>
           </v-container> -->
         </v-form>
       </v-layout>
       <!-- </v-col> -->
       <!-- </v-row> -->
+        <v-snackbar v-model="snackbar" top>
+          {{ snackbarMessage }}
+          <v-btn color="pink" text @click="snackbar = false">
+            Close
+          </v-btn>
+        </v-snackbar>
     </div>
   </v-container>
 </template>
@@ -753,7 +801,7 @@ export default {
 
     person: "",
     person_mode: "person",
-    buyers: 0,
+    buyers: "",
     buyersSwicth: 1,
 
     investorName: "",
@@ -794,7 +842,7 @@ export default {
 
     ficaDate: "",
 
-    investorOneDisclaimerFile: "",
+    investorOneDisclaimerFile: null,
     investorOneIDFile: null,
     investorOnePOAFile: null,
 
@@ -808,6 +856,22 @@ export default {
     companyResolutionFile: null,
     companyRefDocsFile: null,
     companyPOAFile: null,
+
+    investorOneDisclaimerFileNew: null,
+    investorOneIDFileNew: null,
+    investorOnePOAFileNew: null,
+
+    investorTwoDisclaimerFileNew: null,
+    investorTwoIDFileNew: null,
+    investorTwoPOAFileNew: null,
+
+    representativeDisclaimerFileNew: null,
+    representativeIDFileNew: null,
+    representativePOAFileNew: null,
+    companyResolutionFileNew: null,
+    companyRefDocsFileNew: null,
+    companyPOAFileNew: null,
+
 
     mobile: {
       countryCode: "ZA",
@@ -842,9 +906,8 @@ export default {
 
   async mounted() {
     this.paramId = parseInt(this.$route.params.id);
-    console.log("Mounted update investorID = ", this.paramId);
-    //console.log("Mounted update investorID = ", baseUurl);
-    //this.getAllInvestments();
+    //console.log("Mounted update investorID = ", this.paramId);
+
     this.testServer();
     this.getInvestorDetails();
   },
@@ -862,37 +925,18 @@ export default {
     },
     async setFormValues() {
       this.person_mode = this.SelectedInvestor[0].person_mode;
+      this.buyers = this.SelectedInvestor[0].buyers;
       this.investorName = this.SelectedInvestor[0].investor_name;
       this.investorSurname = this.SelectedInvestor[0].investor_surname;
       this.investorInitials = this.SelectedInvestor[0].investor_name;
       this.investorCode = this.SelectedInvestor[0].investor_acc_number;
       this.linkedEmail = this.SelectedInvestor[0].linked_email;
       this.mobile.phoneNumber = this.SelectedInvestor[0].investor_mobile;
-
       this.investorIDNumber = this.SelectedInvestor[0].investor_id_number;
 
-      // need to get the form details to savethem just put this method in both and copy data() - 25 minuteas bro
-      // investor form data
-      // SelectedInvestor: [],
-      // this.paramId: 0,
-      // this.investorCode: "",
-      // this.linkedEmail: "",
-
-      // this.person: "",
-      // this.person_mode: "person",
-      // this.buyers: 0,
-      // this.buyersSwicth: 1,
-
-      // this.investorName: "",
-      // this.investorInitials: "",
-      // this.investorSurname: "",
-      // this.investorIDNumber: "",
-
-      // this.investorTwoCode: "",
       this.investorTwoInitials = this.SelectedInvestor[0].investor_two_name;
       this.investorTwoSurname = this.SelectedInvestor[0].investor_two_surname;
-      this.investorTwoIDNumber =
-        this.SelectedInvestor[0].investor_two_id_number;
+      this.investorTwoIDNumber = this.SelectedInvestor[0].investor_two_id_number;
 
       this.companyName = this.SelectedInvestor[0].company_name;
       this.regNumber = this.SelectedInvestor[0].reg_number;
@@ -909,8 +953,7 @@ export default {
       this.streetName = this.SelectedInvestor[0].investor_physical_street;
       this.addressSuburb = this.SelectedInvestor[0].investor_physical_suburb;
       this.province = this.SelectedInvestor[0].investor_physical_province;
-      this.addressPostalCode =
-        this.SelectedInvestor[0].investor_physical_postal_code;
+      this.addressPostalCode = this.SelectedInvestor[0].investor_physical_postal_code;
 
       this.boxNo = this.SelectedInvestor[0].investor_postal_street_box;
       this.postalSuburb = this.SelectedInvestor[0].investor_postal_suburb;
@@ -922,55 +965,27 @@ export default {
       this.accountNumber = this.SelectedInvestor[0].account_number;
 
       this.ficaDate = this.SelectedInvestor[0].fica_date;
-      this.investorOneDisclaimerFile =
-        this.SelectedInvestor[0].investorOneDisclaimerFile;
-      // add hrefs
-      // this.investorOneDisclaimerFile: "",
+      this.investorOneDisclaimerFile = this.SelectedInvestor[0].investorOneDisclaimerFile;
+  
       this.investorOneIDFile = this.SelectedInvestor[0].investorOneIDFile;
-      (this.investorOnePOAFile = this.SelectedInvestor[0].investorOnePOAFile),
-        (this.investorTwoDisclaimerFile =
-          this.SelectedInvestor[0].investorTwoDisclaimerFile);
+      this.investorOnePOAFile = this.SelectedInvestor[0].investorOnePOAFile,
+      this.investorTwoDisclaimerFile = this.SelectedInvestor[0].investorTwoDisclaimerFile;
       this.investorTwoIDFile = this.SelectedInvestor[0].investorTwoIDFile;
       this.investorTwoPOAFile = this.SelectedInvestor[0].investorTwoPOAFile;
 
-      this.representativeDisclaimerFile =
-        this.SelectedInvestor[0].representativeDisclaimerFile;
+      this.representativeDisclaimerFile = this.SelectedInvestor[0].representativeDisclaimerFile;
       this.representativeIDFile = this.SelectedInvestor[0].representativeIDFile;
-      this.representativePOAFile =
-        this.SelectedInvestor[0].representativePOAFile;
-      this.companyResolutionFile =
-        this.SelectedInvestor[0].companyResolutionFile;
+      this.representativePOAFile = this.SelectedInvestor[0].representativePOAFile;
+      this.companyResolutionFile = this.SelectedInvestor[0].companyResolutionFile;
       this.companyRefDocsFile = this.SelectedInvestor[0].companyRefDocsFile;
       this.companyPOAFile = this.SelectedInvestor[0].companyPOAFile;
-      console.log(
-        "this.investorOneDisclaimerFile = ",
-        this.investorOneDisclaimerFile
-      );
-      console.log("this.investorCode = ", this.investorCode);
 
-      //     mobile: {
-      //       countryCode: "ZA",
-      //       isValid: false,
-      //       phoneNumber: "",
-      //       phoneNumberTwo: "",
-      //     },
-      //     landline: {
-      //       countryCode: "ZA",
-      //       isValid: false,
-      //       phoneNumber: "",
-      //       phoneNumberTwo: "",
-      //     },
-
-      //     snackbar: false,
-      //     snackbarMessage: "",
-      //     checkbox: false,
     },
     async getInvestorDetails() {
       let data = {
         id: this.$store.state.development.id,
         paramId: this.paramId,
       };
-      console.log(data);
       await axios({
         method: "post",
         url: `${url}/getInvestorDetails`, // use store url
@@ -979,18 +994,9 @@ export default {
         .then(
           (response) => {
             response.data.forEach((investor) => {
-              this.SelectedInvestor.push(investor);
-              // this.InvestorCode = investment.investor_acc_number;
-            });
-            console.log("this.SelectedInvestor List = ", this.SelectedInvestor);
-            // use a method here to set the local properties for v-models setFormValues()
-            // this.setFormValues() // this.InvestorName = this.SelectedInvestor.investor_name etc
-            this.setFormValues();
-            // get this working, demo when ready, see if Wayne is coming
-            // set and see the form values (this.investorId) here console.log is my friend
-            // create a new control for the id, so i have two, use a different model for each of them
-            // and try sending to the route as idNumberThis and idNumberSelected
-            // 2 controls, bothgoing into  form append, both being unwrapped in updateinvestor investorroutes
+              this.SelectedInvestor.push(investor);  
+            });   
+            this.setFormValues();            
           },
           (error) => {
             console.log(error);
@@ -999,7 +1005,6 @@ export default {
         .catch((e) => {
           console.log(e);
         });
-      // get the details from the selected investorId
     },
     async testServer() {
       await axios({
@@ -1020,74 +1025,74 @@ export default {
     },
 
     personCompanySwitch() {
-      this.buyers = "1";
+      this.buyers = this.SelectedInvestor[0].buyers;
     },
 
     async updateInvestor() {
       //this.setFormValues()
       let files = [];
       let contains = [];
-      if (this.investorOneDisclaimerFile !== null) {
+      if (this.investorOneDisclaimerFileNew !== null) {
         contains.push("investorOneDisclaimerFile");
-        files.push(this.investorOneDisclaimerFile); // append mimetype here?
+        files.push(this.investorOneDisclaimerFileNew); // append mimetype here?
       }
 
       // investorOneDisclaimerFile: null,
-      if (this.investorOneIDFile !== null) {
+      if (this.investorOneIDFileNew !== null) {
         contains.push("investorOneIDFile");
-        files.push(this.investorOneIDFile); // append mimetype here?
+        files.push(this.investorOneIDFileNew); // append mimetype here?
       }
       // investorOneIDFile: null,
-      if (this.investorOnePOAFile !== null) {
+      if (this.investorOnePOAFileNew !== null) {
         contains.push("investorOnePOAFile");
-        files.push(this.investorOnePOAFile); // append mimetype here?
+        files.push(this.investorOnePOAFileNew); // append mimetype here?
       }
       // investorOnePOAFile: null,
 
-      if (this.investorTwoDisclaimerFile !== null) {
+      if (this.investorTwoDisclaimerFileNew !== null) {
         contains.push("investorTwoDisclaimerFile");
-        files.push(this.investorTwoDisclaimerFile); // append mimetype here?
+        files.push(this.investorTwoDisclaimerFileNew); // append mimetype here?
       }
       // investorTwoDisclaimerFile: null,
-      if (this.investorTwoIDFile !== null) {
+      if (this.investorTwoIDFileNew !== null) {
         contains.push("investorTwoIDFile");
-        files.push(this.investorTwoIDFile); // append mimetype here?
+        files.push(this.investorTwoIDFileNew); // append mimetype here?
       }
       // investorTwoIDFile: null,
-      if (this.investorTwoPOAFile !== null) {
+      if (this.investorTwoPOAFileNew !== null) {
         contains.push("investorTwoPOAFile");
-        files.push(this.investorTwoPOAFile); // append mimetype here?
+        files.push(this.investorTwoPOAFileNew); // append mimetype here?
       }
       // investorTwoPOAFile: null,
 
-      if (this.representativeDisclaimerFile !== null) {
+      if (this.representativeDisclaimerFileNew !== null) {
         contains.push("representativeDisclaimerFile");
-        files.push(this.representativeDisclaimerFile); // append mimetype here?
+        files.push(this.representativeDisclaimerFileNew); // append mimetype here?
       }
       // representativeDisclaimerFile: null,
-      if (this.representativeIDFile !== null) {
+      if (this.representativeIDFileNew !== null) {
         contains.push("representativeIDFile");
-        files.push(this.representativeIDFile); // append mimetype here?
+        files.push(this.representativeIDFileNew); // append mimetype here?
       }
       // representativeIDFile: null,
-      if (this.representativePOAFile !== null) {
+      if (this.representativePOAFileNew !== null) {
         contains.push("representativePOAFile");
-        files.push(this.representativePOAFile); // append mimetype here?
+        files.push(this.representativePOAFileNew); // append mimetype here?
       }
       // representativePOAFile: null,
-      if (this.companyResolutionFile !== null) {
+      if (this.companyResolutionFileNew !== null) {
         contains.push("companyResolutionFile");
-        files.push(this.companyResolutionFile); // append mimetype here?
+        files.push(this.companyResolutionFileNew); // append mimetype here?
       }
       // companyResolutionFile: null,
-      if (this.companyRefDocsFile !== null) {
+      if (this.companyRefDocsFileNew !== null) {
         contains.push("companyRefDocsFile");
-        files.push(this.companyRefDocsFile); // append mimetype here?
+        files.push(this.companyRefDocsFileNew); // append mimetype here?
       }
       // companyRefDocsFile: null,
-      if (this.companyPOAFile !== null) {
+      if (this.companyPOAFileNew !== null) {
         contains.push("companyPOAFile");
-        files.push(this.companyPOAFile); // append mimetype here?
+        files.push(this.companyPOAFileNew); // append mimetype here?
       }
       // companyPOAFile: null
 
@@ -1095,19 +1100,14 @@ export default {
       for (var x = 0; x < files.length; x++) {
         formData.append("documents", files[x]);
       }
+
       formData.append("contains", contains);
       formData.append("investorName", this.investorName);
       formData.append("investorCode", this.investorCode);
       formData.append("linkedEmail", this.linkedEmail);
       formData.append("investorInitials", this.investorInitials);
       formData.append("investorSurname", this.investorSurname);
-      formData.append("investorIDNumber", this.investorIDNumber);
-
-      formData.append("investorIDNumber_this", this.investorIDNumber);
-      formData.append(
-        "investorIDNumber_selectedInvestor",
-        this.SelectedInvestor[0].investor_id_number
-      );
+      formData.append("investorIDNumber", this.investorIDNumber);            
 
       formData.append("investorTwoCode", this.investorTwoCode);
       formData.append("investorTwoInitials", this.investorTwoInitials);
@@ -1146,8 +1146,8 @@ export default {
 
       formData.append("ficaDate", this.ficaDate);
 
-      formData.append("person_mode", this.person);
-      formData.append("buyers", this.person);
+      formData.append("person_mode", this.person_mode);
+      formData.append("buyers", this.buyers);
       formData.append("id", this.SelectedInvestor[0].investor_id);
 
       await axios({
@@ -1155,10 +1155,11 @@ export default {
         url: `${url}/updateInvestor`,
         data: formData,
       }).then(
-        (response) => {
-          console.log(response.data);
+        (response) => {         
+          this.snackbarMessage = "Investor Successfully Updated"
           this.snackbar = true;
-        },
+          console.log(response)
+          setTimeout(() => { this.$router.push("investorview")},1500)},
         (error) => {
           console.log(error);
         }

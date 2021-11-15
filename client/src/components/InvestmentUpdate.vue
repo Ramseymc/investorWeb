@@ -208,10 +208,10 @@
                 target="_blank"
                 style="text-decoration: none"
               >
-                <v-icon color="green">mdi-file-pdf-box</v-icon>
+                <v-icon color="green">mdi-eye-outline</v-icon>
               </a>
               <v-file-input
-                v-model="singedLoanAgreementFile"
+                v-model="singedLoanAgreementFileNew"
                 label="Signed Loan Agreement"
                 accept="image/jpeg, image/jpg, image/png, image/bmp, application/pdf"
                 filled
@@ -229,10 +229,10 @@
                 target="_blank"
                 style="text-decoration: none"
               >
-                <v-icon color="green">mdi-file-pdf-box</v-icon>
+                <v-icon color="green">mdi-eye-outline</v-icon>
               </a>
               <v-file-input
-                v-model="POPFile"
+                v-model="POPFileNew"
                 label="POP File"
                 accept="image/jpeg, image/jpg, image/png, image/bmp, application/pdf"
                 filled
@@ -253,10 +253,10 @@
                 target="_blank"
                 style="text-decoration: none"
               >
-                <v-icon color="green">mdi-file-pdf-box</v-icon>
+                <v-icon color="green">mdi-eye-outline</v-icon>
               </a>
               <v-file-input
-                v-model="attorneyConfirmLetterFile"
+                v-model="attorneyConfirmLetterFileNew"
                 label="Attorney Confirmation Letter"
                 accept="image/jpeg, image/jpg, image/png, image/bmp, application/pdf"
                 filled
@@ -266,45 +266,16 @@
             </v-row>
           </v-container>
 
-          <!-- Action Buttons -->
-          <!-- <v-container>
-            <v-row>
-              <v-checkbox
-                v-model="checkbox"
-                color="#111d5e"
-                :rules="[
-                  (v) =>
-                    !!v ||
-                    'You must ensure that all information entered here is correct As modifying it after it is created will require outside assistance!',
-                ]"
-                label="Confirm Information is Correct?"
-                required
-              ></v-checkbox>
-
-              <v-btn
-                text
-                color="success"
-                class="mr-4"
-                v-if="checkbox"
-                @click="updateInvestment"
-              >
-                Update Investment
-              </v-btn>
-              <v-btn text color="error" class="mr-4" @click="reset">
-                Reset Form
-              </v-btn>
-              <v-snackbar v-model="snackbar">
-                {{ snackbarMessage }}
-                <v-btn color="pink" text @click="snackbar = false">
-                  Close
-                </v-btn>
-              </v-snackbar>
-            </v-row>
-          </v-container> -->
+        
         </v-form>
       </v-layout>
-      <!-- </v-col> -->
-      <!-- </v-row> -->
+     
+       <v-snackbar v-model="snackbar" top>
+          {{ snackbarMessage }}
+          <v-btn color="pink" text @click="snackbar = false">
+            Close
+          </v-btn>
+        </v-snackbar>
     </div>
   </v-container>
 </template>
@@ -353,7 +324,10 @@ export default {
     // investment form data
     SelectedInvestment: [],
     investorCode: "",
+
     investorId: "",
+    investmentId: "",
+
     project: "",
     linkedUnit: "",
     investmentAmount: "",
@@ -367,9 +341,14 @@ export default {
     repaymentAmount: "",
     endDate: "",
     investmentClosed: false,
+
     singedLoanAgreementFile: null,
     POPFile: null,
     attorneyConfirmLetterFile: null,
+
+    singedLoanAgreementFileNew: null,
+    POPFileNew: null,
+    attorneyConfirmLetterFileNew: null,
 
     snackbar: false,
     snackbarMessage: "",
@@ -397,6 +376,7 @@ export default {
     setFormValues() {
       this.investorCode = this.SelectedInvestment[0].investor_acc_number;
       this.investorId = this.SelectedInvestment[0].investor_id;
+      this.investmentId = this.SelectedInvestment[0].investment_id
       this.project = this.SelectedInvestment[0].project;
       this.linkedUnit = this.SelectedInvestment[0].linked_unit;
       this.investmentAmount = this.SelectedInvestment[0].investment_amount;
@@ -410,11 +390,9 @@ export default {
       this.endDate = this.SelectedInvestment[0].end_date;
       this.repaymentAmount = this.SelectedInvestment[0].repayment_amount;
       this.investmentClosed = this.SelectedInvestment[0].investment_closed;
-      this.singedLoanAgreementFile =
-        this.SelectedInvestment[0].singedLoanAgreementFile;
+      this.singedLoanAgreementFile = this.SelectedInvestment[0].singedLoanAgreementFile;
       this.POPFile = this.SelectedInvestment[0].POPFile;
-      this.attorneyConfirmLetterFile =
-        this.SelectedInvestment[0].attorneyConfirmLetterFile;
+      this.attorneyConfirmLetterFile =  this.SelectedInvestment[0].attorneyConfirmLetterFile;
     },
     async getInvestmentDetails() {
       let data = {
@@ -430,15 +408,8 @@ export default {
         .then(
           (response) => {
             response.data.forEach((investment) => {
-              this.SelectedInvestment.push(investment);
-              // this.InvestorCode = investment.investor_acc_number;
-            });
-            console.log(
-              "this.SelectedInvestment List = ",
-              this.SelectedInvestment
-            );
-            // use a method here to set the local properties for v-models setFormValues()
-            // this.setFormValues() // this.InvestorName = this.SelectedInvestor.investor_name etc
+              this.SelectedInvestment.push(investment);      
+            });        
             this.setFormValues();
           },
           (error) => {
@@ -448,7 +419,7 @@ export default {
         .catch((e) => {
           console.log(e);
         });
-      // get the details from the selected investorId
+
     },
     async testServer() {
       await axios({
@@ -475,24 +446,21 @@ export default {
     getFiles() {
       let files = [];
       let contains = [];
-      console.log(
-        "(this.singedLoanAgreementFile) = ",
-        this.singedLoanAgreementFile
-      );
+   
       if (this.singedLoanAgreementFile !== null) {
         contains.push("singedLoanAgreementFile");
-        files.push(this.singedLoanAgreementFile); // append mimetype here?
+        files.push(this.singedLoanAgreementFile);
       }
 
       // investorOneDisclaimerFile: null,
       if (this.POPFile !== null) {
         contains.push("POPFile");
-        files.push(this.POPFile); // append mimetype here?
+        files.push(this.POPFile); 
       }
       // investorOneIDFile: null,
       if (this.attorneyConfirmLetterFile !== null) {
         contains.push("attorneyConfirmLetterFile");
-        files.push(this.attorneyConfirmLetterFile); // append mimetype here?
+        files.push(this.attorneyConfirmLetterFile); 
       }
       return files;
     },
@@ -500,35 +468,32 @@ export default {
     async updateInvestment() {
       let files = [];
       let contains = [];
-      console.log(
-        "(this.singedLoanAgreementFile) = ",
-        this.singedLoanAgreementFile
-      );
-      if (this.singedLoanAgreementFile !== null) {
+  
+      if (this.singedLoanAgreementFileNew !== null) {
         contains.push("singedLoanAgreementFile");
-        files.push(this.singedLoanAgreementFile); // append mimetype here?
+        files.push(this.singedLoanAgreementFileNew); 
       }
 
       // investorOneDisclaimerFile: null,
-      if (this.POPFile !== null) {
+      if (this.POPFileNew !== null) {
         contains.push("POPFile");
-        files.push(this.POPFile); // append mimetype here?
+        files.push(this.POPFileNew); 
       }
       // investorOneIDFile: null,
-      if (this.attorneyConfirmLetterFile !== null) {
+      if (this.attorneyConfirmLetterFileNew !== null) {
         contains.push("attorneyConfirmLetterFile");
-        files.push(this.attorneyConfirmLetterFile); // append mimetype here?
+        files.push(this.attorneyConfirmLetterFileNew); 
       }
-
-      console.log("contains:", contains);
-      console.log("files:", files);
 
       let formData = new FormData();
       for (var x = 0; x < files.length; x++) {
         formData.append("documents", files[x]);
-      } // get it in the route and see if documents has stuff
+      } 
       formData.append("contains", contains);
-      formData.append("investorCode", this.investorId);
+
+      formData.append("investorId", this.investorId);
+      formData.append("investmentId", this.investmentId);
+
       formData.append("investorCode", this.investorCode);
       formData.append("project", this.project);
       formData.append("linkedUnit", this.linkedUnit);
@@ -556,8 +521,12 @@ export default {
         data: formData,
       }).then(
         (response) => {
-          console.log(response.data);
+
+          this.snackbarMessage = "Investment Successfully Updated"
           this.snackbar = true;
+          setTimeout(() => {         
+          this.$router.push({name: "investmentview",params: {id: this.investorId},})},1500)
+          console.log(response)
         },
         (error) => {
           console.log(error);

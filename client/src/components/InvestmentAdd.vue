@@ -79,47 +79,29 @@
           <v-container>
             <v-row>
               <v-text-field
-                ref="codeInput"
-                v-model="investorCode"
-                :counter="20"
-                maxValue="20"
-                :rules="nameRules"
+                v-model="investorCode"              
                 label="Investor Code:"
                 required
-                @blur="checkNames"
+                @blur="checkNames" 
+                readonly
               ></v-text-field>
 
-              <v-text-field
-                ref="linkedEmailInput"
-                v-model="project"
-                :counter="20"
-                maxValue="20"
-                :rules="nameRules"
+              <v-text-field            
+                v-model="project"                            
                 label="Project:"
-                required
-                @blur="checkNames"
+                required           
               ></v-text-field>
 
-              <v-text-field
-                ref="linkedEmailInput"
-                v-model="linkedUnit"
-                :counter="20"
-                maxValue="20"
-                :rules="nameRules"
+              <v-text-field                
+                v-model="linkedUnit"                               
                 label="Linked Unit:"
-                required
-                @blur="checkNames"
+                required             
               ></v-text-field>
 
-              <v-text-field
-                ref="linkedEmailInput"
-                v-model="investmentAmount"
-                :counter="20"
-                maxValue="20"
-                :rules="nameRules"
+              <v-text-field            
+                v-model="investmentAmount"            
                 label="Investment Amount:"
-                required
-                @blur="checkNames"
+                required               
               ></v-text-field>
             </v-row>
           </v-container>
@@ -130,25 +112,15 @@
               <v-col cols="12" sm="12">
                 <!-- <h3>Investor One Details</h3> -->
               </v-col>
-              <v-text-field
-                ref="nameInput"
-                v-model="loanAgreementSignDate"
-                :counter="20"
-                maxValue="20"
-                :rules="nameRules"
+              <v-text-field               
+                v-model="loanAgreementSignDate"                
                 label="Loan Agreement Sign Date:"
-                required
-                @blur="checkNames"
+                required                
               ></v-text-field>
-              <v-text-field
-                ref="surnameInput"
-                v-model="investmentDate"
-                :counter="20"
-                maxValue="20"
-                :rules="nameRules"
+              <v-text-field               
+                v-model="investmentDate"               
                 label="Investment Date:"
-                required
-                @blur="checkNames"
+                required               
               ></v-text-field>
               <v-text-field
                 v-model="investmentPerc"
@@ -162,25 +134,15 @@
               <v-col cols="12" sm="12">
                 <!-- <h3>Investor One Details</h3> -->
               </v-col>
-              <v-text-field
-                ref="nameInput"
-                v-model="releaseDate"
-                :counter="20"
-                maxValue="20"
-                :rules="nameRules"
+              <v-text-field          
+                v-model="releaseDate"                
                 label="Release Date:"
-                required
-                @blur="checkNames"
+                required        
               ></v-text-field>
-              <v-text-field
-                ref="surnameInput"
-                v-model="releaseAmount"
-                :counter="20"
-                maxValue="20"
-                :rules="nameRules"
+              <v-text-field             
+                v-model="releaseAmount"              
                 label="Release Amount:"
-                required
-                @blur="checkNames"
+                required            
               ></v-text-field>
               <v-text-field
                 v-model="releasePerc"
@@ -192,27 +154,17 @@
           <v-container>
             <v-row>
               <v-col cols="12" sm="4">
-                <v-text-field
-                  ref="nameInput"
-                  v-model="repaymentDate"
-                  :counter="20"
-                  maxValue="20"
-                  :rules="nameRules"
+                <v-text-field               
+                  v-model="repaymentDate"               
                   label="Repayment Date:"
-                  required
-                  @blur="checkNames"
+                  required            
                 ></v-text-field>
               </v-col>
               <v-col cols="12" sm="4">
-                <v-text-field
-                  ref="surnameInput"
-                  v-model="repaymentAmount"
-                  :counter="20"
-                  maxValue="20"
-                  :rules="nameRules"
+                <v-text-field               
+                  v-model="repaymentAmount"               
                   label="Repayment Amount:"
-                  required
-                  @blur="checkNames"
+                  required              
                 ></v-text-field>
               </v-col>
               <v-col cols="12" sm="3">
@@ -317,6 +269,12 @@
       </v-layout>
       <!-- </v-col> -->
       <!-- </v-row> -->
+       <v-snackbar v-model="snackbar" top>
+          {{ snackbarMessage }}
+          <v-btn color="pink" text @click="snackbar = false">
+            Close
+          </v-btn>
+        </v-snackbar>
     </div>
   </v-container>
 </template>
@@ -534,7 +492,17 @@ export default {
       }).then(
         (response) => {
           console.log(response.data);
+          this.snackbarMessage = "Investment Successfully Created"
           this.snackbar = true;
+          setTimeout(() => {
+
+         
+          this.$router.push({
+                //name: "investmentview",
+                name: "investmentview",
+                params: { id: this.paramId },
+              })
+           },1500)
         },
         (error) => {
           console.log(error);

@@ -5,19 +5,19 @@
       <v-col cols="8"> </v-col>
       <v-col cols="4">
         <v-btn-toggle v-model="icon" borderless>
-          <v-btn value="cancel" color="red lighten-1" @click="cancel">
+          <v-btn  color="red lighten-1" @click="cancel">
             <span>Cancel</span>
 
             <v-icon right> mdi-cancel </v-icon>
           </v-btn>
 
-          <v-btn value="reset" color="orange lighten-1" @click="reset">
+          <v-btn  color="orange lighten-1" @click="reset">
             <span class="hidden-sm-and-down">Reset</span>
 
             <v-icon right> mdi-rotate-left </v-icon>
           </v-btn>
 
-          <v-btn value="create" color="green" @click="save">
+          <v-btn  color="green" @click="save">
             <span class="hidden-sm-and-down">Create</span>
 
             <v-icon right> mdi-account-plus </v-icon>
@@ -713,15 +713,15 @@ export default {
       // send to db, use the returning count 
       this.getInvestorSuffixNumber(_investSurnameSnippet)
       console.log("### Investor Count new logic from Blur = ", this.investorCount)
-      if (this.investorCount === undefined) {
-        this.getInvestorSuffixNumber(_investSurnameSnippet)
-      }
-      if (this.investorCount < 10) {
-        console.log("### InvestorCount before appending to the code = ",this.investorCount )
-        this._investorCode = "Z" + _investSurnameSnippet + "0" + this.investorCount;
-      } else {
-        this._investorCode = "Z" + _investSurnameSnippet + this.investorCount;
-      }
+      // if (this.investorCount === undefined) {
+      //   this.getInvestorSuffixNumber(_investSurnameSnippet)
+      // }
+      // if (this.investorCount < 10) {
+      //   console.log("### InvestorCount before appending to the code = ",this.investorCount )
+      //   this._investorCode = "Z" + _investSurnameSnippet + "0" + this.investorCount;
+      // } else {
+      //   this._investorCode = "Z" + _investSurnameSnippet + this.investorCount;
+      // }
       this.snackbarMessage = "Investor Code Created : " + this._investorCode
       console.log("### this._investorCode = ",this._investorCode )
       this.snackbar = true;
@@ -756,7 +756,7 @@ export default {
             });
             console.log("this.SelectedInvestor List = ", this.SelectedInvestor);
             // use a method here to set the local properties for v-models setFormValues()
-            // this.setFormValues() // this.InvestorName = this.SelectedInvestor.investor_name etc
+            // this.setFormlogic from Blurs() // this.InvestorName = this.SelectedInvestor.investor_name etc
             this.setFormValues();
             // get this working, demo when ready, see if Wayne is coming
             // set and see the form values (this.investorId) here console.log is my friend
@@ -798,10 +798,13 @@ export default {
     async getInvestorSuffixNumber(investorPrefix) {
       let formData = new FormData();
       formData.append("investorPrefix", investorPrefix);
+      let data = {
+        investorPrefix: investorPrefix
+      }
       await axios({
         method: "post",
         url: `${url}/getInvestorSuffix`,
-        data: formData,
+        data: data,
       }).then(
         (response) => {
           this.investorSuffix = response.data[0].count;
@@ -812,6 +815,15 @@ export default {
 
           this.snackbarMessage = "Investor Code Created"
           this.snackbar = true;
+
+
+          
+      if (this.investorCount < 10) {
+        console.log("### InvestorCount before appending to the code = ",this.investorCount )
+        this.investorCode = "Z" + investorPrefix + "0" + this.investorCount;
+      } else {
+        this.investorCode = "Z" + investorPrefix + this.investorCount;
+      }
           //   if( response.data[0].count  < 10  ) {
           //     return "0" + response.data[0].count
           //   } else {

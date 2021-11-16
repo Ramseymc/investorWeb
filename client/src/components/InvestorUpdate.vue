@@ -59,12 +59,12 @@
                   <v-radio
                     label="1 Person"
                     color="blue darken-3"
-                    value=1
+                    :value='1'
                   ></v-radio>
                   <v-radio
                     label="2 People"
                     color="green darken-3"
-                    value=2
+                    :value='2'
                   ></v-radio>
                 </v-radio-group>
               </v-col>

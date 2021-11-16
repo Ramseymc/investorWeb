@@ -163,9 +163,9 @@ const chalk = require("chalk")
         excecuteSQL(mysql, res);
     }),
 
-    router.post("/getInvestorSuffix", upload.array("documents"), (req, res) => {
+    router.post("/getInvestorSuffix", (req, res) => {
         // sql to get the count of investors whos surname is like ${req.body.investorPrefix}
-        let mysql = `SELECT COUNT(*) + 2 as count FROM investors i WHERE i.investor_surname LIKE '${req.body.investorPrefix}%' ` 
+        let mysql = `SELECT COUNT(*) + 1 as count FROM investors i WHERE i.investor_surname LIKE '${req.body.investorPrefix}%' ` 
         excecuteSQL(mysql, res);
 
     }),

@@ -7,18 +7,18 @@ export default new Vuex.Store({
   mutations: {},
   actions: {},
   modules: {},
-  url: '',
+  url: "",
   state: {
-        development: {
-          id: null,
-          developmentName: null
-        }
-        // gridWidth: true
-      }
- });
+    development: {
+      id: null,
+      developmentName: null,
+    },
+    // gridWidth: true
+  },
+});
 
 // export default new Vuex.Store({
- 
+
 //   state: {
 //     url: null,
 //     development: {

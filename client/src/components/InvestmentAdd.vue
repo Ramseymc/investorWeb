@@ -1,5 +1,30 @@
 <template>
   <v-container fluid>
+    <br />
+    <v-row>
+      <v-col cols="7"> </v-col>
+      <v-col cols="4">
+        <v-btn-toggle v-model="icon" borderless>
+          <v-btn value="cancel" color="red lighten-1" @click="cancel">
+            <span>Cancel</span>
+
+            <v-icon right> mdi-cancel </v-icon>
+          </v-btn>
+
+          <v-btn value="reset" color="orange lighten-1" @click="reset">
+            <span class="hidden-sm-and-down">Reset</span>
+
+            <v-icon right> mdi-rotate-left </v-icon>
+          </v-btn>
+
+          <v-btn value="save" color="green" @click="save">
+            <span class="hidden-sm-and-down">Create</span>
+
+            <v-icon right> mdi-account-plus </v-icon>
+          </v-btn>
+        </v-btn-toggle>
+      </v-col>
+    </v-row>
     <div>
       <br />
       <!-- <v-row> -->
@@ -7,7 +32,9 @@
 
       <v-layout align-center justify-center style="padding: 8px">
         <v-form ref="form" v-model="valid" lazy-validation>
-          <h2>Create Investment</h2>
+          <h2>
+            Create Investment - {{ this.SelectedInvestor[0].investor_name }}
+          </h2>
 
           <!-- Person / company and 2 People radio buttons -->
           <!-- <v-container>
@@ -52,47 +79,29 @@
           <v-container>
             <v-row>
               <v-text-field
-                ref="codeInput"
-                v-model="investorCode"
-                :counter="20"
-                maxValue="20"
-                :rules="nameRules"
+                v-model="investorCode"              
                 label="Investor Code:"
                 required
-                @blur="checkNames"
+                @blur="checkNames" 
+                readonly
               ></v-text-field>
 
-              <v-text-field
-                ref="linkedEmailInput"
-                v-model="project"
-                :counter="20"
-                maxValue="20"
-                :rules="nameRules"
+              <v-text-field            
+                v-model="project"                            
                 label="Project:"
-                required
-                @blur="checkNames"
+                required           
               ></v-text-field>
 
-              <v-text-field
-                ref="linkedEmailInput"
-                v-model="linkedUnit"
-                :counter="20"
-                maxValue="20"
-                :rules="nameRules"
+              <v-text-field                
+                v-model="linkedUnit"                               
                 label="Linked Unit:"
-                required
-                @blur="checkNames"
+                required             
               ></v-text-field>
 
-              <v-text-field
-                ref="linkedEmailInput"
-                v-model="investmentAmount"
-                :counter="20"
-                maxValue="20"
-                :rules="nameRules"
+              <v-text-field            
+                v-model="investmentAmount"            
                 label="Investment Amount:"
-                required
-                @blur="checkNames"
+                required               
               ></v-text-field>
             </v-row>
           </v-container>
@@ -103,25 +112,15 @@
               <v-col cols="12" sm="12">
                 <!-- <h3>Investor One Details</h3> -->
               </v-col>
-              <v-text-field
-                ref="nameInput"
-                v-model="loanAgreementSignDate"
-                :counter="20"
-                maxValue="20"
-                :rules="nameRules"
+              <v-text-field               
+                v-model="loanAgreementSignDate"                
                 label="Loan Agreement Sign Date:"
-                required
-                @blur="checkNames"
+                required                
               ></v-text-field>
-              <v-text-field
-                ref="surnameInput"
-                v-model="investmentDate"
-                :counter="20"
-                maxValue="20"
-                :rules="nameRules"
+              <v-text-field               
+                v-model="investmentDate"               
                 label="Investment Date:"
-                required
-                @blur="checkNames"
+                required               
               ></v-text-field>
               <v-text-field
                 v-model="investmentPerc"
@@ -135,25 +134,15 @@
               <v-col cols="12" sm="12">
                 <!-- <h3>Investor One Details</h3> -->
               </v-col>
-              <v-text-field
-                ref="nameInput"
-                v-model="releaseDate"
-                :counter="20"
-                maxValue="20"
-                :rules="nameRules"
+              <v-text-field          
+                v-model="releaseDate"                
                 label="Release Date:"
-                required
-                @blur="checkNames"
+                required        
               ></v-text-field>
-              <v-text-field
-                ref="surnameInput"
-                v-model="releaseAmount"
-                :counter="20"
-                maxValue="20"
-                :rules="nameRules"
+              <v-text-field             
+                v-model="releaseAmount"              
                 label="Release Amount:"
-                required
-                @blur="checkNames"
+                required            
               ></v-text-field>
               <v-text-field
                 v-model="releasePerc"
@@ -165,27 +154,17 @@
           <v-container>
             <v-row>
               <v-col cols="12" sm="4">
-                <v-text-field
-                  ref="nameInput"
-                  v-model="repaymentDate"
-                  :counter="20"
-                  maxValue="20"
-                  :rules="nameRules"
+                <v-text-field               
+                  v-model="repaymentDate"               
                   label="Repayment Date:"
-                  required
-                  @blur="checkNames"
+                  required            
                 ></v-text-field>
               </v-col>
               <v-col cols="12" sm="4">
-                <v-text-field
-                  ref="surnameInput"
-                  v-model="repaymentAmount"
-                  :counter="20"
-                  maxValue="20"
-                  :rules="nameRules"
+                <v-text-field               
+                  v-model="repaymentAmount"               
                   label="Repayment Amount:"
-                  required
-                  @blur="checkNames"
+                  required              
                 ></v-text-field>
               </v-col>
               <v-col cols="12" sm="3">
@@ -252,7 +231,7 @@
           </v-container>
 
           <!-- Action Buttons -->
-          <v-container>
+          <!-- <v-container>
             <v-row>
               <v-checkbox
                 v-model="checkbox"
@@ -285,11 +264,17 @@
                 </v-btn>
               </v-snackbar>
             </v-row>
-          </v-container>
+          </v-container> -->
         </v-form>
       </v-layout>
       <!-- </v-col> -->
       <!-- </v-row> -->
+       <v-snackbar v-model="snackbar" top>
+          {{ snackbarMessage }}
+          <v-btn color="pink" text @click="snackbar = false">
+            Close
+          </v-btn>
+        </v-snackbar>
     </div>
   </v-container>
 </template>
@@ -320,7 +305,11 @@ export default {
     },
   },
   data: () => ({
+    // input investorId param
+    paramId: 0,
+
     // add data models here
+
     roleId: null,
     jobId: null,
     jobType: null,
@@ -347,15 +336,65 @@ export default {
     singedLoanAgreementFile: null,
     POPFile: null,
     attorneyConfirmLetterFile: null,
-   
+    SelectedInvestor: [],
   }),
 
   async mounted() {
+    this.paramId = parseInt(this.$route.params.id);
+    console.log("Mounted add investment investorID = ", this.paramId);
+    //this.getAllInvestments();
     this.testServer();
+    this.getInvestorDetails();
   },
   watch: {},
 
   methods: {
+    cancel() {
+      this.$router.push({
+        name: "investmentview",
+        params: { id: this.paramId },
+      });
+    },
+    save() {
+      this.saveInvestment();
+    },
+    async getInvestorDetails() {
+      this.SelectedInvestor = [];
+      let data = {
+        id: this.$store.state.development.id,
+        paramId: this.paramId,
+      };
+      console.log(data);
+      await axios({
+        method: "post",
+        url: `${url}/getInvestorDetails`, // use store url
+        data: data,
+      })
+        .then(
+          (response) => {
+            response.data.forEach((investor) => {
+              this.SelectedInvestor.push(investor);
+              // this.InvestorCode = investment.investor_acc_number;
+            });
+            console.log("this.SelectedInvestor List = ", this.SelectedInvestor);
+            // use a method here to set the local properties for v-models setFormValues()
+            // this.setFormValues() // this.InvestorName = this.SelectedInvestor.investor_name etc
+            this.setFormValues();
+            // get this working, demo when ready, see if Wayne is coming
+            // set and see the form values (this.investorId) here console.log is my friend
+            // create a new control for the id, so i have two, use a different model for each of them
+            // and try sending to the route as idNumberThis and idNumberSelected
+            // 2 controls, bothgoing into  form append, both being unwrapped in updateinvestor investorroutes
+          },
+          (error) => {
+            console.log(error);
+          }
+        )
+        .catch((e) => {
+          console.log(e);
+        });
+      // get the details from the selected investorId
+    },
     async testServer() {
       await axios({
         method: "get",
@@ -398,7 +437,7 @@ export default {
       }
       return files;
     },
-    
+
     async saveInvestment() {
       let files = [];
       let contains = [];
@@ -421,7 +460,9 @@ export default {
       for (var x = 0; x < files.length; x++) {
         formData.append("documents", files[x]);
       }
+      formData.append("contains", contains);
 
+      formData.append("investorId", this.paramId);
       formData.append("investorCode", this.investorCode);
       formData.append("project", this.project);
       formData.append("linkedUnit", this.linkedUnit);
@@ -451,7 +492,17 @@ export default {
       }).then(
         (response) => {
           console.log(response.data);
+          this.snackbarMessage = "Investment Successfully Created"
           this.snackbar = true;
+          setTimeout(() => {
+
+         
+          this.$router.push({
+                //name: "investmentview",
+                name: "investmentview",
+                params: { id: this.paramId },
+              })
+           },1500)
         },
         (error) => {
           console.log(error);

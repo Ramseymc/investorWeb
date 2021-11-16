@@ -29,7 +29,52 @@ const chalk = require("chalk")
         },
     });
 
+    function renameFile(req) {
+        let fileDetails = [];
+        // file manipulation
+        if (req.files.length) {
+            let contains = req.body.contains.split(",");
+       
+            contains.forEach((el, index, arr) => {
+                let mainIndex = index;
+                if (req.files[mainIndex] !== "undefined" || req.files[mainIndex] !== undefined ) {
+                    console.log("FILES AFTER CHECK::: ", req.files[mainIndex])
+                    let insert = {
+                        fileType: el,
+                        //fileName: `${req.files[mainIndex].filename}.${req.files[mainIndex].mimetype.split("/")[1]}`,
+                        fileName: req.files[mainIndex].filename,
+                        originalName: req.files[mainIndex].originalname,
+                    };
+                    fileDetails.push(insert);
+                }
+            });
+
+            console.log("fileDetails", fileDetails);
+
+            fileDetails.forEach((el) => {
+                let filtered = req.files.filter((el2) => {
+                    return el2.filename === el.originalName;
+                });
+                el.fileNameUpdated = `${el.fileName}`;
+                fs.rename(
+                    
+                    `public/uploads/${el.fileNameUpdated}`,
+                    `public/uploads/${el.originalName}`,
+                    (err) => {
+                        if (err) console.log("Error renaming", err);
+                        //throw err
+                    }
+                    
+                );
+                console.log("CONNOR:: file renamed from" + `${el.fileNameUpdated}` + " to " + `${el.originalName}`)
+            });
+            
+        }
+        return fileDetails
+    }
+
     function excecuteSQL(sql, res) {
+        console.log("EXECUTIUNG SQL STATEMENT")
         pool.getConnection(function (err, connection) {
             if (err) {
                 connection.release();
@@ -40,8 +85,8 @@ const chalk = require("chalk")
                     console.log(error);
                 } else {
                     res.json(result);
-                    console.log("After SQL stmnt, result = ");
-                    console.log(result);
+                    console.log("SQL Statement executed successfully - see json result in browser.");
+                  //  console.log(result);
                 }
             });
             connection.release();
@@ -67,41 +112,8 @@ const chalk = require("chalk")
     // ------------------------------------------------------------------------------------------------
     router.post("/updateInvestment", upload.array("documents"), (req, res) => {
         console.log("updateInvestment req", req.body)           
-        let fileDetails = []
-        //console.log(req.body.contains)
-        let contains = []
-        try {
-            contains = req.body.contains.split(",")
-        } catch {
-            contains.push(req.body.contains)
-        }
-        contains = Array.from(new Set(contains))
-        contains.forEach((el) => {
-
-            req.files.forEach((el2) => {
-                el2.filenameA = `${el2.filename}.${el2.mimetype.split("/")[1]}`
-                let insert = {
-                    fileType: el,
-                    fileName: el2.filenameA,
-                    originalName: el2.filename
-                }
-                fileDetails.push(insert)
-            })
-        })
-        console.log("Server: ", fileDetails)
-        // renaming files if required
-        fileDetails.forEach((el) => {
-            let filtered = req.files.filter((el2) => {
-                return el2.filename === el.originalName
-            })
-            // el.fileNameUpdated = `${el.fileName}.${filtered[0].mimetype.split("/")[1]}`
-            el.fileNameUpdated = `${el.fileName}`
-            fs.rename(`public/uploads/${el.originalName}`, `public/uploads/${el.fileNameUpdated}`, (err) => {
-                if (err)
-                    console.log("Error renaiming");
-                //throw err
-            })
-        })
+        let fileDetails = renameFile(req) 
+        
 
         var today = new Date();
         let dateToday = today.getFullYear() + "-" + (today.getMonth() + 1) + "-" + today.getDate();
@@ -123,17 +135,17 @@ const chalk = require("chalk")
         let additionalSQL = ""
         let singedLoanAgreementFileSQL = fileDetails.filter((el) => { return el.fileType === 'singedLoanAgreementFile' })          
             if (singedLoanAgreementFileSQL.length > 0) { singedLoanAgreementFileSQL.forEach((el) => {
-                additionalSQL = `${additionalSQL}, singedLoanAgreementFile = '${el.fileName}'`
+                additionalSQL = `${additionalSQL}, singedLoanAgreementFile = '${el.originalName}'`
             })
         }        
         let POPFileSQL = fileDetails.filter((el) => {  return el.fileType === 'POPFile' })  
             if (POPFileSQL.length > 0) { POPFileSQL.forEach((el) => {
-                additionalSQL = `${additionalSQL}, POPFile = '${el.fileName}'`
+                additionalSQL = `${additionalSQL}, POPFile = '${el.originalName}'`
             })
         }        
         let attorneyConfirmLetterFileSQL = fileDetails.filter((el) => {  return el.fileType === 'attorneyConfirmLetterFile' })  
             if (attorneyConfirmLetterFileSQL.length > 0) { attorneyConfirmLetterFileSQL.forEach((el) => {
-                additionalSQL = `${additionalSQL}, attorneyConfirmLetterFile = '${el.fileName}'`
+                additionalSQL = `${additionalSQL}, attorneyConfirmLetterFile = '${el.originalName}'`
             })
         }
     
@@ -151,43 +163,16 @@ const chalk = require("chalk")
         excecuteSQL(mysql, res);
     }),
 
+    router.post("/getInvestorSuffix", (req, res) => {
+        // sql to get the count of investors whos surname is like ${req.body.investorPrefix}
+        let mysql = `SELECT COUNT(*) + 1 as count FROM investors i WHERE i.investor_surname LIKE '${req.body.investorPrefix}%' ` 
+        excecuteSQL(mysql, res);
+
+    }),
+    //getInvestorSuffixNumber()
     // complete sql
     router.post("/createInvestment", upload.array("documents"), (req, res) => {
-        let fileDetails = [];
-        // file manipulation
-        if (req.files.length) {
-            let contains = req.body.contains.split(",");
-            contains.forEach((el, index) => {
-                let mainIndex = index;
-                if (req.files[mainIndex] !== "undefined") {
-                    console.log("FILES AFTER CHECK::: ", req.files[mainIndex])
-                    let insert = {
-                        fileType: el,
-                        fileName: `${req.files[mainIndex].filename}.${req.files[mainIndex].mimetype.split("/")[1]
-                            }`,
-                        originalName: req.files[mainIndex].filename,
-                    };
-                    fileDetails.push(insert);
-                }
-            });
-
-            console.log("fileDetails", fileDetails);
-
-            fileDetails.forEach((el) => {
-                let filtered = req.files.filter((el2) => {
-                    return el2.filename === el.originalName;
-                });
-                el.fileNameUpdated = `${el.fileName}`;
-                fs.rename(
-                    `public/uploads/${el.originalName}`,
-                    `public/uploads/${el.fileNameUpdated}`,
-                    (err) => {
-                        if (err) console.log("Error renaming", err);
-                        //throw err
-                    }
-                );
-            });
-        }
+        let fileDetails = renameFile(req)       
 
         let singedLoanAgreementFile;
         let POPFile;
@@ -199,7 +184,7 @@ const chalk = require("chalk")
                 return el.fileType === "singedLoanAgreementFile";
             });
             if (singedLoanAgreementFile.length) {
-                singedLoanAgreementFile = singedLoanAgreementFile[0].fileName;
+                singedLoanAgreementFile = singedLoanAgreementFile[0].originalName;
             } else {
                 singedLoanAgreementFile = "";
             }
@@ -208,7 +193,7 @@ const chalk = require("chalk")
                 return el.fileType === "POPFile";
             });
             if (POPFile.length) {
-                POPFile = POPFile[0].fileName;
+                POPFile = POPFile[0].originalName;
             } else {
                 POPFile = "";
             }
@@ -217,7 +202,7 @@ const chalk = require("chalk")
                 return el.fileType === "attorneyConfirmLetterFile";
             });
             if (attorneyConfirmLetterFile.length) {
-                attorneyConfirmLetterFile = attorneyConfirmLetterFile[0].fileName;
+                attorneyConfirmLetterFile = attorneyConfirmLetterFile[0].originalName;
             } else {
                 attorneyConfirmLetterFile = "";
             }
@@ -241,6 +226,7 @@ const chalk = require("chalk")
                         investment_interest_rate,    
                         repayment_amount,                  
                         lastupdated,
+                        datecreated,
 
                         release_percentage, 
                         release_date,
@@ -259,6 +245,7 @@ const chalk = require("chalk")
                         '${req.body.repaymentDate}',
                         '${req.body.investmentPerc}',
                         '${req.body.repaymentAmount}',                    
+                        '${dateToday}', 
                         '${dateToday}', 
                         
                         '${req.body.releasePerc}',
@@ -281,22 +268,7 @@ const chalk = require("chalk")
     router.post("/getAllInvestments", (req, res) => {
 
         let mysql = `select * from investors i join investments iv on iv.investor_id = i.investor_id where iv.investment_amount > 0 and i.investor_id = ${req.body.paramId}`
-        excecuteSQL(mysql, res)
-
-        // pool.getConnection(function (err, connection) {
-        //     if (err) {
-        //         connection.release();
-        //         resizeBy.send("Error with connection");
-        //     }
-        //     connection.query(mysql, function (error, result) {
-        //         if (error) {
-        //             console.log(error);
-        //         } else {
-        //             res.json(result);
-        //         }
-        //     });
-        //     connection.release();
-        // });
+        excecuteSQL(mysql, res)       
     }),
     router.post("/getInvestmentDetails", (req, res) => {
         console.log(req.body)
@@ -320,47 +292,9 @@ const chalk = require("chalk")
     }),
     // test
     router.post("/updateInvestor", upload.array("documents"), (req, res) => {
-        console.log("updateInvestor req", req.body)
-        console.log("Files: ", req.files);
-        console.log("Info: ", req.body);
-
-        let fileDetails = []
-        //console.log(req.body.contains)
-        let contains = []
-        try {
-            contains = req.body.contains.split(",")
-        } catch {
-            contains.push(req.body.contains)
-        }
-        contains = Array.from(new Set(contains))
-        contains.forEach((el) => {
-
-            req.files.forEach((el2) => {
-                el2.filenameA = `${el2.filename}.${el2.mimetype.split("/")[1]}`
-                let insert = {
-                    fileType: el,
-                    fileName: el2.filenameA,
-                    originalName: el2.filename
-                }
-                fileDetails.push(insert)
-            })
-        })
-
-        console.log("fileDetails", fileDetails)
-
-        // renaming files if required
-        fileDetails.forEach((el) => {
-            let filtered = req.files.filter((el2) => {
-                return el2.filename === el.originalName
-            })
-            // el.fileNameUpdated = `${el.fileName}.${filtered[0].mimetype.split("/")[1]}`
-            el.fileNameUpdated = `${el.fileName}`
-            fs.rename(`public/uploads/${el.originalName}`, `public/uploads/${el.fileNameUpdated}`, (err) => {
-                if (err)
-                    console.log("Error renaiming");
-                //throw err
-            })
-        })
+        console.log("$$$ 100 % $$$ updateInvestor request.body", req.body)     
+        let fileDetails = renameFile(req) 
+       
 
         let mysql = `UPDATE investors
         SET 
@@ -386,17 +320,22 @@ const chalk = require("chalk")
         street_no = '${req.body.streetNo}',
         street_name = '${req.body.streetName}',
         address_suburb = '${req.body.addressSuburb}',
+        investor_physical_suburb = '${req.body.addressSuburb}',
         province = '${req.body.province}',
-        address_postal_code = '${req.body.addressPostalCode}',
+        investor_physical_province = '${req.body.province}',
+        investor_physical_postal_code = '${req.body.addressPostalCode}',
         box_no = '${req.body.boxNo}',
+        investor_postal_street_box = '${req.body.boxNo}',
         postal_suburb = '${req.body.postalSuburb}',
+        investor_postal_suburb = '${req.body.postalSuburb}',
         postal_code = '${req.body.postalCode}',                                
+        investor_postal_postal_code = '${req.body.postalCode}',                                
         bank_name =  '${req.body.bankName}',
         account_name =  '${req.body.accountName}',
         branch_code = '${req.body.branchCode}',
         account_no = '${req.body.accountNumber}',
         fica_date = '${req.body.ficaDate}' ,             
-        person_mode = '${req.body.person}',
+        person_mode = '${req.body.person_mode}',
         buyers = '${req.body.buyers}',
         linked_email = '${req.body.linkedEmail}'`;
 
@@ -405,76 +344,76 @@ const chalk = require("chalk")
           // investorOneFiles
           let investorOneDisclaimerFileSQL = fileDetails.filter((el) => { return el.fileType === 'investorOneDisclaimerFile' })            
             if (investorOneDisclaimerFileSQL.length > 0) { investorOneDisclaimerFileSQL.forEach((el) => {
-                additionalSQL = `${additionalSQL}, investorOneDisclaimerFile = '${el.fileName}'`
+                additionalSQL = `${additionalSQL}, investorOneDisclaimerFile = '${el.originalName}'`
                 })
           }        
           let investorOneIDFileSQL = fileDetails.filter((el) => {  return el.fileType === 'investorOneIDFile' })  
             if (investorOneIDFileSQL.length > 0) { investorOneIDFileSQL.forEach((el) => {
-                additionalSQL = `${additionalSQL}, investorOneIDFile = '${el.fileName}'`
+                additionalSQL = `${additionalSQL}, investorOneIDFile = '${el.originalName}'`
                 })
           }        
           let investorOnePOAFileSQL = fileDetails.filter((el) => {  return el.fileType === 'investorOnePOAFile' })  
             if (investorOnePOAFileSQL.length > 0) { investorOnePOAFileSQL.forEach((el) => {
-                additionalSQL = `${additionalSQL}, investorOnePOAFile = '${el.fileName}'`
+                additionalSQL = `${additionalSQL}, investorOnePOAFile = '${el.originalName}'`
                 })
           }
 
           // investorTwoFiles
           let investorTwoDisclaimerFileSQL = fileDetails.filter((el) => {  return el.fileType === 'investorTwoDisclaimerFile' })  
             if (investorTwoDisclaimerFileSQL.length > 0) { investorTwoDisclaimerFileSQL.forEach((el) => {
-                additionalSQL = `${additionalSQL}, investorTwoDisclaimerFile = '${el.fileName}'`
+                additionalSQL = `${additionalSQL}, investorTwoDisclaimerFile = '${el.originalName}'`
                 })
           }
           let investorTwoIdFileSQL = fileDetails.filter((el) => {  return el.fileType === 'investorTwoIDFile' })  
             if (investorTwoIdFileSQL.length > 0) { investorTwoIdFileSQL.forEach((el) => {
-                additionalSQL = `${additionalSQL}, investorTwoIdFile = '${el.fileName}'`
+                additionalSQL = `${additionalSQL}, investorTwoIdFile = '${el.originalName}'`
                 })
           }         
           let investorTwoPOAFileSQL = fileDetails.filter((el) => {  return el.fileType === 'investorTwoPOAFile' })  
             if (investorTwoPOAFileSQL.length > 0) { investorTwoPOAFileSQL.forEach((el) => {
-                additionalSQL = `${additionalSQL}, investorTwoPOAFile = '${el.fileName}'`
+                additionalSQL = `${additionalSQL}, investorTwoPOAFile = '${el.originalName}'`
                 })
           }
 
           // company rep files 
           let representativeDisclaimerFileSQL = fileDetails.filter((el) => {  return el.fileType === 'representativeDisclaimerFile' })  
             if (representativeDisclaimerFileSQL.length > 0) { representativeDisclaimerFileSQL.forEach((el) => {
-                additionalSQL = `${additionalSQL}, representativeDisclaimerFile = '${el.fileName}'`
+                additionalSQL = `${additionalSQL}, representativeDisclaimerFile = '${el.originalName}'`
                 })
           }
           let representativeIDFileSQL = fileDetails.filter((el) => {  return el.fileType === 'representativeIDFile' })  
             if (representativeIDFileSQL.length > 0) { representativeIDFileSQL.forEach((el) => {
-                additionalSQL = `${additionalSQL}, representativeIDFile = '${el.fileName}'`
+                additionalSQL = `${additionalSQL}, representativeIDFile = '${el.originalName}'`
                 })
           }
           let reresentativePOAFileSQL = fileDetails.filter((el) => {  return el.fileType === 'reresentativePOAFile' })  
             if (reresentativePOAFileSQL.length > 0) { reresentativePOAFileSQL.forEach((el) => {
-                additionalSQL = `${additionalSQL}, reresentativePOAFile = '${el.fileName}'`
+                additionalSQL = `${additionalSQL}, reresentativePOAFile = '${el.originalName}'`
                 })
           }
 
           // company files
           let companyResolutionFileSQL = fileDetails.filter((el) => {  return el.fileType === 'companyResolutionFile' })  
             if (companyResolutionFileSQL.length > 0) { companyResolutionFileSQL.forEach((el) => {
-                additionalSQL = `${additionalSQL}, companyResolutionFile = '${el.fileName}'`
+                additionalSQL = `${additionalSQL}, companyResolutionFile = '${el.originalName}'`
                 })
           }
           let companyRefDocsFileSQL = fileDetails.filter((el) => {  return el.fileType === 'companyRefDocsFile' })  
             if (companyRefDocsFileSQL.length > 0) { companyRefDocsFileSQL.forEach((el) => {
-                additionalSQL = `${additionalSQL}, companyRefDocsFile = '${el.fileName}'`
+                additionalSQL = `${additionalSQL}, companyRefDocsFile = '${el.originalName}'`
                 })
           }
           let companyPOAFileSQL = fileDetails.filter((el) => {  return el.fileType === 'companyPOAFile' })  
             if (companyPOAFileSQL.length > 0) { companyPOAFileSQL.forEach((el) => {
-                additionalSQL = `${additionalSQL}, companyPOAFile = '${el.fileName}'`
+                additionalSQL = `${additionalSQL}, companyPOAFile = '${el.originalName}'`
                 })
           }         
 
           if(additionalSQL.length) {
             mysql = `${mysql} ${additionalSQL}` 
-              + ` WHERE investor_id = '${req.body.investorId}'; ` 
+              + ` WHERE investor_id = '${req.body.id}'; ` 
           } else {
-            mysql = `${mysql}` + ` WHERE investor_id = '${req.body.investorId}'; ` 
+            mysql = `${mysql}` + ` WHERE investor_id = '${req.body.id}'; ` 
           }
               // +  `WHERE id = ${req.body.id}`
         console.log(chalk.yellow("updateInvestor SQL = ",mysql))
@@ -485,41 +424,47 @@ const chalk = require("chalk")
     router.post("/createInvestor", upload.array("documents"), (req, res) => {
         console.log(req.body)
         console.log(req.files)
-        let fileDetails = [];
-        // file manipulation
-        if (req.files.length) {
-            let contains = req.body.contains.split(",");
-            contains.forEach((el, index) => {
-                let mainIndex = index;
-                if (req.files[mainIndex] !== "undefined") {
-                    console.log("FILES AFTER CHECK::: ", req.files[mainIndex])
-                    let insert = {
-                        fileType: el,
-                        fileName: `${req.files[mainIndex].filename}.${req.files[mainIndex].mimetype.split("/")[1]
-                            }`,
-                        originalName: req.files[mainIndex].filename,
-                    };
-                    fileDetails.push(insert);
-                }
-            });
 
-            console.log("fileDetails", fileDetails);
+        let fileDetails = renameFile(req)  // return fileDetails 
+        //  let fileDetails = [];
+        // // file manipulation
+        // if (req.files.length) {
+        //     let contains = req.body.contains.split(",");
+       
+        //     contains.forEach((el, index) => {
+        //         let mainIndex = index;
+        //         if (req.files[mainIndex] !== "undefined" || req.files[mainIndex] !== undefined ) {
+        //             console.log("FILES AFTER CHECK::: ", req.files[mainIndex])
+        //             let insert = {
+        //                 fileType: el,
+        //                 //fileName: `${req.files[mainIndex].filename}.${req.files[mainIndex].mimetype.split("/")[1]}`,
+        //                 fileName: req.files[mainIndex].filename,
+        //                 originalName: req.files[mainIndex].originalname,
+        //             };
+        //             fileDetails.push(insert);
+        //         }
+        //     });
 
-            fileDetails.forEach((el) => {
-                let filtered = req.files.filter((el2) => {
-                    return el2.filename === el.originalName;
-                });
-                el.fileNameUpdated = `${el.fileName}`;
-                fs.rename(
-                    `public/uploads/${el.originalName}`,
-                    `public/uploads/${el.fileNameUpdated}`,
-                    (err) => {
-                        if (err) console.log("Error renaming", err);
-                        //throw err
-                    }
-                );
-            });
-        }
+        //     console.log("fileDetails", fileDetails);
+
+        //     fileDetails.forEach((el) => {
+        //         let filtered = req.files.filter((el2) => {
+        //             return el2.filename === el.originalName;
+        //         });
+        //         el.fileNameUpdated = `${el.fileName}`;
+        //         fs.rename(
+                    
+        //             `public/uploads/${el.fileNameUpdated}`,
+        //             `public/uploads/${el.originalName}`,
+        //             (err) => {
+        //                 if (err) console.log("Error renaming", err);
+        //                 //throw err
+        //             }
+                    
+        //         );
+        //         console.log("CONNOR:: file renamed from" + `${el.fileNameUpdated}` + " to " + `${el.originalName}`)
+        //     });
+        // }
 
         let investorOneDisclaimerFile;
         let investorOneIDFile;
@@ -543,7 +488,7 @@ const chalk = require("chalk")
                 return el.fileType === "investorOneDisclaimerFile";
             });
             if (investorOneDisclaimerFile.length) {
-                investorOneDisclaimerFile = investorOneDisclaimerFile[0].fileName;
+                investorOneDisclaimerFile = investorOneDisclaimerFile[0].originalName;
             } else {
                 investorOneDisclaimerFile = "";
             }
@@ -552,7 +497,7 @@ const chalk = require("chalk")
                 return el.fileType === "investorOneIDFile";
             });
             if (investorOneIDFile.length) {
-                investorOneIDFile = investorOneIDFile[0].fileName;
+                investorOneIDFile = investorOneIDFile[0].originalName;
             } else {
                 investorOneIDFile = "";
             }
@@ -561,7 +506,7 @@ const chalk = require("chalk")
                 return el.fileType === "investorOnePOAFile";
             });
             if (investorOnePOAFile.length) {
-                investorOnePOAFile = investorOnePOAFile[0].fileName;
+                investorOnePOAFile = investorOnePOAFile[0].originalName;
             } else {
                 investorOnePOAFile = "";
             }
@@ -570,7 +515,7 @@ const chalk = require("chalk")
                 return el.fileType === "investorTwoDisclaimerFile";
             });
             if (investorTwoDisclaimerFile.length) {
-                investorTwoDisclaimerFile = investorTwoDisclaimerFile[0].fileName;
+                investorTwoDisclaimerFile = investorTwoDisclaimerFile[0].originalName;
             } else {
                 investorTwoDisclaimerFile = "";
             }
@@ -579,7 +524,7 @@ const chalk = require("chalk")
                 return el.fileType === "investorTwoIDFile";
             });
             if (investorTwoIDFile.length) {
-                investorTwoIDFile = investorTwoIDFile[0].fileName;
+                investorTwoIDFile = investorTwoIDFile[0].originalName;
             } else {
                 investorTwoIDFile = "";
             }
@@ -588,7 +533,7 @@ const chalk = require("chalk")
                 return el.fileType === "investorTwoPOAFile";
             });
             if (investorTwoPOAFile.length) {
-                investorTwoPOAFile = investorTwoPOAFile[0].fileName;
+                investorTwoPOAFile = investorTwoPOAFile[0].originalName;
             } else {
                 investorTwoPOAFile = "";
             }
@@ -597,7 +542,7 @@ const chalk = require("chalk")
                 return el.fileType === "representativeDisclaimerFile";
             });
             if (representativeDisclaimerFile.length) {
-                representativeDisclaimerFile = representativeDisclaimerFile[0].fileName;
+                representativeDisclaimerFile = representativeDisclaimerFile[0].originalName;
             } else {
                 representativeDisclaimerFile = "";
             }
@@ -606,7 +551,7 @@ const chalk = require("chalk")
                 return el.fileType === "representativeIDFile";
             });
             if (representativeIDFile.length) {
-                representativeIDFile = representativeIDFile[0].fileName;
+                representativeIDFile = representativeIDFile[0].originalName;
             } else {
                 representativeIDFile = "";
             }
@@ -615,7 +560,7 @@ const chalk = require("chalk")
                 return el.fileType === "representativePOAFile";
             });
             if (representativePOAFile.length) {
-                representativePOAFile = representativePOAFile[0].fileName;
+                representativePOAFile = representativePOAFile[0].originalName;
             } else {
                 representativePOAFile = "";
             }
@@ -624,7 +569,7 @@ const chalk = require("chalk")
                 return el.fileType === "companyResolutionFile";
             });
             if (companyResolutionFile.length) {
-                companyResolutionFile = companyResolutionFile[0].fileName;
+                companyResolutionFile = companyResolutionFile[0].originalName;
             } else {
                 companyResolutionFile = "";
             }
@@ -633,7 +578,7 @@ const chalk = require("chalk")
                 return el.fileType === "companyRefDocsFile";
             });
             if (companyRefDocsFile.length) {
-                companyRefDocsFile = companyRefDocsFile[0].fileName;
+                companyRefDocsFile = companyRefDocsFile[0].originalName;
             } else {
                 companyRefDocsFile = "";
             }
@@ -642,7 +587,7 @@ const chalk = require("chalk")
                 return el.fileType === "companyPOAFile";
             });
             if (companyPOAFile.length) {
-                companyPOAFile = companyPOAFile[0].fileName;
+                companyPOAFile = companyPOAFile[0].originalName;
             } else {
                 companyPOAFile = "";
             }
@@ -747,64 +692,23 @@ const chalk = require("chalk")
 
         console.log(chalk.blue("createInvestor SQL = ",mysql))
             // + the 'let' file variables
-        excecuteSQL(mysql, res)
-        // pool.getConnection(function (err, connection) {
-        //     if (err) {
-        //         connection.release();
-        //         resizeBy.send("Error with connection");
-        //     }
-        //     connection.query(mysql, function (error, result) {
-        //         if (error) {
-        //             console.log(error);
-        //         } else {
-        //             res.json(result);
-        //             console.log("After INSERT stmnt");
-        //             console.log(result);
-        //         }
-        //     });
-        //     connection.release();
-        // });
+        excecuteSQL(mysql, res)     
     }),
 
     router.post("/getAllInvestors", (req, res) => {
 
         let mysql = `select * from investors i`
         excecuteSQL(mysql, res)
-        // pool.getConnection(function (err, connection) {
-        //     if (err) {
-        //         connection.release();
-        //         resizeBy.send("Error with connection");
-        //     }
-        //     connection.query(mysql, function (error, result) {
-        //         if (error) {
-        //             console.log(error);
-        //         } else {
-        //             res.json(result);
-        //         }
-        //     });
-        //     connection.release();
-        // });
+       
     }),
 
     router.post("/getInvestorDetails", (req, res) => {
         console.log(req.body)
         let mysql = `select * from investors i WHERE i.investor_id = ${req.body.paramId}` 
         console.log("GET INVESTOR DEETS SQL = ", mysql)
-        excecuteSQL(mysql, res)
-        // pool.getConnection(function (err, connection) {
-        //     if (err) {
-        //         connection.release();
-        //         resizeBy.send("Error with connection");
-        //     }
-        //     connection.query(mysql, function (error, result) {
-        //         if (error) {
-        //             console.log(error);
-        //         } else {
-        //             res.json(result);
-        //         }
-        //     });
-        //     connection.release();
-        // });
+        excecuteSQL(mysql, res)        
+       // console.log("Resposne = ", res)
+       
     }),
     // ------------------------------------------------------------------------------------------------
     // Investor App Methods End 

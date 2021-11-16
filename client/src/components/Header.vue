@@ -1,6 +1,18 @@
 <template>
   <v-app-bar app color="#393e46" dark class="mobile">
-    <h2>Investor Web App</h2>
+    <v-spacer>
+      <h2>
+        Investor Web App - {{ this.$store.state.development.developmentName }}
+      </h2>
+    </v-spacer>
+    <v-spacer>
+      <v-btn-toggle borderless>
+        <v-btn value="home" color="cyan lighten-2" @click="home">
+          <v-icon right> mdi-home </v-icon>
+        </v-btn>
+      </v-btn-toggle>
+    </v-spacer>
+
     <div class="text-center">
       <v-menu
         dark
@@ -450,6 +462,11 @@ export default {
   },
 
   methods: {
+    home() {
+      this.$router.push({
+        name: "Home",
+      });
+    },
     closeMenu() {
       this.closeOnClick = true;
       setTimeout(() => {
